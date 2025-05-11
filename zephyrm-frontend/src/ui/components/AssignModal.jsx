@@ -48,36 +48,42 @@ export const AssignModal = () => {
       overlayClassName="modal-fondo"
       closeTimeoutMS={500}
     >
-      <h2>Select a User</h2>
-      <hr />
-      <div className="user-list-container">
-        {users.map((user) => (
-          <div
-            key={user.uid}
-            className="user-card"
-            onClick={() => handleUserClick(user)}
-          >
-            <div className="user-info">
-              <h3>{user.name}</h3>
-              <div className="user-meta">
-                <span className="user-id">ID: {user.uid}</span>
-                <span className="user-role">{user.role}</span>
+      <div className="modal-header">
+        <h2>Select a User</h2>
+      </div>
+
+      <div className="modal-content">
+        <div className="user-list-container">
+          {users.map((user) => (
+            <div
+              key={user.uid}
+              className="user-card"
+              onClick={() => handleUserClick(user)}
+            >
+              <div className="user-info">
+                <h3>{user.name}</h3>
+                <div className="user-meta">
+                  <span className="user-id">ID: {user.uid}</span>
+                  <span className="user-role">{user.role}</span>
+                </div>
+              </div>
+              <div className="user-select-indicator">
+                <i className="fas fa-chevron-right"></i>
               </div>
             </div>
-            <div className="user-select-indicator">
-              <i className="fas fa-chevron-right"></i>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-      <hr />
-      <button
-        onClick={() => handleButtonClick()}
-        className="btn btn-outline-danger"
-      >
-        <i className="far fa-trash-alt"></i>
-        <span> Clear</span>
-      </button>
+
+      <div className="modal-footer-assign pt-3">
+        <button
+          onClick={() => handleButtonClick()}
+          className="btn btn-outline-danger"
+        >
+          <i className="far fa-trash-alt"></i>
+          <span> Clear</span>
+        </button>
+      </div>
     </Modal>
   );
 };

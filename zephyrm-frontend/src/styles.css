@@ -45,9 +45,10 @@
   border-radius: 100%;
   bottom: 25px;
   font-size: 30px;
-  padding: 25px;
   position: fixed;
   right: 25px;
+  width: 50px;
+  height: 50px;
 }
 
 .fab-danger {
@@ -56,6 +57,42 @@
   font-size: 22px;
   position: fixed;
   left: 25px;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
+}
+
+/* AssetSelectionModal && UserSelectionModal */
+
+.selection-field {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.selection-field:hover {
+  border-color: #80bdff;
+}
+
+/* Selection Modal Styling */
+.selection-modal {
+  max-width: 50vw;
+  max-height: 80vh;
+}
+
+.selection-list {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.selection-item {
+  background-color: #e0dddd70;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.selection-item:hover {
+  background-color: #f8f9fa;
 }

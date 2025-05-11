@@ -95,6 +95,7 @@
 }
 
 .new-password-btn {
+  font-size: 13px;
   background-color: #1cc88a;
   color: white;
 }

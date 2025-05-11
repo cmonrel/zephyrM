@@ -9,10 +9,15 @@ import {
   onUpdateUser,
 } from "../../../store";
 import zephyrmApi from "../../../apis/zephyrMAPI";
+import { useAuthStore } from "../../../auth/hooks/useAuthStore";
+import { useCalendarStore } from "../../calendar";
 
 export const useUsersStore = () => {
   const dispatch = useDispatch();
   const { users, activeUser } = useSelector((state) => state.user);
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const { startLogout } = useAuthStore();
+  const { startDeletingUserEvents } = useCalendarStore();
 
   const setActiveUser = (user) => {
     dispatch(onSetActiveUser(user));
@@ -63,10 +68,12 @@ export const useUsersStore = () => {
   const startDeletingUser = async (user) => {
     if (!user) return;
     try {
+      startDeletingUserEvents(user.uid);
       await zephyrmApi.delete(`users/${user.uid}`);
       dispatch(onDeleteUser());
       Swal.fire("Deleted successfully", "", "success");
       startLoadingUsers();
+      if (currentUser.uid === user.uid) startLogout();
     } catch (error) {
       Swal.fire("Error deleting", error.response.data.msg, "error");
     }

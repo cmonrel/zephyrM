@@ -1,17 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import Modal from "react-modal";
 
-import "react-datepicker/dist/react-datepicker.css";
-import "sweetalert2/dist/sweetalert2.min.css";
 import { addHours, differenceInSeconds } from "date-fns";
-import { es } from "date-fns/locale/es";
+import { enUS } from "date-fns/locale/en-US";
 import DatePicker, { registerLocale } from "react-datepicker";
 import Swal from "sweetalert2";
+import "react-datepicker/dist/react-datepicker.css";
+import "sweetalert2/dist/sweetalert2.min.css";
 
-import { useUIStore } from "..";
+import { UserSelectionModal, AssetSelectionModal, useUIStore } from "..";
 import { useCalendarStore } from "../../modules/calendar";
+import { useUsersStore } from "../../modules/users/hooks/useUsersStore";
+import { useAssetsStore } from "../../modules/assetsModule";
 
-registerLocale("es", es);
+registerLocale("en", enUS);
 
 const customStyles = {
   content: {
@@ -26,13 +28,20 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-registerLocale("es", es);
-
 export const CalendarModal = () => {
-  // TODO: Manejar la lógica mediante un CUSTOHOOK
-
-  const { isDateModalOpen, closeDateModal } = useUIStore();
-  const { activeEvent, startSavingEvent } = useCalendarStore();
+  const {
+    isDateModalOpen,
+    closeDateModal,
+    isAssetSelectionModalOpen,
+    isUserSelectionModalOPen,
+    closeAssetSelectionModal,
+    closeUserSelectionModal,
+    openAssetSelectionModal,
+    openUserSelectionModal,
+  } = useUIStore();
+  const { activeEvent, startSavingEvent, setActiveEvent } = useCalendarStore();
+  const { startLoadingUsers, setActiveUser } = useUsersStore();
+  const { startLoadingAssets, setActiveAsset } = useAssetsStore();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -40,6 +49,8 @@ export const CalendarModal = () => {
     notes: "",
     start: new Date(),
     end: addHours(new Date(), 2),
+    asset: null,
+    user: null,
   });
 
   const titleClass = useMemo(() => {
@@ -48,6 +59,8 @@ export const CalendarModal = () => {
   }, [formValues.title, formSubmitted]);
 
   useEffect(() => {
+    startLoadingUsers();
+    startLoadingAssets();
     if (activeEvent !== null) setFormValues({ ...activeEvent });
   }, [activeEvent]);
 
@@ -59,6 +72,7 @@ export const CalendarModal = () => {
   };
 
   const onCloseModal = () => {
+    setActiveEvent(null);
     closeDateModal();
   };
 
@@ -67,6 +81,18 @@ export const CalendarModal = () => {
       ...formValues,
       [changing]: event,
     });
+  };
+
+  const handleAssetSelect = (asset) => {
+    setActiveAsset(asset);
+    setFormValues({ ...formValues, asset });
+    closeAssetSelectionModal();
+  };
+
+  const handleUserSelect = (user) => {
+    setActiveUser(user);
+    setFormValues({ ...formValues, user });
+    closeUserSelectionModal();
   };
 
   const onSubmit = async (event) => {
@@ -81,6 +107,8 @@ export const CalendarModal = () => {
     }
 
     if (formValues.title.length <= 0) return;
+    if (formValues.asset === null) return;
+    if (formValues.user === null) return;
 
     await startSavingEvent(formValues);
     onCloseModal();
@@ -88,81 +116,116 @@ export const CalendarModal = () => {
   };
 
   return (
-    <Modal
-      isOpen={isDateModalOpen}
-      onRequestClose={onCloseModal}
-      style={customStyles}
-      className="modal"
-      overlayClassName="modal-fondo"
-      closeTimeoutMS={500}
-    >
-      <h1> Nuevo evento </h1>
-      <hr />
-      <form className="container" onSubmit={onSubmit}>
-        <div className="form-group mb-2">
-          <label>Fecha y hora inicio</label>
-          <DatePicker
-            selected={formValues.start}
-            onChange={(event) => onDateChange(event, "start")}
-            className="form-control"
-            dateFormat="Pp"
-            locale="es"
-            timeCaption="Hora"
-            showTimeSelect
-          />
-        </div>
-
-        <div className="form-group mb-2">
-          <label>Fecha y hora fin</label>
-          <DatePicker
-            minDate={formValues.start}
-            selected={formValues.end}
-            onChange={(event) => onDateChange(event, "end")}
-            className="form-control"
-            dateFormat="Pp"
-            locale="es"
-            timeCaption="Hora"
-            showTimeSelect
-          />
-        </div>
-
+    <>
+      <Modal
+        isOpen={isDateModalOpen}
+        onRequestClose={onCloseModal}
+        style={customStyles}
+        className="modal"
+        overlayClassName="modal-fondo"
+        closeTimeoutMS={500}
+      >
+        {activeEvent?.title === "" || activeEvent === null ? (
+          <h2> New Event </h2>
+        ) : (
+          <h2>{activeEvent.title}</h2>
+        )}
         <hr />
-        <div className="form-group mb-2">
-          <label>Titulo y notas</label>
-          <input
-            type="text"
-            className={`form-control ${titleClass}`}
-            placeholder="Título del evento"
-            name="title"
-            autoComplete="off"
-            value={formValues.title}
-            onChange={onChangeInput}
-          />
-          <small id="emailHelp" className="form-text text-muted">
-            Una descripción corta
-          </small>
-        </div>
+        <form className="container" onSubmit={onSubmit}>
+          <div className="form-group mb-2">
+            <label>Start date and hour &nbsp;</label>
+            <DatePicker
+              selected={formValues.start}
+              onChange={(event) => onDateChange(event, "start")}
+              className="form-control"
+              dateFormat="Pp"
+              locale="en"
+              timeCaption="Hour"
+              showTimeSelect
+            />
+          </div>
 
-        <div className="form-group mb-2">
-          <textarea
-            type="text"
-            className="form-control"
-            placeholder="Notas"
-            rows="5"
-            name="notes"
-            value={formValues.notes}
-            onChange={onChangeInput}
-          ></textarea>
-          <small id="emailHelp" className="form-text text-muted">
-            Información adicional
-          </small>
-        </div>
+          <div className="form-group mb-2">
+            <label>End date and hour &nbsp;</label>
+            <DatePicker
+              minDate={formValues.start}
+              selected={formValues.end}
+              onChange={(event) => onDateChange(event, "end")}
+              className="form-control"
+              dateFormat="Pp"
+              locale="en"
+              timeCaption="Hour"
+              showTimeSelect
+            />
+          </div>
 
-        <button type="submit" className="btn btn-outline-primary btn-block">
-          <i className="far fa-save"></i>
-          <span> Guardar</span>
-        </button>
-      </form>
-    </Modal>
+          <hr />
+          <div className="form-group mb-2">
+            <label>Title and description</label>
+            <input
+              type="text"
+              className={`form-control ${titleClass}`}
+              placeholder="Title of event"
+              name="title"
+              autoComplete="off"
+              value={formValues.title}
+              onChange={onChangeInput}
+            />
+            <small id="emailHelp" className="form-text text-muted">
+              Short description
+            </small>
+          </div>
+
+          <div className="form-group mb-2">
+            <textarea
+              type="text"
+              className="form-control"
+              placeholder="Description"
+              rows="5"
+              name="notes"
+              value={formValues.notes}
+              onChange={onChangeInput}
+            ></textarea>
+          </div>
+
+          <div className="form-group mb-2">
+            <label>Asset</label>
+            <div
+              className="selection-field"
+              onClick={() => openAssetSelectionModal()}
+            >
+              {formValues.asset?.title || "Select an asset"}
+              <i className="fas fa-chevron-down float-right"></i>
+            </div>
+          </div>
+
+          <div className="form-group mb-2">
+            <label>User</label>
+            <div
+              className="selection-field"
+              onClick={() => openUserSelectionModal()}
+            >
+              {formValues.user?.name || "Select a user"}
+              <i className="fas fa-chevron-down float-right"></i>
+            </div>
+          </div>
+
+          <button type="submit" className="btn btn-outline-primary btn-block">
+            <i className="far fa-save"></i>
+            <span> Save </span>
+          </button>
+        </form>
+      </Modal>
+
+      {/* Asset Selection Modal */}
+      {isAssetSelectionModalOpen && (
+        <AssetSelectionModal onSelect={handleAssetSelect} />
+      )}
+
+      {/* User Selection Modal */}
+      {isUserSelectionModalOPen && (
+        <UserSelectionModal onSelect={handleUserSelect} />
+      )}
+    </>
   );
 };

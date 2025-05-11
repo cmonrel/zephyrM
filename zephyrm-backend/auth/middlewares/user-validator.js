@@ -47,7 +47,6 @@ const validatingUser = async (req, res = response, next) => {
   if (!user) {
     return res.status(400).json({
       ok: false,
-      counter: user.counter,
       msg: "User or password are incorrect",
     });
   }

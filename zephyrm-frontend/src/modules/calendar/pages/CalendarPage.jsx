@@ -7,7 +7,6 @@ import { CalendarEvent, getMessages, localizer, useCalendarStore } from "..";
 import { CalendarModal } from "../../../ui";
 import { useUIStore } from "../../../ui/hooks/useUiStore";
 import { FabAddNew, FabDelete } from "../../../components";
-import { NavBar } from "../../../components";
 
 export const CalendarPage = () => {
   const { user } = useAuthStore();
@@ -17,8 +16,8 @@ export const CalendarPage = () => {
 
   const [lastView] = useState(localStorage.getItem("lastView") || "week");
   const eventStyleGetter = (event) => {
-    console.log(event);
-    const isMyEvent = user.uid === event.uid;
+    const isMyEvent =
+      user.uid === event.user._id || user.uid === event.user.uid;
 
     const style = {
       backgroundColor: isMyEvent ? "#347CF7" : "#465660",
@@ -55,7 +54,6 @@ export const CalendarPage = () => {
   return (
     <>
       <Calendar
-        culture={"es"}
         localizer={localizer}
         events={events}
         defaultView={lastView}

@@ -32,6 +32,11 @@ export const assetsSlice = createSlice({
         state.activeAsset = null;
       }
     },
+    onLogoutAssets: (state) => {
+      state.isLoadingAssets = false;
+      state.assets = [];
+      state.activeAsset = null;
+    },
   },
 });
 
@@ -40,6 +45,7 @@ export const {
   onAddNewAsset,
   onDeleteAsset,
   onLoadAssets,
+  onLogoutAssets,
   onSetActiveAsset,
   onUpdateAsset,
 } = assetsSlice.actions;

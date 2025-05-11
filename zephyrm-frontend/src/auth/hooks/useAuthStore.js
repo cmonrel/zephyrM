@@ -9,20 +9,12 @@ import {
 } from "../../store/auth/authSlice";
 import { onLogoutCalendar } from "../../store/calendar/calendarSlice";
 import zephyrmApi from "../../apis/zephyrMAPI";
+import { onLogoutAssets } from "../../store";
+import { onLogoutUsers } from "../../store";
 
 export const useAuthStore = () => {
   const { status, user, errorMessage } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
-  const startSearchingRole = async ({ email }) => {
-    try {
-      const { data } = await zephyrmApi.get("auth/role", { email });
-      console.log(data);
-      Swal.fire("User validated", "", "success");
-    } catch (error) {
-      Swal.fire("Error", error.response.data.msg, "error");
-    }
-  };
 
   const startLogin = async ({ email, password }) => {
     dispatch(onChecking());
@@ -78,27 +70,8 @@ export const useAuthStore = () => {
 
     localStorage.clear();
     dispatch(onLogoutCalendar());
-    dispatch(onLogout());
-  };
-
-  const startBlockingAccount = async ({ email }) => {
-    dispatch(onChecking());
-    try {
-      const { data } = await zephyrmApi.post("/auth/block", {
-        email,
-      });
-
-      dispatch(onLogin({ name: data.name, uid: data.uid }));
-
-      return data.token;
-    } catch (error) {
-      dispatch(onLogout(error.response.data?.msg));
-      setTimeout(() => {
-        dispatch(clearErrorMessage());
-      }, 10);
-    }
-    localStorage.clear();
-    dispatch(onLogoutCalendar());
+    dispatch(onLogoutAssets());
+    dispatch(onLogoutUsers());
     dispatch(onLogout());
   };
 
@@ -110,9 +83,7 @@ export const useAuthStore = () => {
 
     // Methods
     checkAuthToken,
-    startBlockingAccount,
     startLogin,
     startLogout,
-    startSearchingRole,
   };
 };

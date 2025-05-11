@@ -6,4 +6,6 @@ export * from "./ui/uiSlice";
 
 export * from "./user/userSlice";
 
+export * from "./assetsModule/assetsSlice";
+
 export * from "./store";

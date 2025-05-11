@@ -2,25 +2,31 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   onCloseAssetModal,
+  onCloseAssetSelectionModal,
   onCloseAssignModal,
   onCloseDateModal,
   onClosePasswordModal,
   onCloseUserModal,
+  onCloseUserSelectionModal,
   onOpenAssetModal,
+  onOpenAssetSelectionModal,
   onOpenAssignModal,
   onOpenDateModal,
   onOpenPasswordModal,
   onOpenUserModal,
+  onOpenUserSelectionModal,
 } from "../../store/ui/uiSlice";
 
 export const useUIStore = () => {
   const dispatch = useDispatch();
   const {
-    isDateModalOpen,
-    isUserModalOpen,
-    isPasswordModalOpen,
     isAssetModalOpen,
+    isAssetSelectionModalOpen,
     isAssignModalOpen,
+    isDateModalOpen,
+    isPasswordModalOpen,
+    isUserModalOpen,
+    isUserSelectionModalOPen,
   } = useSelector((state) => state.ui);
 
   const openDateModal = () => {
@@ -61,24 +67,46 @@ export const useUIStore = () => {
     dispatch(onCloseAssignModal());
   };
 
+  const openAssetSelectionModal = () => {
+    dispatch(onOpenAssetSelectionModal());
+  };
+
+  const closeAssetSelectionModal = () => {
+    dispatch(onCloseAssetSelectionModal());
+  };
+
+  const openUserSelectionModal = () => {
+    dispatch(onOpenUserSelectionModal());
+  };
+
+  const closeUserSelectionModal = () => {
+    dispatch(onCloseUserSelectionModal());
+  };
+
   return {
     // Properties
     isAssetModalOpen,
+    isAssetSelectionModalOpen,
+    isAssignModalOpen,
     isDateModalOpen,
     isPasswordModalOpen,
     isUserModalOpen,
-    isAssignModalOpen,
+    isUserSelectionModalOPen,
 
     // Methods
     closeAssetModal,
+    closeAssetSelectionModal,
     closeAssignModal,
     closeDateModal,
     closePasswordModal,
     closeUserModal,
+    closeUserSelectionModal,
     openAssetModal,
+    openAssetSelectionModal,
     openAssignModal,
     openDateModal,
     openPasswordModal,
     openUserModal,
+    openUserSelectionModal,
   };
 };

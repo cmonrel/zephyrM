@@ -4,6 +4,7 @@ import "./UserManagementPage.css";
 import { UserModal, PasswordModal, useUIStore } from "../../../ui";
 import { useUsersStore } from "../hooks/useUsersStore";
 import { FabAddNewUser } from "../../../components/FabButtons/FabAddNewUser";
+import { useCalendarStore } from "../../calendar";
 
 export const UserManagementPage = () => {
   const {
@@ -14,6 +15,7 @@ export const UserManagementPage = () => {
   } = useUIStore();
   const { users, startLoadingUsers, startDeletingUser, setActiveUser } =
     useUsersStore();
+  const { startLoadingEvents } = useCalendarStore();
 
   // Open modal and set selected user
   const handleEdit = (user) => {
@@ -33,7 +35,8 @@ export const UserManagementPage = () => {
 
   useEffect(() => {
     startLoadingUsers();
-  }, [users]);
+    startLoadingEvents();
+  }, []);
 
   return (
     <div className="user-management-container">
@@ -65,16 +68,16 @@ export const UserManagementPage = () => {
                     Edit
                   </button>
                   <button
-                    className="btn delete-btn"
-                    onClick={() => handleDelete(user)}
-                  >
-                    Delete
-                  </button>
-                  <button
                     className="btn new-password-btn"
                     onClick={() => handleRecoverPassword(user)}
                   >
                     New Password
+                  </button>
+                  <button
+                    className="btn delete-btn"
+                    onClick={() => handleDelete(user)}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>

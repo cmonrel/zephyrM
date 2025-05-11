@@ -5,45 +5,55 @@ import {
   onAddNewEvent,
   onDeleteEvent,
   onLoadEvents,
+  onLogoutCalendar,
   onSetActiveEvent,
+  onSetActiveUser,
   onUpdateEvent,
 } from "../../../store";
 import { convertEventsToDateEvents } from "../";
 import zephyrmApi from "../../../apis/zephyrMAPI";
+import { onSetActiveAsset } from "../../../store/assetsModule/assetsSlice";
 
 export const useCalendarStore = () => {
   const dispatch = useDispatch();
   const { events, activeEvent } = useSelector((state) => state.calendar);
   const { user } = useSelector((state) => state.auth);
+  const { activeUser } = useSelector((state) => state.user);
+  const { activeAsset } = useSelector((state) => state.assets);
 
   const setActiveEvent = (calendarEvent) => {
     dispatch(onSetActiveEvent(calendarEvent));
   };
 
   const startSavingEvent = async (calendarEvent) => {
+    if (!calendarEvent) return;
+    calendarEvent.user = activeUser.uid;
+    calendarEvent.asset = activeAsset.aid;
     try {
-      if (calendarEvent.id) {
+      if (calendarEvent.eid) {
         // Update
-        await zephyrmApi.put(`events/${calendarEvent.id}`, calendarEvent);
-
+        await zephyrmApi.put(`events/${calendarEvent.eid}`, calendarEvent);
         dispatch(onUpdateEvent({ ...calendarEvent, user }));
+        dispatch(onSetActiveAsset(null));
+        dispatch(onSetActiveUser(null));
         return;
       }
-
       // Create
       const { data } = await zephyrmApi.post("events", calendarEvent);
-      dispatch(
-        onAddNewEvent({ ...calendarEvent, id: data.saveEvent.id, user })
-      );
+      dispatch(onAddNewEvent({ ...calendarEvent, eid: data.saveEvent.eid }));
+      dispatch(onSetActiveAsset(null));
+      dispatch(onSetActiveUser(null));
     } catch (error) {
       Swal.fire("Error saving", error.response.data.msg, "error");
     }
   };
 
-  const startDeletingEvent = async () => {
-    if (!activeEvent) return;
+  const startDeletingEvent = async (event) => {
+    if (!activeEvent && !event) return;
+    const idEventToDelete = activeEvent?.eid || event.eid;
+    if (!idEventToDelete) return;
     try {
-      await zephyrmApi.delete(`events/${activeEvent.id}`);
+      await zephyrmApi.delete(`events/${idEventToDelete}`);
       dispatch(onDeleteEvent());
     } catch (error) {
       Swal.fire("Error deleting", error.response.data.msg, "error");
@@ -54,11 +64,20 @@ export const useCalendarStore = () => {
     try {
       const { data } = await zephyrmApi.get("events");
       const events = convertEventsToDateEvents(data.events);
+      dispatch(onLogoutCalendar());
       dispatch(onLoadEvents(events));
     } catch (error) {
       console.log("Error loading events");
       console.log(error);
     }
+  };
+
+  const startDeletingUserEvents = (uid) => {
+    events.map((event) => {
+      if (event.user._id === uid || event.user.uid === uid) {
+        startDeletingEvent(event);
+      }
+    });
   };
 
   return {
@@ -71,6 +90,7 @@ export const useCalendarStore = () => {
     setActiveEvent,
     startSavingEvent,
     startDeletingEvent,
+    startDeletingUserEvents,
     startLoadingEvents,
   };
 };

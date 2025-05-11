@@ -18,13 +18,11 @@ export const AssetsPage = () => {
   } = useUIStore();
   const { users } = useUsersStore();
 
-  // Open modal and set selected asset
   const handleEdit = (asset) => {
     setActiveAsset(asset);
     openAssetModal();
   };
 
-  // Delete asset
   const handleDeleteAll = (aid) => {
     startDeletingAsset(aid);
   };
@@ -70,7 +68,7 @@ export const AssetsPage = () => {
                         "en-US",
                         {
                           year: "numeric",
-                          month: "short",
+                          month: "long",
                           day: "numeric",
                         }
                       )
