@@ -1,0 +1,82 @@
+import { useEffect, useState } from "react";
+import { Calendar } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+
+import { useAuthStore } from "../../../auth/hooks/useAuthStore";
+import { CalendarEvent, getMessages, localizer, useCalendarStore } from "..";
+import { CalendarModal } from "../../../ui";
+import { useUIStore } from "../../../ui/hooks/useUiStore";
+import { FabAddNew, FabDelete } from "../../../components";
+import { NavBar } from "../../../components";
+
+export const CalendarPage = () => {
+  const { user } = useAuthStore();
+  const { isDateModalOpen, openDateModal } = useUIStore();
+  const { events, hasEventSelected, setActiveEvent, startLoadingEvents } =
+    useCalendarStore();
+
+  const [lastView] = useState(localStorage.getItem("lastView") || "week");
+  const eventStyleGetter = (event) => {
+    console.log(event);
+    const isMyEvent = user.uid === event.uid;
+
+    const style = {
+      backgroundColor: isMyEvent ? "#347CF7" : "#465660",
+      borderRadius: "0px",
+      opacity: 0.8,
+      color: "white",
+    };
+
+    return {
+      style,
+    };
+  };
+
+  const onDoubleClick = () => {
+    openDateModal();
+  };
+
+  const onSelect = (event) => {
+    setActiveEvent(event);
+  };
+
+  const onSelectEmpty = () => {
+    setActiveEvent(null);
+  };
+
+  const onViewChange = (event) => {
+    localStorage.setItem("lastView", event);
+  };
+
+  useEffect(() => {
+    startLoadingEvents();
+  }, []);
+
+  return (
+    <>
+      <Calendar
+        culture={"es"}
+        localizer={localizer}
+        events={events}
+        defaultView={lastView}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: "calc(100vh - 80px)" }}
+        messages={getMessages()}
+        eventPropGetter={eventStyleGetter}
+        components={{
+          event: CalendarEvent,
+        }}
+        selectable
+        onSelectSlot={onSelectEmpty}
+        onDoubleClickEvent={onDoubleClick}
+        onSelectEvent={onSelect}
+        onView={onViewChange}
+      />
+
+      {hasEventSelected && !isDateModalOpen && <FabDelete />}
+      <FabAddNew />
+      <CalendarModal />
+    </>
+  );
+};

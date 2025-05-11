@@ -1,0 +1,226 @@
+/* Main container */
+.assets-management-container {
+  max-width: 75vw;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.page-title {
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Alert */
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alert.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Table styles */
+.table-container {
+  overflow-x: auto;
+}
+
+.assets-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.assets-table th,
+.assets-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.assets-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+}
+
+.assets-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 5px;
+  transition: background-color 0.3s;
+}
+
+.edit-btn {
+  background-color: #4e73df;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #2e59d9;
+}
+
+.delete-btn {
+  background-color: #e74a3b;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #d52a1a;
+}
+
+.assign-btn {
+  background-color: #1cc88a;
+  color: white;
+}
+
+.assign-btn:hover {
+  background-color: #17a673;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actions input[type="number"] {
+  width: 50px;
+  height: 32px;
+  padding: 4px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 4px;
+}
+
+.actions input[type="number"]:focus {
+  outline: none;
+  border-color: #dc3545; /* Match delete button color */
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.actions .delete-btn {
+  min-width: 60px;
+}
+
+/* Modal footer styling */
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+/* Modal Assign */
+
+.user-list-container {
+  padding: 16px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.user-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: #a777e3;
+}
+
+.user-info {
+  flex-grow: 1;
+}
+
+.user-info h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.user-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 0.8rem;
+}
+
+.user-id {
+  color: #666;
+}
+
+.user-role {
+  color: #a777e3;
+  font-weight: 500;
+  background: rgba(167, 119, 227, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.user-select-indicator {
+  color: #ccc;
+  transition: all 0.3s ease;
+}
+
+.user-card:hover .user-select-indicator {
+  color: #a777e3;
+  transform: translateX(3px);
+}
+
+/* Scrollbar styling */
+.user-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.user-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.user-list-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.user-list-container::-webkit-scrollbar-thumb:hover {
+  background: #a777e3;
+}
