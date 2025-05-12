@@ -1,9 +1,10 @@
 const { response } = require("express");
 const Event = require("../models/Event");
+const sendEventNotification = require("../../notifications/helpers/sendEventNotification");
 
 const getEvents = async (req, res = response) => {
   try {
-    const events = await Event.find().populate("user", "name");
+    const events = await Event.find().populate("title");
 
     res.status(200).json({
       ok: true,
@@ -19,9 +20,15 @@ const getEvents = async (req, res = response) => {
 const createEvent = async (req, res = response) => {
   const event = new Event(req.body);
   try {
-    event.user = req.uid;
-
     const saveEvent = await event.save();
+
+    const notifyTime = new Date(event.start) - 30 * 60 * 1000; // 30 mins before
+    if (notifyTime > Date.now()) {
+      setTimeout(async () => {
+        await sendEventNotification(event.user.uid, event);
+      }, notifyTime - Date.now());
+    }
+
     res.status(201).json({
       ok: true,
       saveEvent,
@@ -36,14 +43,9 @@ const createEvent = async (req, res = response) => {
 };
 const updateEvent = async (req, res = response) => {
   const eventId = req.params.id;
-  const uid = req.uid;
+  const newEvent = req.body;
 
   try {
-    const newEvent = {
-      ...req.body,
-      user: uid,
-    };
-
     const updatedEvent = await Event.findByIdAndUpdate(eventId, newEvent, {
       new: true,
     });

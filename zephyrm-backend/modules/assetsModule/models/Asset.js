@@ -29,7 +29,7 @@ const AssetSchema = Schema({
     type: Array,
   },
   user: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.Object,
     ref: "User",
   },
 });

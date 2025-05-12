@@ -27,6 +27,12 @@ app.use("/api/users", require("./modules/users/routes/users"));
 // CRUD: Assets
 app.use("/api/assets", require("./modules/assetsModule/routes/assets"));
 
+// CRUD: Notifications
+app.use(
+  "/api/notifications",
+  require("./modules/notifications/routes/notifications")
+);
+
 // Levantar el servidor
 app.listen(process.env.PORT, () => {
   console.log(`Servidor corriendo en puerto ${process.env.PORT}`);

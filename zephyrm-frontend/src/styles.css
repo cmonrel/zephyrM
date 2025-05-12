@@ -75,10 +75,9 @@
   border-color: #80bdff;
 }
 
-/* Selection Modal Styling */
 .selection-modal {
   max-width: 50vw;
-  max-height: 80vh;
+  max-height: 60vh;
 }
 
 .selection-list {

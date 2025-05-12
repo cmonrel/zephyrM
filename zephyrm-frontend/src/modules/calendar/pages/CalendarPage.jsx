@@ -14,7 +14,9 @@ export const CalendarPage = () => {
   const { events, hasEventSelected, setActiveEvent, startLoadingEvents } =
     useCalendarStore();
 
-  const [lastView] = useState(localStorage.getItem("lastView") || "week");
+  const [lastView, setLastView] = useState(
+    localStorage.getItem("lastView") || "week"
+  );
   const eventStyleGetter = (event) => {
     const isMyEvent =
       user.uid === event.user._id || user.uid === event.user.uid;
@@ -31,6 +33,11 @@ export const CalendarPage = () => {
     };
   };
 
+  const displayedEvents =
+    lastView === "agenda"
+      ? events.filter((event) => event.user.uid === user.uid)
+      : events;
+
   const onDoubleClick = () => {
     openDateModal();
   };
@@ -44,7 +51,9 @@ export const CalendarPage = () => {
   };
 
   const onViewChange = (event) => {
+    setLastView(event);
     localStorage.setItem("lastView", event);
+    setActiveEvent(null);
   };
 
   useEffect(() => {
@@ -55,7 +64,7 @@ export const CalendarPage = () => {
     <>
       <Calendar
         localizer={localizer}
-        events={events}
+        events={displayedEvents}
         defaultView={lastView}
         startAccessor="start"
         endAccessor="end"

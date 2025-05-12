@@ -1,10 +1,38 @@
 import { useNavigate } from "react-router-dom";
+import "./NavBar.css";
 
 import { useAuthStore } from "../../auth/hooks/useAuthStore";
+import { useEffect, useState } from "react";
+import { NotificationDropdown } from "./NotificationDropdown";
+import { useNotificationStore } from "../../hooks";
 
 export const NavBar = () => {
-  const { user, startLogout } = useAuthStore();
   const navigate = useNavigate();
+  const { user, notifications, startLogout } = useAuthStore();
+  const {
+    markNotificationRead,
+    markAllAsRead: markAllAsReadStore,
+    handleSSENotifications,
+  } = useNotificationStore();
+
+  // Replace with backend
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const markAsRead = (noti) => {
+    markNotificationRead(noti);
+  };
+
+  const markAllAsRead = () => {
+    markAllAsReadStore(notifications);
+  };
+
+  useEffect(() => {
+    if (user.uid) {
+      handleSSENotifications(user.uid);
+    }
+  }, [user.uid]);
 
   return (
     <>
@@ -35,7 +63,30 @@ export const NavBar = () => {
             &nbsp; Calendar
           </button>
         </div>
-        <div className="d-flex">
+
+        <div className="d-flex align-items-center">
+          <div className="notification-container me-3 position-relative">
+            <button
+              className="btn btn-outline-light notification-btn"
+              onClick={() => setShowNotifications(!showNotifications)}
+            >
+              <i className="fas fa-bell"></i>
+              {unreadCount > 0 &&
+                (unreadCount > 99 ? (
+                  <span className="notification-badge">99+</span>
+                ) : (
+                  <span className="notification-badge">{unreadCount}</span>
+                ))}
+            </button>
+
+            {showNotifications && (
+              <NotificationDropdown
+                markAsRead={markAsRead}
+                markAllAsRead={markAllAsRead}
+                notifications={notifications}
+              />
+            )}
+          </div>
           <button onClick={startLogout} className="btn btn-outline-danger">
             <i className="fas fa-sign-out-alt"></i>
             &nbsp;

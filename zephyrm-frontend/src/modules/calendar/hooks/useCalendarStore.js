@@ -7,19 +7,16 @@ import {
   onLoadEvents,
   onLogoutCalendar,
   onSetActiveEvent,
-  onSetActiveUser,
   onUpdateEvent,
 } from "../../../store";
 import { convertEventsToDateEvents } from "../";
 import zephyrmApi from "../../../apis/zephyrMAPI";
-import { onSetActiveAsset } from "../../../store/assetsModule/assetsSlice";
+import { useNotificationStore } from "../../../hooks";
 
 export const useCalendarStore = () => {
   const dispatch = useDispatch();
   const { events, activeEvent } = useSelector((state) => state.calendar);
-  const { user } = useSelector((state) => state.auth);
-  const { activeUser } = useSelector((state) => state.user);
-  const { activeAsset } = useSelector((state) => state.assets);
+  const { startCreatingNotification } = useNotificationStore();
 
   const setActiveEvent = (calendarEvent) => {
     dispatch(onSetActiveEvent(calendarEvent));
@@ -27,22 +24,18 @@ export const useCalendarStore = () => {
 
   const startSavingEvent = async (calendarEvent) => {
     if (!calendarEvent) return;
-    calendarEvent.user = activeUser.uid;
-    calendarEvent.asset = activeAsset.aid;
     try {
       if (calendarEvent.eid) {
         // Update
         await zephyrmApi.put(`events/${calendarEvent.eid}`, calendarEvent);
-        dispatch(onUpdateEvent({ ...calendarEvent, user }));
-        dispatch(onSetActiveAsset(null));
-        dispatch(onSetActiveUser(null));
+        dispatch(onUpdateEvent(calendarEvent));
+        startCreatingNotification(calendarEvent);
         return;
       }
       // Create
       const { data } = await zephyrmApi.post("events", calendarEvent);
       dispatch(onAddNewEvent({ ...calendarEvent, eid: data.saveEvent.eid }));
-      dispatch(onSetActiveAsset(null));
-      dispatch(onSetActiveUser(null));
+      startCreatingNotification(calendarEvent);
     } catch (error) {
       Swal.fire("Error saving", error.response.data.msg, "error");
     }

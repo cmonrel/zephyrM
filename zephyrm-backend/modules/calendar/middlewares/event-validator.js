@@ -1,8 +1,6 @@
 const { response } = require("express");
 const Event = require("../models/Event");
-
-// TODO: Validar si hay eventos
-// TODO: Juntas ambos middlewares
+const User = require("../../../auth/models/User");
 
 const eventExist = async (req, res = response, next) => {
   const eventId = req.params.id;
@@ -23,9 +21,10 @@ const isUserEvent = async (req, res = response, next) => {
   const eventId = req.params.id;
   const uid = req.uid;
 
-  const event = await Event.findById(eventId);
+  const user = await User.findById(uid);
 
-  if (event.user.toString() !== uid) {
+  const event = await Event.findById(eventId);
+  if (event.user.uid !== uid && user.role !== "admin") {
     return res.status(401).json({
       ok: false,
       msg: "You are not allowed to do this",

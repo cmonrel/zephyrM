@@ -33,6 +33,8 @@ router.post(
   "/",
   [
     check("title", "Title is required").not().isEmpty(),
+    check("user", "User is required").not().isEmpty(),
+    check("asset", "Asset is required").not().isEmpty(),
     check("start", "Start date is required").custom(isDate),
     check("end", "End date is required").custom(isDate),
     fieldsValidator,
@@ -45,6 +47,8 @@ router.put(
   "/:id",
   [
     check("title", "Title is required").not().isEmpty(),
+    check("user", "User is required").not().isEmpty(),
+    check("asset", "Asset is required").not().isEmpty(),
     check("start", "Start date is required").custom(isDate),
     check("end", "End date is required").custom(isDate),
     fieldsValidator,

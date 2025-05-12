@@ -40,13 +40,13 @@ export const CalendarModal = () => {
     openUserSelectionModal,
   } = useUIStore();
   const { activeEvent, startSavingEvent, setActiveEvent } = useCalendarStore();
-  const { startLoadingUsers, setActiveUser } = useUsersStore();
-  const { startLoadingAssets, setActiveAsset } = useAssetsStore();
+  const { startLoadingUsers } = useUsersStore();
+  const { startLoadingAssets } = useAssetsStore();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formValues, setFormValues] = useState({
     title: "",
-    notes: "",
+    description: "",
     start: new Date(),
     end: addHours(new Date(), 2),
     asset: null,
@@ -84,13 +84,11 @@ export const CalendarModal = () => {
   };
 
   const handleAssetSelect = (asset) => {
-    setActiveAsset(asset);
     setFormValues({ ...formValues, asset });
     closeAssetSelectionModal();
   };
 
   const handleUserSelect = (user) => {
-    setActiveUser(user);
     setFormValues({ ...formValues, user });
     closeUserSelectionModal();
   };
@@ -182,8 +180,8 @@ export const CalendarModal = () => {
               className="form-control"
               placeholder="Description"
               rows="5"
-              name="notes"
-              value={formValues.notes}
+              name="description"
+              value={formValues.description}
               onChange={onChangeInput}
             ></textarea>
           </div>

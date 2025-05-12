@@ -17,12 +17,12 @@ const EventSchema = Schema({
     required: true,
   },
   user: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.Object,
     ref: "User",
     required: true,
   },
   asset: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.Object,
     ref: "Asset",
     required: true,
   },
