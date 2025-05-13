@@ -9,7 +9,6 @@ const { check } = require("express-validator");
 
 const {
   userHaveNotifications,
-  createEventReminder,
 } = require("../middlewares/notifications-validator");
 const {
   getNotifications,
@@ -17,14 +16,10 @@ const {
   deleteNotification,
   markAsRead,
   markAllAsRead,
-  setupNotificationStream,
 } = require("../controllers/notifications");
 const { validateJWT } = require("../../../middlewares/jwt-validator");
 
 const router = Router();
-
-// GET setup notification stream
-router.get("/stream/:id", setupNotificationStream);
 
 // GET notifications
 router.get("/:id", [userHaveNotifications], getNotifications);

@@ -19,6 +19,9 @@ const {
   updateEvent,
   deleteEvent,
 } = require("../controllers/events");
+const {
+  createNotification,
+} = require("../../notifications/controllers/notifications");
 
 const router = Router();
 
@@ -60,5 +63,8 @@ router.put(
 
 // DELETE event
 router.delete("/:id", [eventExist, isUserEvent], deleteEvent);
+
+// POST agenda notifications
+router.post("/schedule", createNotification);
 
 module.exports = router;

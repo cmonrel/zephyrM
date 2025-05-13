@@ -83,43 +83,10 @@ export const useNotificationStore = () => {
     }
   };
 
-  const handleSSENotifications = (uid) => {
-    // Create new EventSource connection
-    const apiBaseUrl = VITE_API_URL;
-    const token = localStorage.getItem("token");
-    const newEventSource = new EventSource(
-      `${apiBaseUrl}/notifications/stream/${uid}?token=${token}`
-    );
-    console.log(newEventSource);
-    newEventSource.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data.type === "NEW_NOTIFICATION") {
-        startCreatingNotification(data.notification);
-        // Optional: Show browser notification
-        if (Notification.permission === "granted") {
-          new Notification("New Notification", {
-            body: data.notification.message,
-          });
-        }
-      }
-    };
-
-    newEventSource.onerror = () => {
-      console.log("SSE error - attempting reconnect...");
-      newEventSource.close();
-      // Implement reconnect logic here if needed
-    };
-
-    return () => {
-      newEventSource.close();
-    };
-  };
-
   return {
     // Params
 
     // Methods
-    handleSSENotifications,
     markAllAsRead,
     markNotificationRead,
     startCreatingNotification,

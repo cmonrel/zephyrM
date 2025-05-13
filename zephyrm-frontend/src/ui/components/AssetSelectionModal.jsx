@@ -2,6 +2,8 @@ import Modal from "react-modal";
 
 import { useAssetsStore } from "../../modules/assetsModule";
 import { useUIStore } from "../hooks/useUiStore";
+import { useEffect, useState } from "react";
+import { SearchBar } from "../../components";
 
 const customStyles = {
   content: {
@@ -10,7 +12,7 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-0%, -35%)",
+    transform: "translate(-0%, -30%)",
   },
 };
 
@@ -22,6 +24,21 @@ export const AssetSelectionModal = ({ onSelect }) => {
     closeAssetSelectionModal();
   };
 
+  const [filteredAssets, setFilteredAssets] = useState(assets);
+
+  const handleAssetSearch = (searchTerm) => {
+    const result = assets.filter(
+      (asset) =>
+        asset.title.toLocaleLowerCase().includes(searchTerm) ||
+        asset.category.toLocaleLowerCase().includes(searchTerm)
+    );
+    setFilteredAssets(result);
+  };
+
+  useEffect(() => {
+    setFilteredAssets(assets);
+  }, [assets]);
+
   return (
     <Modal
       isOpen={isAssetSelectionModalOpen}
@@ -30,14 +47,16 @@ export const AssetSelectionModal = ({ onSelect }) => {
       className="selection-modal"
     >
       <h2>Select Asset</h2>
+      <SearchBar onSearch={handleAssetSearch} placeholder="Search asset..." />
       <div className="selection-list">
-        {assets.map((asset) => (
+        {filteredAssets.map((asset) => (
           <div
             key={asset.aid}
             className="selection-item"
             onClick={() => onSelect(asset)}
           >
             {asset.title} ({asset.category})
+            <div className="asset-state">{asset.state}</div>
           </div>
         ))}
       </div>

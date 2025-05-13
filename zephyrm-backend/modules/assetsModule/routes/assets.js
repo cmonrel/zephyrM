@@ -18,10 +18,7 @@ const {
   deleteAsset,
   assignUserToAsset,
 } = require("../controllers/assets");
-const {
-  assetAlreadyExists,
-  assetExists,
-} = require("../middlewares/asset-validator");
+const { assetExists } = require("../middlewares/asset-validator");
 const { userExists } = require("../../../auth/middlewares/user-validator");
 
 const router = Router();
@@ -42,7 +39,6 @@ router.post(
     check("state", "State is required").not().isEmpty(),
     check("acquisitionDate", "Acquisition date is required").custom(isDate),
     fieldsValidator,
-    assetAlreadyExists,
   ],
   createAsset
 );
@@ -66,6 +62,6 @@ router.put(
 router.delete("/:id", assetExists, deleteAsset);
 
 // POST assign user to asset
-router.put("/assign/:id", assetExists, assignUserToAsset);
+router.put("/assign/:id", [assetExists, userExists], assignUserToAsset);
 
 module.exports = router;

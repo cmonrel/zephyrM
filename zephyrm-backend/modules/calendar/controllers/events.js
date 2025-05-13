@@ -1,6 +1,5 @@
 const { response } = require("express");
 const Event = require("../models/Event");
-const sendEventNotification = require("../../notifications/helpers/sendEventNotification");
 
 const getEvents = async (req, res = response) => {
   try {
@@ -21,13 +20,6 @@ const createEvent = async (req, res = response) => {
   const event = new Event(req.body);
   try {
     const saveEvent = await event.save();
-
-    const notifyTime = new Date(event.start) - 30 * 60 * 1000; // 30 mins before
-    if (notifyTime > Date.now()) {
-      setTimeout(async () => {
-        await sendEventNotification(event.user.uid, event);
-      }, notifyTime - Date.now());
-    }
 
     res.status(201).json({
       ok: true,

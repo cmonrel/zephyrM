@@ -10,6 +10,7 @@ export const uiSlice = createSlice({
     isAssignModalOpen: false,
     isAssetSelectionModalOpen: false,
     isUserSelectionModalOPen: false,
+    isAssetDetailsModalOpen: false,
   },
   reducers: {
     onOpenDateModal: (state) => {
@@ -54,12 +55,19 @@ export const uiSlice = createSlice({
     onCloseUserSelectionModal: (state) => {
       state.isUserSelectionModalOPen = false;
     },
+    onOpenAssetsDetailsModal: (state) => {
+      state.isAssetDetailsModalOpen = true;
+    },
+    onCloseAssetsDetailsModal: (state) => {
+      state.isAssetDetailsModalOpen = false;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
 export const {
   onCloseAssetModal,
+  onCloseAssetsDetailsModal,
   onCloseAssetSelectionModal,
   onCloseAssignModal,
   onCloseDateModal,
@@ -67,6 +75,7 @@ export const {
   onCloseUserModal,
   onCloseUserSelectionModal,
   onOpenAssetModal,
+  onOpenAssetsDetailsModal,
   onOpenAssetSelectionModal,
   onOpenAssignModal,
   onOpenDateModal,

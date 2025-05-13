@@ -2,18 +2,15 @@ import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
 
 import { useAuthStore } from "../../auth/hooks/useAuthStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NotificationDropdown } from "./NotificationDropdown";
 import { useNotificationStore } from "../../hooks";
 
 export const NavBar = () => {
   const navigate = useNavigate();
   const { user, notifications, startLogout } = useAuthStore();
-  const {
-    markNotificationRead,
-    markAllAsRead: markAllAsReadStore,
-    handleSSENotifications,
-  } = useNotificationStore();
+  const { markNotificationRead, markAllAsRead: markAllAsReadStore } =
+    useNotificationStore();
 
   // Replace with backend
   const [showNotifications, setShowNotifications] = useState(false);
@@ -27,12 +24,6 @@ export const NavBar = () => {
   const markAllAsRead = () => {
     markAllAsReadStore(notifications);
   };
-
-  useEffect(() => {
-    if (user.uid) {
-      handleSSENotifications(user.uid);
-    }
-  }, [user.uid]);
 
   return (
     <>

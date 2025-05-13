@@ -1,8 +1,6 @@
 const { response } = require("express");
 const Notification = require("../models/Notification");
 
-const notificationStreams = new Map();
-
 const getNotifications = async (req, res = response) => {
   const user = req.params.id;
   try {
@@ -25,10 +23,11 @@ const getNotifications = async (req, res = response) => {
 const createNotification = async (req, res = response) => {
   try {
     const notification = new Notification(req.body);
-    const saveNotification = await notification.save();
+    const savedNotification = await notification.save();
+
     res.status(201).json({
       ok: true,
-      saveNotification,
+      savedNotification,
     });
   } catch (error) {
     console.log(error);
@@ -100,32 +99,22 @@ const markAllAsRead = (req, res = response) => {
   }
 };
 
-const setupNotificationStream = (req, res) => {
-  console.log(res);
-  const uid = req.params.id;
+const scheduleNotification = async (req, res = response) => {
+  const { userId, title, startTime } = req.body;
 
-  res.writeHead(200, {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    Connection: "keep-alive",
+  const event = await Event.create({ user: userId, title, startTime });
+
+  const notifyTime = new Date(new Date(startTime).getTime() - 30 * 60 * 1000);
+
+  await agenda.schedule(notifyTime, "sendNotification", {
+    userId,
+    eventId: event._id,
+    title,
   });
 
-  notificationStreams.set(uid, res);
-
-  Notification.find({ user: uid })
-    .sort({ creationDate: -1 })
-    .limit(10)
-    .then((notifications) => {
-      res.write(
-        `data: ${JSON.stringify({
-          type: "INITIAL_DATA",
-          notifications,
-        })}\n\n`
-      );
-    });
-
-  req.on("close", () => {
-    notificationStreams.delete(uid);
+  res.status(201).json({
+    ok: true,
+    event,
   });
 };
 
@@ -135,5 +124,5 @@ module.exports = {
   getNotifications,
   markAllAsRead,
   markAsRead,
-  setupNotificationStream,
+  scheduleNotification,
 };

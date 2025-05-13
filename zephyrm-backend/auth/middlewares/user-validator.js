@@ -25,7 +25,7 @@ const userExists = async (req, res = response, next) => {
   if (!user) {
     return res.status(400).json({
       ok: true,
-      msg: "User don'texists",
+      msg: "User don't exists",
     });
   }
 

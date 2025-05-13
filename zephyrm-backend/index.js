@@ -1,24 +1,50 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
-const { dbConnection } = require("./database/config");
+const http = require("http");
+const { Server } = require("socket.io");
 
-// Crear el servidor de express
+const { dbConnection } = require("./database/config");
+const { agenda } = require("./agenda/agenda");
+
+// Create express server
 const app = express();
 
-// Base de Datos
+// Create HTTP server and attach Socket.IO
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // You can restrict this to your frontend URL
+  },
+});
+
+// Socket.IO connection handler
+io.on("connection", (socket) => {
+  console.log("A client connected");
+
+  socket.on("register", (uid) => {
+    console.log(`User registered to room: user-${uid}`);
+    socket.join(`user-${uid}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
+
+// Data base
 dbConnection();
 
 // CORS
 app.use(cors());
 
-// Lectura y parseo del body
+// Parser and read body
 app.use(express.json());
 
-// Rutas
+// Rutes
 app.use("/api/auth", require("./auth/routes/auth"));
 
-// CRUD: Eventos
+// CRUD: Events
 app.use("/api/events", require("./modules/calendar/routes/events"));
 
 // CRUD: Users
@@ -33,7 +59,16 @@ app.use(
   require("./modules/notifications/routes/notifications")
 );
 
-// Levantar el servidor
-app.listen(process.env.PORT, () => {
+// Load and inject agenda jobs
+require("./modules/notifications/helpers/sendNotifications")(agenda, io);
+
+// Start agenda
+agenda.on("ready", async () => {
+  await agenda.start();
+  console.log("Agenda started!");
+});
+
+// Start server
+server.listen(process.env.PORT, () => {
   console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
 });

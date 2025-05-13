@@ -29,6 +29,7 @@ const createAsset = async (req, res = response) => {
       saveAsset,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       ok: false,
       msg: "Error creating asset",

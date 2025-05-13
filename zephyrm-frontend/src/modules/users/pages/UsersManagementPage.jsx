@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./UserManagementPage.css";
 
 import { UserModal, PasswordModal, useUIStore } from "../../../ui";
 import { useUsersStore } from "../hooks/useUsersStore";
 import { FabAddNewUser } from "../../../components/FabButtons/FabAddNewUser";
 import { useCalendarStore } from "../../calendar";
+import { SearchBar } from "../../../components";
 
 export const UserManagementPage = () => {
   const {
@@ -16,6 +17,18 @@ export const UserManagementPage = () => {
   const { users, startLoadingUsers, startDeletingUser, setActiveUser } =
     useUsersStore();
   const { startLoadingEvents } = useCalendarStore();
+
+  const [filteredUsers, setFilteredUsers] = useState(users);
+
+  const handleUserSearch = (searchTerm) => {
+    const result = users.filter(
+      (user) =>
+        user.name.toLowerCase().includes(searchTerm) ||
+        user.email.toLowerCase().includes(searchTerm) ||
+        user.role.toLowerCase().includes(searchTerm)
+    );
+    setFilteredUsers(result);
+  };
 
   // Open modal and set selected user
   const handleEdit = (user) => {
@@ -38,9 +51,15 @@ export const UserManagementPage = () => {
     startLoadingEvents();
   }, []);
 
+  useEffect(() => {
+    setFilteredUsers(users);
+  }, [users]);
+
   return (
     <div className="user-management-container">
       <h2 className="page-title">Users Management</h2>
+
+      <SearchBar onSearch={handleUserSearch} placeholder="Search Users..." />
 
       <div className="table-container">
         <table className="user-table">
@@ -54,7 +73,7 @@ export const UserManagementPage = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {filteredUsers.map((user, index) => (
               <tr key={user.uid}>
                 <td>{index + 1}</td>
                 <td>{user.name}</td>

@@ -6,6 +6,7 @@ export * from "./components/CalendarModal";
 export * from "./components/PasswordModal";
 export * from "./components/UserModal";
 export * from "./components/UserSelectionModal";
+export * from "./components/AssetDetailsModal";
 
 // HELPERS
 

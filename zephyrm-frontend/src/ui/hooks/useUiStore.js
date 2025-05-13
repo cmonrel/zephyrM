@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   onCloseAssetModal,
+  onCloseAssetsDetailsModal,
   onCloseAssetSelectionModal,
   onCloseAssignModal,
   onCloseDateModal,
@@ -9,6 +10,7 @@ import {
   onCloseUserModal,
   onCloseUserSelectionModal,
   onOpenAssetModal,
+  onOpenAssetsDetailsModal,
   onOpenAssetSelectionModal,
   onOpenAssignModal,
   onOpenDateModal,
@@ -27,6 +29,7 @@ export const useUIStore = () => {
     isPasswordModalOpen,
     isUserModalOpen,
     isUserSelectionModalOPen,
+    isAssetDetailsModalOpen,
   } = useSelector((state) => state.ui);
 
   const openDateModal = () => {
@@ -83,8 +86,17 @@ export const useUIStore = () => {
     dispatch(onCloseUserSelectionModal());
   };
 
+  const openAssetsDetailsModal = () => {
+    dispatch(onOpenAssetsDetailsModal());
+  };
+
+  const closeAssetsDetailsModal = () => {
+    dispatch(onCloseAssetsDetailsModal());
+  };
+
   return {
     // Properties
+    isAssetDetailsModalOpen,
     isAssetModalOpen,
     isAssetSelectionModalOpen,
     isAssignModalOpen,
@@ -95,6 +107,7 @@ export const useUIStore = () => {
 
     // Methods
     closeAssetModal,
+    closeAssetsDetailsModal,
     closeAssetSelectionModal,
     closeAssignModal,
     closeDateModal,
@@ -102,6 +115,7 @@ export const useUIStore = () => {
     closeUserModal,
     closeUserSelectionModal,
     openAssetModal,
+    openAssetsDetailsModal,
     openAssetSelectionModal,
     openAssignModal,
     openDateModal,

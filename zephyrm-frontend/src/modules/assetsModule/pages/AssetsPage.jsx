@@ -1,22 +1,48 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./AssetsPage.css";
 
 import { AssetModal } from "../../../ui/components/AssetModal";
 import { useAssetsStore } from "../";
-import { AssignModal, useUIStore } from "../../../ui";
+import { AssetDetailsModal, AssignModal, useUIStore } from "../../../ui";
 import { FabAddNewAsset } from "../../../components/FabButtons/FabAddNewAsset";
 import { useUsersStore } from "../../users/hooks/useUsersStore";
+import { SearchBar } from "../../../components";
 
 export const AssetsPage = () => {
-  const { assets, startLoadingAssets, setActiveAsset, startDeletingAsset } =
-    useAssetsStore();
+  const {
+    activeAsset,
+    assets,
+    startLoadingAssets,
+    setActiveAsset,
+    startDeletingAsset,
+  } = useAssetsStore();
   const {
     isAssetModalOpen,
     isAssignModalOpen,
+    isAssetDetailsModalOpen,
     openAssetModal,
     openAssignModal,
+    openAssetsDetailsModal,
   } = useUIStore();
-  const { users } = useUsersStore();
+  const { users, startLoadingUsers } = useUsersStore();
+
+  const [filteredAssets, setFilteredAssets] = useState(assets);
+
+  const handleAssetSearch = (searchTerm) => {
+    const result = assets.filter((asset) => {
+      const userName =
+        users.find((user) => user.uid === asset.user)?.name || "Unassigned";
+
+      return (
+        asset.title.toLocaleLowerCase().includes(searchTerm) ||
+        asset.category.toLocaleLowerCase().includes(searchTerm) ||
+        asset.location.toLocaleLowerCase().includes(searchTerm) ||
+        asset.state.toLocaleLowerCase().includes(searchTerm) ||
+        userName.toLocaleLowerCase()?.includes(searchTerm)
+      );
+    });
+    setFilteredAssets(result);
+  };
 
   const handleEdit = (asset) => {
     setActiveAsset(asset);
@@ -32,13 +58,28 @@ export const AssetsPage = () => {
     openAssignModal();
   };
 
+  const handleClick = (asset) => {
+    setActiveAsset(asset);
+  };
+
+  const handleDoubleClick = () => {
+    openAssetsDetailsModal();
+  };
+
   useEffect(() => {
+    startLoadingUsers();
     startLoadingAssets();
   }, []);
+
+  useEffect(() => {
+    setFilteredAssets(assets);
+  }, [assets]);
 
   return (
     <div className="assets-management-container">
       <h2 className="page-title">Assets Management</h2>
+
+      <SearchBar onSearch={handleAssetSearch} placeholder="Search assets..." />
 
       <div className="table-container">
         <table className="assets-table">
@@ -56,8 +97,12 @@ export const AssetsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {assets.map((asset, index) => (
-              <tr key={asset.aid}>
+            {filteredAssets.map((asset, index) => (
+              <tr
+                key={asset.aid}
+                onClick={() => handleClick(asset)}
+                onDoubleClick={() => handleDoubleClick()}
+              >
                 <td>{index + 1}</td>
                 <td>{asset.title}</td>
                 <td>{asset.category}</td>
@@ -105,6 +150,9 @@ export const AssetsPage = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Detaisl Asset Modal */}
+      {isAssetDetailsModalOpen && <AssetDetailsModal asset={activeAsset} />}
 
       {/* Edit User Modal */}
       {isAssetModalOpen && <AssetModal />}
