@@ -7,6 +7,8 @@ import {
   onCloseAssignModal,
   onCloseDateModal,
   onClosePasswordModal,
+  onCloseRoleSelectionModal,
+  onCloseStateSelectionModal,
   onCloseUserModal,
   onCloseUserSelectionModal,
   onOpenAssetModal,
@@ -15,6 +17,8 @@ import {
   onOpenAssignModal,
   onOpenDateModal,
   onOpenPasswordModal,
+  onOpenRoleSelectionModal,
+  onOpenStateSelectionModal,
   onOpenUserModal,
   onOpenUserSelectionModal,
 } from "../../store/ui/uiSlice";
@@ -22,14 +26,16 @@ import {
 export const useUIStore = () => {
   const dispatch = useDispatch();
   const {
+    isAssetDetailsModalOpen,
     isAssetModalOpen,
     isAssetSelectionModalOpen,
     isAssignModalOpen,
     isDateModalOpen,
     isPasswordModalOpen,
+    isRoleSelectionModalOpen,
+    isStateSelectionModalOpen,
     isUserModalOpen,
     isUserSelectionModalOPen,
-    isAssetDetailsModalOpen,
   } = useSelector((state) => state.ui);
 
   const openDateModal = () => {
@@ -94,6 +100,22 @@ export const useUIStore = () => {
     dispatch(onCloseAssetsDetailsModal());
   };
 
+  const openRoleSelectionModal = () => {
+    dispatch(onOpenRoleSelectionModal());
+  };
+
+  const closeRoleSelectionModal = () => {
+    dispatch(onCloseRoleSelectionModal());
+  };
+  const openStateSelectionModal = () => {
+    console.log("openStateSelectionModal");
+    dispatch(onOpenStateSelectionModal());
+  };
+
+  const closeStateSelectionModal = () => {
+    dispatch(onCloseStateSelectionModal());
+  };
+
   return {
     // Properties
     isAssetDetailsModalOpen,
@@ -104,6 +126,8 @@ export const useUIStore = () => {
     isPasswordModalOpen,
     isUserModalOpen,
     isUserSelectionModalOPen,
+    isRoleSelectionModalOpen,
+    isStateSelectionModalOpen,
 
     // Methods
     closeAssetModal,
@@ -112,6 +136,8 @@ export const useUIStore = () => {
     closeAssignModal,
     closeDateModal,
     closePasswordModal,
+    closeRoleSelectionModal,
+    closeStateSelectionModal,
     closeUserModal,
     closeUserSelectionModal,
     openAssetModal,
@@ -120,6 +146,8 @@ export const useUIStore = () => {
     openAssignModal,
     openDateModal,
     openPasswordModal,
+    openRoleSelectionModal,
+    openStateSelectionModal,
     openUserModal,
     openUserSelectionModal,
   };

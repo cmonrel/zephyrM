@@ -110,37 +110,9 @@ const assignUserToAsset = async (req, res = response) => {
   }
 };
 
-const downloadAssetPdf = async (req, res = response) => {
+const downloadAssetFile = async (req, res = response) => {
   try {
-    const pdfPath = await generatePdf();
-
-    if (!fs.existsSync(pdfPath)) {
-      return res.status(404).json({ ok: false, msg: "Error generating PDF" });
-    }
-
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      'attachment; filename="assets_report.pdf"'
-    );
-
-    const fileStream = fs.createReadStream(pdfPath);
-    fileStream.pipe(res);
-    // res.download(pdfPath, (err) => {
-    //   if (err) {
-    //     console.error("Error sending file:", err);
-    //   }
-
-    //   fs.unlinkSync(pdfPath);
-    // });
-
-    fileStream.on("end", () => {
-      fs.unlink(pdfPath, (err) => {
-        if (err) {
-          console.error("Error deleting file:", err);
-        }
-      });
-    });
+    await generatePdf(res);
   } catch (error) {
     res.status(500).json({
       ok: false,
@@ -154,7 +126,7 @@ module.exports = {
   assignUserToAsset,
   createAsset,
   deleteAsset,
-  downloadAssetPdf,
+  downloadAssetFile,
   getAssets,
   updateAsset,
 };

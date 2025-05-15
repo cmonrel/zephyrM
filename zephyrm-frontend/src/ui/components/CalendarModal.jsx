@@ -22,7 +22,7 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
+    transform: "translate(-50%, -49%)",
   },
 };
 
@@ -179,7 +179,7 @@ export const CalendarModal = () => {
               type="text"
               className="form-control"
               placeholder="Description"
-              rows="5"
+              rows="3"
               name="description"
               value={formValues.description}
               onChange={onChangeInput}

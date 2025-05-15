@@ -37,8 +37,9 @@ export const useCalendarStore = () => {
       }
       // Create
       const { data } = await zephyrmApi.post("events", calendarEvent);
-      dispatch(onAddNewEvent({ ...calendarEvent, eid: data.saveEvent.eid }));
-      startCreatingNotification(calendarEvent);
+      const newCalendarEvent = { ...calendarEvent, eid: data.saveEvent.eid };
+      dispatch(onAddNewEvent(newCalendarEvent));
+      startCreatingNotification(newCalendarEvent);
     } catch (error) {
       Swal.fire("Error saving", error.response.data.msg, "error");
     }

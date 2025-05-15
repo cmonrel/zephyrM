@@ -9,15 +9,20 @@ module.exports = (agenda, io) => {
       const eventFound = await Event.findById(event);
       const { title } = eventFound;
 
+      const timeTillEvent = new Date(
+        new Date(eventFound.start).getTime() - Date.now()
+      );
+
       await Notification.create({
         user: user,
         title: "Event Reminder",
-        description: `Your event "${title}" is starting in 30 minutes.`,
+        description: `Your event "${title}" is starting in ${timeTillEvent.getMinutes()} minutes.`,
+        eventDate: eventFound.start,
       });
 
       io.to(`user-${user}`).emit("notification", {
         title: "Event Reminder",
-        message: `Your event "${title}" is starting in 30 minutes.`,
+        message: `Your event "${title}" is starting in ${timeTillEvent.getMinutes()} minutes.`,
         eventFound,
       });
     } catch (error) {

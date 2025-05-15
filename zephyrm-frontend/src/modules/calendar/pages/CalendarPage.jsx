@@ -15,7 +15,7 @@ export const CalendarPage = () => {
     useCalendarStore();
 
   const [lastView, setLastView] = useState(
-    localStorage.getItem("lastView") || "week"
+    localStorage.getItem("lastView") || "month"
   );
   const eventStyleGetter = (event) => {
     const isMyEvent =

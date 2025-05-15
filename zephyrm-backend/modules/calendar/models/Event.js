@@ -24,7 +24,6 @@ const EventSchema = Schema({
   asset: {
     type: Schema.Types.Object,
     ref: "Asset",
-    required: true,
   },
 });
 

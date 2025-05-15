@@ -23,6 +23,7 @@ export const NavBar = () => {
 
   const markAllAsRead = () => {
     markAllAsReadStore(notifications);
+    setShowNotifications(false);
   };
 
   return (

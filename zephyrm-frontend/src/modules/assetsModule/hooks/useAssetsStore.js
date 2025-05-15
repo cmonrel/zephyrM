@@ -89,11 +89,11 @@ export const useAssetsStore = () => {
         responseType: "blob",
       });
 
-      const blob = new Blob([response.data], { type: "application/pdf" });
+      const blob = new Blob([response.data], { type: "application/xlsx" });
 
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "assets_report.pdf";
+      link.download = "assets_report.xlsx";
 
       document.body.appendChild(link);
       link.click();

@@ -11,7 +11,7 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
+    transform: "translate(-50%, -49%)",
   },
 };
 
@@ -52,19 +52,6 @@ export const AssetDetailsModal = ({ asset }) => {
         <p>
           <strong>User Assigned:</strong> {asset.user?.name || "Unassigned"}
         </p>
-
-        <div>
-          <strong>Documents:</strong>
-          {asset?.documents && asset?.documents.length > 0 ? (
-            <ul>
-              {asset?.documents.map((doc, i) => (
-                <li key={i}>{doc}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>No documents attached.</p>
-          )}
-        </div>
       </div>
     </Modal>
   );

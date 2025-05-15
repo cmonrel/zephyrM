@@ -63,14 +63,13 @@ export const useNotificationStore = () => {
       description: event.description,
       event: event,
       user: event.user.uid,
+      eventDate: event.start,
     };
-    console.log(newNotification);
 
     const schedule = {
       event: newNotification.event.eid,
       user: newNotification.user,
     };
-    console.log(schedule);
 
     try {
       await zephyrmApi.post("events/schedule", schedule);

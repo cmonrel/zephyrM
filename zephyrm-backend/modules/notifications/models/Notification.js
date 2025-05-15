@@ -22,6 +22,10 @@ const NotificationSchema = Schema({
     type: Schema.Types.Object,
     ref: "Event",
   },
+  eventDate: {
+    type: Date,
+    required: true,
+  },
   creationDate: {
     type: Date,
     default: Date.now(),

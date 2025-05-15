@@ -7,6 +7,8 @@ export * from "./components/PasswordModal";
 export * from "./components/UserModal";
 export * from "./components/UserSelectionModal";
 export * from "./components/AssetDetailsModal";
+export * from "./components/RoleSelectionModal";
+export * from "./components/StateSelectionModal";
 
 // HELPERS
 

@@ -42,7 +42,6 @@ const createNotification = async (req, res = response) => {
 
 const deleteNotification = async (req, res = response) => {
   const notificationId = req.params.id;
-  console.log(notificationId);
   try {
     await Notification.findByIdAndDelete(notificationId);
 
