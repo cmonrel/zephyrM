@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { io } from "socket.io-client";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import { CalendarPage } from "../calendar";
@@ -8,35 +7,17 @@ import { useAuthStore } from "../../auth";
 import { UserManagementPage } from "../users/pages/UsersManagementPage";
 import { AssetsPage } from "../assetsModule/pages/AssetsPage";
 import { getEnvVariables } from "../../helpers/getEnvVariables";
+import { useSocket } from "../../hooks";
 
-const { VITE_API_URL } = getEnvVariables();
-
-const socket = io(VITE_API_URL);
+const { VITE_WEBSOCKET_URL } = getEnvVariables();
 
 export const ModulesRouter = () => {
   const { user, checkAuthToken } = useAuthStore();
+  useSocket(user.uid, VITE_WEBSOCKET_URL);
 
   useEffect(() => {
     checkAuthToken();
   }, []);
-
-  useEffect(() => {
-    if (user.uid) {
-      socket.emit("register", user.uid);
-    }
-
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
-    });
-
-    socket.on("notification", (data) => {
-      alert(data.message);
-    });
-
-    return () => {
-      socket.off("notification");
-    };
-  }, [user]);
 
   return (
     <>

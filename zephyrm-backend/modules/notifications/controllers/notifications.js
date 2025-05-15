@@ -1,5 +1,7 @@
 const { response } = require("express");
+const { agenda } = require("../../../agenda/agenda");
 const Notification = require("../models/Notification");
+const Event = require("../../calendar/models/Event");
 
 const getNotifications = async (req, res = response) => {
   const user = req.params.id;
@@ -100,21 +102,24 @@ const markAllAsRead = (req, res = response) => {
 };
 
 const scheduleNotification = async (req, res = response) => {
-  const { userId, title, startTime } = req.body;
+  const { user, event } = req.body;
 
-  const event = await Event.create({ user: userId, title, startTime });
+  const eventFound = await Event.findById(event);
 
-  const notifyTime = new Date(new Date(startTime).getTime() - 30 * 60 * 1000);
+  const { title, description, start } = eventFound;
+
+  const notifyTime = new Date(new Date(start).getTime() - 30 * 60 * 1000);
 
   await agenda.schedule(notifyTime, "sendNotification", {
-    userId,
-    eventId: event._id,
+    user,
+    event,
     title,
+    description,
   });
 
   res.status(201).json({
     ok: true,
-    event,
+    msg: "Notification scheduled successfully",
   });
 };
 

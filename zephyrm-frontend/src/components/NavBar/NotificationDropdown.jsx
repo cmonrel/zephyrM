@@ -32,8 +32,8 @@ export const NotificationDropdown = ({ markAsRead, markAllAsRead }) => {
                 {notification.description}
               </div>
               <div className="notification-date">
-                {notification.event.start
-                  ? new Date(notification.event.start).toLocaleDateString(
+                {notification.creationDate
+                  ? new Date(notification.creationDate).toLocaleDateString(
                       "en-US",
                       {
                         year: "numeric",

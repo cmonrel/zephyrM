@@ -17,6 +17,7 @@ const {
   updateAsset,
   deleteAsset,
   assignUserToAsset,
+  downloadAssetPdf,
 } = require("../controllers/assets");
 const { assetExists } = require("../middlewares/asset-validator");
 const { userExists } = require("../../../auth/middlewares/user-validator");
@@ -61,7 +62,10 @@ router.put(
 // DELETE event
 router.delete("/:id", assetExists, deleteAsset);
 
-// POST assign user to asset
+// PUT assign user to asset
 router.put("/assign/:id", [assetExists, userExists], assignUserToAsset);
+
+// GET PDF file
+router.get("/pdf", downloadAssetPdf);
 
 module.exports = router;

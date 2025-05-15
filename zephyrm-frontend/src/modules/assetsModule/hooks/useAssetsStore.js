@@ -83,6 +83,28 @@ export const useAssetsStore = () => {
     }
   };
 
+  const startDownloadingAssetsPdf = async () => {
+    try {
+      const response = await zephyrmApi.get("assets/pdf", {
+        responseType: "blob",
+      });
+
+      const blob = new Blob([response.data], { type: "application/pdf" });
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "assets_report.pdf";
+
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+    } catch (error) {
+      console.log(error);
+      Swal.fire("Error downloading", error.response.data.msg, "error");
+    }
+  };
+
   return {
     // Properties
     assets,
@@ -94,5 +116,6 @@ export const useAssetsStore = () => {
     startDeletingAsset,
     startLoadingAssets,
     startSavingAsset,
+    startDownloadingAssetsPdf,
   };
 };

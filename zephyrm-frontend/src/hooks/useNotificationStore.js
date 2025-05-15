@@ -1,8 +1,6 @@
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
-import { getEnvVariables } from "../helpers/getEnvVariables";
-
 import zephyrmApi from "../apis/zephyrMAPI";
 import {
   onCreateNotification,
@@ -11,8 +9,6 @@ import {
   onMarkNotificationRead,
 } from "../store";
 import { useAuthStore } from "../auth/hooks/useAuthStore";
-
-const { VITE_API_URL } = getEnvVariables();
 
 export const useNotificationStore = () => {
   const dispatch = useDispatch();
@@ -68,10 +64,16 @@ export const useNotificationStore = () => {
       event: event,
       user: event.user.uid,
     };
+    console.log(newNotification);
 
-    // const notifyTime = event.start - 30 * 60 * 1000;
+    const schedule = {
+      event: newNotification.event.eid,
+      user: newNotification.user,
+    };
+    console.log(schedule);
 
     try {
+      await zephyrmApi.post("events/schedule", schedule);
       await zephyrmApi.post("notifications/new", newNotification);
 
       if (newNotification.user === user.uid) {

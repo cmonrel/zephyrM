@@ -15,6 +15,7 @@ export const AssetsPage = () => {
     startLoadingAssets,
     setActiveAsset,
     startDeletingAsset,
+    startDownloadingAssetsPdf,
   } = useAssetsStore();
   const {
     isAssetModalOpen,
@@ -66,6 +67,10 @@ export const AssetsPage = () => {
     openAssetsDetailsModal();
   };
 
+  const handleDownloadPdf = () => {
+    startDownloadingAssetsPdf();
+  };
+
   useEffect(() => {
     startLoadingUsers();
     startLoadingAssets();
@@ -80,6 +85,10 @@ export const AssetsPage = () => {
       <h2 className="page-title">Assets Management</h2>
 
       <SearchBar onSearch={handleAssetSearch} placeholder="Search assets..." />
+
+      <button className="btn download-btn" onClick={handleDownloadPdf}>
+        Download PDF
+      </button>
 
       <div className="table-container">
         <table className="assets-table">

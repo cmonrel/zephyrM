@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { isEqual } from "lodash";
 import Swal from "sweetalert2";
 
 import {
@@ -29,7 +30,9 @@ export const useCalendarStore = () => {
         // Update
         await zephyrmApi.put(`events/${calendarEvent.eid}`, calendarEvent);
         dispatch(onUpdateEvent(calendarEvent));
-        startCreatingNotification(calendarEvent);
+        if (!isEqual(calendarEvent, activeEvent)) {
+          startCreatingNotification(calendarEvent);
+        }
         return;
       }
       // Create

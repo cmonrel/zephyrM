@@ -110,6 +110,15 @@
   background-color: #17a673;
 }
 
+.download-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.download-btn:hover {
+  background-color: #45a049;
+}
+
 .actions {
   display: flex;
   align-items: center;

@@ -14,7 +14,10 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // You can restrict this to your frontend URL
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   },
 });
 
@@ -36,7 +39,14 @@ io.on("connection", (socket) => {
 dbConnection();
 
 // CORS
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "x-token"],
+    credentials: true,
+  })
+);
 
 // Parser and read body
 app.use(express.json());

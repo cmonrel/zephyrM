@@ -24,9 +24,6 @@ const AssetSchema = Schema({
     type: String,
     required: true,
   },
-  documents: {
-    type: Array,
-  },
   user: {
     type: Schema.Types.Object,
     ref: "User",
