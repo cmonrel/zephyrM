@@ -35,7 +35,11 @@ export const NavBar = () => {
             onClick={() => navigate("/")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-house"></i>
+            <img
+              src="./src/assets/zephyrLogo.png"
+              alt="Logo"
+              style={{ width: "30px", height: "30px", objectFit: "contain" }}
+            />
             &nbsp; {user.name}
           </span>
 

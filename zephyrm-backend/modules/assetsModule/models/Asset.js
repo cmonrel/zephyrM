@@ -25,7 +25,7 @@ const AssetSchema = Schema({
     required: true,
   },
   user: {
-    type: Schema.Types.Object,
+    type: Schema.Types.ObjectId,
     ref: "User",
   },
 });

@@ -3,11 +3,15 @@ const fs = require("fs");
 const path = require("path");
 const Asset = require("../models/Asset");
 const { utc } = require("moment");
+const User = require("../../../auth/models/User");
 
 const generatePdf = async (res) => {
   try {
     const assets = await Asset.find();
     if (assets.length === 0) throw new Error("No assets found");
+
+    const users = await User.find();
+    if (users.length === 0) throw new Error("No users found");
 
     // Load the Excel template
     const directoryPath = path.join(
@@ -23,7 +27,7 @@ const generatePdf = async (res) => {
 
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.readFile(filePath);
-    const worksheet = workbook.worksheets[0]; // Automatically use the first sheet
+    const worksheet = workbook.worksheets[0];
 
     if (!worksheet) throw new Error("No worksheets found in the template");
 
@@ -40,8 +44,6 @@ const generatePdf = async (res) => {
 
     let rowIndex = 3;
 
-    // Transform acquisitionDate
-
     // Insert data
     assets.forEach((asset) => {
       const row = worksheet.getRow(rowIndex) || worksheet.addRow([]);
@@ -49,22 +51,20 @@ const generatePdf = async (res) => {
         const cell = row.getCell(parseInt(col));
         const existingStyle = { ...cell.style };
 
-        if (field === "acquisition date") {
-          const utcOffset = asset.acquisitionDate.getTimezoneOffset();
-          console.log(utcOffset);
-          const cellValue = new Date(
-            0,
-            0,
-            asset.acquisitionDate.getDate(),
-            0,
-            -utcOffset,
-            0
-          );
-          cell.value = cellValue;
-          cell.numFmt = "mm dd, yyyy";
-          console.log(cell.value);
+        if (field === "user") {
+          if (asset[field]) {
+            const uid = asset[field];
+            const user = users.find(
+              (user) => user._id.toString() === uid.toString()
+            );
+            cell.value = user.name;
+          } else {
+            cell.value = "Unassigned";
+          }
+        } else if (field === "acquisition date") {
+          cell.value = asset.acquisitionDate;
         } else {
-          cell.value = asset[field] || "";
+          cell.value = asset[field];
         }
 
         cell.style = existingStyle;
@@ -80,6 +80,9 @@ const generatePdf = async (res) => {
         const cellLength = cell.value ? cell.value.toString().length : 0;
         if (cellLength > maxLength) {
           maxLength = cellLength + 5;
+          if (cell._column._number === 5) {
+            maxLength = 20;
+          }
         }
       });
       column.width = maxLength;
