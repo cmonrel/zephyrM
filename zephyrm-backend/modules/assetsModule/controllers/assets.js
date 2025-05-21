@@ -1,8 +1,7 @@
 const { response } = require("express");
-const fs = require("fs");
 
 const Asset = require("../models/Asset");
-const { generatePdf } = require("../helpers/generatePDF");
+const { generateFile } = require("../helpers/generateFile");
 
 // GET assets
 const getAssets = async (req, res = response) => {
@@ -112,11 +111,11 @@ const assignUserToAsset = async (req, res = response) => {
 
 const downloadAssetFile = async (req, res = response) => {
   try {
-    await generatePdf(res);
+    await generateFile(res);
   } catch (error) {
     res.status(500).json({
       ok: false,
-      message: "Error generating PDF",
+      message: "Error generating Excel file",
       error: error.message,
     });
   }

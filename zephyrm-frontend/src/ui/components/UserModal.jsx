@@ -112,18 +112,20 @@ export const UserModal = () => {
             />
           </div>
 
-          <div className="form-group mb-2">
-            <label>Password</label>
-            <input
-              type="text"
-              className={`form-control ${nameClass}`}
-              placeholder="Password"
-              name="password"
-              autoComplete="off"
-              value={formState.password}
-              onChange={onInputChange}
-            />
-          </div>
+          {activeUser?.name === "" && (
+            <div className="form-group mb-2">
+              <label>Password</label>
+              <input
+                type="text"
+                className={`form-control ${nameClass}`}
+                placeholder="Password"
+                name="password"
+                autoComplete="off"
+                value={formState.password}
+                onChange={onInputChange}
+              />
+            </div>
+          )}
 
           <div className="form-group mb-2">
             <label>Role</label>

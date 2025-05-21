@@ -14,7 +14,7 @@ const NotificationSchema = Schema({
     default: false,
   },
   user: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.Object,
     ref: "User",
     required: true,
   },
@@ -22,9 +22,13 @@ const NotificationSchema = Schema({
     type: Schema.Types.Object,
     ref: "Event",
   },
+  asset: {
+    type: Schema.Types.Object,
+    ref: "Asset",
+  },
   eventDate: {
     type: Date,
-    required: true,
+    default: Date.now(),
   },
   creationDate: {
     type: Date,

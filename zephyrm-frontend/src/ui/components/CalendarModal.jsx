@@ -28,7 +28,7 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-export const CalendarModal = () => {
+export const CalendarModal = ({ role }) => {
   const {
     isDateModalOpen,
     closeDateModal,
@@ -115,113 +115,158 @@ export const CalendarModal = () => {
 
   return (
     <>
-      <Modal
-        isOpen={isDateModalOpen}
-        onRequestClose={onCloseModal}
-        style={customStyles}
-        className="modal"
-        overlayClassName="modal-fondo"
-        closeTimeoutMS={500}
-      >
-        {activeEvent?.title === "" || activeEvent === null ? (
-          <h2> New Event </h2>
-        ) : (
-          <h2>{activeEvent.title}</h2>
-        )}
-        <hr />
-        <form className="container" onSubmit={onSubmit}>
+      {role === "admin" ? (
+        <Modal
+          isOpen={isDateModalOpen}
+          onRequestClose={onCloseModal}
+          style={customStyles}
+          className="modal"
+          overlayClassName="modal-fondo"
+          closeTimeoutMS={500}
+        >
+          {activeEvent?.title === "" || activeEvent === null ? (
+            <h2> New Event </h2>
+          ) : (
+            <h2>{activeEvent.title}</h2>
+          )}
+          <hr />
+          <form className="container" onSubmit={onSubmit}>
+            <div className="form-group mb-2">
+              <label>Start date and hour &nbsp;</label>
+              <DatePicker
+                selected={formValues.start}
+                onChange={(event) => onDateChange(event, "start")}
+                className="form-control"
+                dateFormat="Pp"
+                locale="en"
+                timeCaption="Hour"
+                showTimeSelect
+              />
+            </div>
+
+            <div className="form-group mb-2">
+              <label>End date and hour &nbsp;</label>
+              <DatePicker
+                minDate={formValues.start}
+                selected={formValues.end}
+                onChange={(event) => onDateChange(event, "end")}
+                className="form-control"
+                dateFormat="Pp"
+                locale="en"
+                timeCaption="Hour"
+                showTimeSelect
+              />
+            </div>
+
+            <hr />
+            <div className="form-group mb-2">
+              <label>Title and description</label>
+              <input
+                type="text"
+                className={`form-control ${titleClass}`}
+                placeholder="Title of event"
+                name="title"
+                autoComplete="off"
+                value={formValues.title}
+                onChange={onChangeInput}
+              />
+              <small id="emailHelp" className="form-text text-muted">
+                Short description
+              </small>
+            </div>
+
+            <div className="form-group mb-2">
+              <textarea
+                type="text"
+                className="form-control"
+                placeholder="Description"
+                rows="3"
+                name="description"
+                value={formValues.description}
+                onChange={onChangeInput}
+              ></textarea>
+            </div>
+
+            <div className="form-group mb-2">
+              <label>Asset</label>
+              <div
+                className="selection-field"
+                onClick={() => openAssetSelectionModal()}
+              >
+                {formValues.asset?.title || "Select an asset"}
+                <i className="fas fa-chevron-down float-right"></i>
+              </div>
+            </div>
+
+            <div className="form-group mb-2">
+              <label>User</label>
+              <div
+                className="selection-field"
+                onClick={() => openUserSelectionModal()}
+              >
+                {formValues.user?.name || "Select a user"}
+                <i className="fas fa-chevron-down float-right"></i>
+              </div>
+            </div>
+
+            <button type="submit" className="btn btn-outline-primary btn-block">
+              <i className="far fa-save"></i>
+              <span> Save </span>
+            </button>
+          </form>
+        </Modal>
+      ) : (
+        <Modal
+          isOpen={isDateModalOpen}
+          onRequestClose={onCloseModal}
+          style={customStyles}
+          className="modal"
+          overlayClassName="modal-fondo"
+          closeTimeoutMS={500}
+        >
+          <h2>{activeEvent?.title}</h2>
+          <hr />
+
           <div className="form-group mb-2">
             <label>Start date and hour &nbsp;</label>
-            <DatePicker
-              selected={formValues.start}
-              onChange={(event) => onDateChange(event, "start")}
-              className="form-control"
-              dateFormat="Pp"
-              locale="en"
-              timeCaption="Hour"
-              showTimeSelect
-            />
+            <p>{activeEvent?.start.toLocaleDateString()}</p>
           </div>
 
           <div className="form-group mb-2">
             <label>End date and hour &nbsp;</label>
-            <DatePicker
-              minDate={formValues.start}
-              selected={formValues.end}
-              onChange={(event) => onDateChange(event, "end")}
-              className="form-control"
-              dateFormat="Pp"
-              locale="en"
-              timeCaption="Hour"
-              showTimeSelect
-            />
+            <p>{activeEvent?.end.toLocaleDateString()}</p>
           </div>
 
           <hr />
           <div className="form-group mb-2">
-            <label>Title and description</label>
-            <input
-              type="text"
-              className={`form-control ${titleClass}`}
-              placeholder="Title of event"
-              name="title"
-              autoComplete="off"
-              value={formValues.title}
-              onChange={onChangeInput}
-            />
             <small id="emailHelp" className="form-text text-muted">
-              Short description
+              {activeEvent?.title}
             </small>
           </div>
 
           <div className="form-group mb-2">
-            <textarea
-              type="text"
-              className="form-control"
-              placeholder="Description"
-              rows="3"
-              name="description"
-              value={formValues.description}
-              onChange={onChangeInput}
-            ></textarea>
+            <p>{activeEvent?.description}</p>
           </div>
 
           <div className="form-group mb-2">
             <label>Asset</label>
-            <div
-              className="selection-field"
-              onClick={() => openAssetSelectionModal()}
-            >
-              {formValues.asset?.title || "Select an asset"}
-              <i className="fas fa-chevron-down float-right"></i>
-            </div>
+            <p>{activeEvent?.asset?.title}</p>
           </div>
 
           <div className="form-group mb-2">
             <label>User</label>
-            <div
-              className="selection-field"
-              onClick={() => openUserSelectionModal()}
-            >
-              {formValues.user?.name || "Select a user"}
-              <i className="fas fa-chevron-down float-right"></i>
-            </div>
+            <p>{activeEvent?.user?.name}</p>
           </div>
-
-          <button type="submit" className="btn btn-outline-primary btn-block">
-            <i className="far fa-save"></i>
-            <span> Save </span>
-          </button>
-        </form>
-      </Modal>
+        </Modal>
+      )}
 
       {/* Asset Selection Modal */}
-      {isAssetSelectionModalOpen && (
+      {isAssetSelectionModalOpen && role === "admin" && (
         <AssetSelectionModal onSelect={handleAssetSelect} />
       )}
 
       {/* User Selection Modal */}
-      {isUserSelectionModalOPen && (
+      {isUserSelectionModalOPen && role === "admin" && (
         <UserSelectionModal onSelect={handleUserSelect} />
       )}
     </>

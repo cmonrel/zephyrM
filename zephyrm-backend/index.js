@@ -14,7 +14,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:8081",
+      "exp://192.168.0.16:8081",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -38,10 +42,14 @@ io.on("connection", (socket) => {
 // Data base
 dbConnection();
 
-// CORS
+// EXPRESS CORS
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:8081",
+      "exp://192.168.0.16:8081",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "x-token"],
     credentials: true,
@@ -68,6 +76,9 @@ app.use(
   "/api/notifications",
   require("./modules/notifications/routes/notifications")
 );
+
+// CRUD: Requests
+app.use("/api/requests", require("./modules/requests/routes/requests"));
 
 // Load and inject agenda jobs
 require("./modules/notifications/helpers/sendNotifications")(agenda, io);

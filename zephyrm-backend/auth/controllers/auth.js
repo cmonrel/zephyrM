@@ -10,7 +10,7 @@ const loginUser = async (req, res = response) => {
   const { email } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: new RegExp(`^${email}$`, "i") });
     user.counter = 0;
 
     // Save user
@@ -23,6 +23,7 @@ const loginUser = async (req, res = response) => {
       ok: true,
       uid: user.id,
       name: user.name,
+      role: user.role,
       counter: user.counter,
       token,
     });
@@ -37,15 +38,20 @@ const loginUser = async (req, res = response) => {
 const renewToken = async (req, res = response) => {
   const { uid, name } = req;
 
-  // Generate JWT
-  const token = await generateJWT(uid, name);
+  try {
+    const { role } = await User.findById(uid);
 
-  res.json({
-    ok: true,
-    uid,
-    name,
-    token,
-  });
+    // Generate JWT
+    const token = await generateJWT(uid, name);
+
+    res.status(200).json({
+      ok: true,
+      uid,
+      name,
+      role,
+      token,
+    });
+  } catch (error) {}
 };
 
 const blockUser = async (req, res = response) => {

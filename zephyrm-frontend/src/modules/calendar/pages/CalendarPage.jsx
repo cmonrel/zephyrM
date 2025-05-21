@@ -81,9 +81,11 @@ export const CalendarPage = () => {
         onView={onViewChange}
       />
 
-      {hasEventSelected && !isDateModalOpen && <FabDelete />}
-      <FabAddNew />
-      <CalendarModal />
+      {hasEventSelected && !isDateModalOpen && user.role === "admin" && (
+        <FabDelete />
+      )}
+      {user.role === "admin" && <FabAddNew />}
+      <CalendarModal role={user.role} />
     </>
   );
 };

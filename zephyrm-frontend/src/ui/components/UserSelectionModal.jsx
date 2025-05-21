@@ -45,8 +45,9 @@ export const UserSelectionModal = ({ onSelect }) => {
       onRequestClose={onCloseModal}
       style={customStyles}
       className="selection-modal"
+      overlayClassName={"modal-fondo"}
     >
-      <h2>Select User</h2>
+      <h2 className="selection-modal-title">Select User</h2>
       <SearchBar onSearch={handleUserSearch} placeholder="Search user..." />
       <div className="selection-list">
         {filteredUsers.map((user) => (

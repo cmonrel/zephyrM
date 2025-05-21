@@ -12,7 +12,7 @@
 }
 
 .modal-fondo {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.4);
   bottom: 0;
   left: 0;
   right: 0;
@@ -80,17 +80,23 @@
 }
 
 .selection-modal {
+  background-color: white;
+  border-radius: 5%;
   max-width: 50vw;
   max-height: 60vh;
 }
 
 .selection-list {
-  max-height: 60vh;
+  max-height: 40vh;
   overflow-y: auto;
 }
 
+.selection-modal-title {
+  border-bottom: 1px solid #eee;
+  padding: 10px;
+}
+
 .selection-item {
-  background-color: #e0dddd70;
   padding: 12px;
   border-bottom: 1px solid #eee;
   cursor: pointer;

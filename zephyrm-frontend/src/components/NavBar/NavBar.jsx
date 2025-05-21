@@ -12,7 +12,6 @@ export const NavBar = () => {
   const { markNotificationRead, markAllAsRead: markAllAsReadStore } =
     useNotificationStore();
 
-  // Replace with backend
   const [showNotifications, setShowNotifications] = useState(false);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -43,21 +42,24 @@ export const NavBar = () => {
             &nbsp; {user.name}
           </span>
 
-          <button
-            onClick={() => navigate("/assets")}
-            className="btn btn-outline-primary me-2"
-          >
-            <i className="fas fa-box "></i>
-            &nbsp; Assets
-          </button>
-
-          <button
-            onClick={() => navigate("/calendar")}
-            className="btn btn-outline-primary me-2"
-          >
-            <i className="fas fa-calendar-day"></i>
-            &nbsp; Calendar
-          </button>
+          {user.role === "admin" && (
+            <>
+              <button
+                onClick={() => navigate("/assets")}
+                className="btn btn-outline-primary me-2"
+              >
+                <i className="fas fa-box "></i>
+                &nbsp; Assets
+              </button>
+              <button
+                onClick={() => navigate("/calendar")}
+                className="btn btn-outline-primary me-2"
+              >
+                <i className="fas fa-calendar-day"></i>
+                &nbsp; Calendar
+              </button>
+            </>
+          )}
         </div>
 
         <div className="d-flex align-items-center">

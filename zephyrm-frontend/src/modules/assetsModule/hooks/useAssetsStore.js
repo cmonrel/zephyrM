@@ -39,12 +39,12 @@ export const useAssetsStore = () => {
     }
   };
 
-  const startSavingAsset = (asset) => {
+  const startSavingAsset = async (asset) => {
     if (!asset) return;
     try {
       if (asset.aid) {
         // Update
-        zephyrmApi.put(`assets/${asset.aid}`, asset);
+        await zephyrmApi.put(`assets/${asset.aid}`, asset);
         dispatch(onUpdateAsset(asset));
         Swal.fire("Updated successfully", "", "success");
         startLoadingAssets();
@@ -52,7 +52,7 @@ export const useAssetsStore = () => {
       }
 
       // Create
-      zephyrmApi.post("assets/new", asset);
+      await zephyrmApi.post("assets/new", asset);
       dispatch(onAddNewAsset(asset));
       Swal.fire("Created successfully", "", "success");
       startLoadingAssets();
@@ -85,7 +85,7 @@ export const useAssetsStore = () => {
 
   const startDownloadingAssetsPdf = async () => {
     try {
-      const response = await zephyrmApi.get("assets/pdf", {
+      const response = await zephyrmApi.get("assets/xlsx", {
         responseType: "blob",
       });
 

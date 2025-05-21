@@ -5,7 +5,8 @@ const bcrypt = require("bcryptjs");
 
 const userAlreadyExist = async ({ body }, res = response, next) => {
   const { email } = body;
-  const user = await User.findOne({ email });
+
+  const user = await User.findOne({ email: new RegExp(`^${email}$`, "i") });
 
   if (user) {
     return res.status(400).json({
@@ -42,7 +43,7 @@ const validatingUser = async (req, res = response, next) => {
     });
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: new RegExp(`^${email}$`, "i") });
 
   if (!user) {
     return res.status(400).json({
@@ -51,19 +52,12 @@ const validatingUser = async (req, res = response, next) => {
     });
   }
 
-  const { blocked, role } = user;
+  const { blocked } = user;
 
   if (blocked) {
     return res.status(400).json({
       ok: false,
       msg: "User is blocked, please contact admins",
-    });
-  }
-
-  if (role !== "admin") {
-    return res.status(400).json({
-      ok: false,
-      msg: "User not admin",
     });
   }
 
@@ -85,7 +79,8 @@ const validatingUser = async (req, res = response, next) => {
 
 const validBlocking = async ({ body }, res = response, next) => {
   const { email } = body;
-  const user = await User.findOne({ email });
+
+  const user = await User.findOne({ email: new RegExp(`^${email}$`, "i") });
 
   if (!user) {
     return res.status(400).json({

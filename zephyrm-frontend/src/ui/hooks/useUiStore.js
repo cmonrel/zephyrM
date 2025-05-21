@@ -108,7 +108,6 @@ export const useUIStore = () => {
     dispatch(onCloseRoleSelectionModal());
   };
   const openStateSelectionModal = () => {
-    console.log("openStateSelectionModal");
     dispatch(onOpenStateSelectionModal());
   };
 

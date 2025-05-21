@@ -32,6 +32,7 @@ export const useAuthStore = () => {
         onLogin({
           name: data.name,
           uid: data.uid,
+          role: data.role,
           counter: data.counter,
         })
       );
@@ -65,7 +66,7 @@ export const useAuthStore = () => {
       localStorage.setItem("token-init-date", new Date().getTime());
 
       startLoadingNotifications(data.uid);
-      dispatch(onLogin({ name: data.name, uid: data.uid }));
+      dispatch(onLogin({ name: data.name, uid: data.uid, role: data.role }));
     } catch (error) {
       localStorage.clear();
       dispatch(onLogout());

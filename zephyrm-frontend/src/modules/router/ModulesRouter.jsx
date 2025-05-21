@@ -24,10 +24,19 @@ export const ModulesRouter = () => {
       <NavBar />
 
       <Routes>
-        <Route path="*" element={<UserManagementPage />} />
-        <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="/assets" element={<AssetsPage />} />
-        <Route path="/*" element={<Navigate to="/" />} />
+        {user.role === "admin" ? (
+          <>
+            <Route path="*" element={<UserManagementPage />} />
+            <Route path="/assets" element={<AssetsPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/*" element={<Navigate to="/" />} />
+          </>
+        ) : (
+          <>
+            <Route path="*" element={<CalendarPage />} />
+            <Route path="/*" element={<Navigate to="/" />} />
+          </>
+        )}
       </Routes>
     </>
   );

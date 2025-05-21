@@ -45,8 +45,9 @@ export const AssetSelectionModal = ({ onSelect }) => {
       onRequestClose={onCloseModal}
       style={customStyles}
       className="selection-modal"
+      overlayClassName={"modal-fondo"}
     >
-      <h2>Select Asset</h2>
+      <h2 className="selection-modal-title">Select Asset</h2>
       <SearchBar onSearch={handleAssetSearch} placeholder="Search asset..." />
       <div className="selection-list">
         {filteredAssets.map((asset) => (

@@ -81,9 +81,9 @@ export const AssetModal = () => {
         closeTimeoutMS={500}
       >
         {activeAsset?.title === "" || !activeAsset ? (
-          <h1> New Asset </h1>
+          <h2 className="selection-modal-title"> New Asset </h2>
         ) : (
-          <h1>{activeAsset.title}</h1>
+          <h2 className="selection-modal-title">{activeAsset.title}</h2>
         )}
         <hr />
         <form className="container" onSubmit={onSubmit}>
@@ -109,6 +109,19 @@ export const AssetModal = () => {
               name="category"
               autoComplete="off"
               value={formState.category}
+              onChange={onInputChange}
+            />
+          </div>
+
+          <div className="form-group mb-2">
+            <label>Location</label>
+            <input
+              type="text"
+              className={`form-control ${nameClass}`}
+              placeholder="Location"
+              name="location"
+              autoComplete="off"
+              value={formState.location}
               onChange={onInputChange}
             />
           </div>

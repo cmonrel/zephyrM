@@ -27,10 +27,10 @@ const router = Router();
 // All routes need JWT verification
 router.use(validateJWT);
 
-// // GET events
+// // GET assets
 router.get("/", getAssets);
 
-// POST event
+// POST asset
 router.post(
   "/new",
   [
@@ -44,7 +44,7 @@ router.post(
   createAsset
 );
 
-// PUT event
+// PUT asset
 router.put(
   "/:id",
   [
@@ -59,13 +59,13 @@ router.put(
   updateAsset
 );
 
-// DELETE event
+// DELETE asset
 router.delete("/:id", assetExists, deleteAsset);
 
 // PUT assign user to asset
 router.put("/assign/:id", [assetExists, userExists], assignUserToAsset);
 
-// GET PDF file
-router.get("/pdf", downloadAssetFile);
+// GET XLSX file
+router.get("/xlsx", downloadAssetFile);
 
 module.exports = router;

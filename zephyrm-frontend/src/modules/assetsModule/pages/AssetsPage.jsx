@@ -50,7 +50,7 @@ export const AssetsPage = () => {
     openAssetModal();
   };
 
-  const handleDeleteAll = (aid) => {
+  const handleDelete = (aid) => {
     startDeletingAsset(aid);
   };
 
@@ -67,7 +67,7 @@ export const AssetsPage = () => {
     openAssetsDetailsModal();
   };
 
-  const handleDownloadPdf = () => {
+  const handleDownloadXLSX = () => {
     startDownloadingAssetsPdf();
   };
 
@@ -86,8 +86,8 @@ export const AssetsPage = () => {
 
       <SearchBar onSearch={handleAssetSearch} placeholder="Search assets..." />
 
-      <button className="btn download-btn" onClick={handleDownloadPdf}>
-        Download PDF
+      <button className="btn download-btn" onClick={handleDownloadXLSX}>
+        Download Excel File
       </button>
 
       <div className="table-container">
@@ -115,7 +115,16 @@ export const AssetsPage = () => {
                 <td>{index + 1}</td>
                 <td>{asset.title}</td>
                 <td>{asset.category}</td>
-                <td>{asset.description}</td>
+                <td
+                  style={{
+                    maxWidth: "150px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {asset.description}
+                </td>
                 <td>
                   {asset.acquisitionDate
                     ? new Date(asset.acquisitionDate).toLocaleDateString(
@@ -149,7 +158,7 @@ export const AssetsPage = () => {
                   </button>
                   <button
                     className="btn delete-btn"
-                    onClick={() => handleDeleteAll(asset.aid)}
+                    onClick={() => handleDelete(asset.aid)}
                   >
                     Delete
                   </button>
