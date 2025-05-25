@@ -1,8 +1,28 @@
+/**
+ * Notifications Controller
+ *
+ * Contains the controllers for notification management.
+ *
+ * @module modules/notifications/controllers/notifications
+ */
+
 const { response } = require("express");
 const { agenda } = require("../../../agenda/agenda");
 const Notification = require("../models/Notification");
 const Event = require("../../calendar/models/Event");
 
+/**
+ * Retrieves the notifications for a given user.
+ *
+ * @param {Object} req - The request object containing the user ID in the URL
+ *                        parameters.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the
+ *                            notifications for the given user if successful.
+ *                            If an error occurs, sends a JSON response with
+ *                            status 500 and an error message.
+ */
 const getNotifications = async (req, res = response) => {
   const user = req.params.id;
   try {
@@ -22,6 +42,18 @@ const getNotifications = async (req, res = response) => {
   }
 };
 
+/**
+ * Creates a new notification in the database.
+ *
+ * @param {Object} req - The request object containing the notification data in the
+ *                       request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the
+ *                            created notification if successful.
+ *                            If an error occurs, sends a JSON response with
+ *                            status 500 and an error message.
+ */
 const createNotification = async (req, res = response) => {
   try {
     const notification = new Notification(req.body);
@@ -40,6 +72,19 @@ const createNotification = async (req, res = response) => {
   }
 };
 
+/**
+ * Deletes a notification from the database with the given ID.
+ *
+ * @param {Object} req - The request object containing the notification ID in the
+ *                       URL parameters.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status.
+ *                            Responds with status 200 and a success message if the notification is
+ *                            deleted successfully.
+ *                            If an error occurs, responds with status 500 and an
+ *                            error message.
+ */
 const deleteNotification = async (req, res = response) => {
   const notificationId = req.params.id;
   try {
@@ -56,6 +101,18 @@ const deleteNotification = async (req, res = response) => {
     });
   }
 };
+
+/**
+ * Marks a specific notification as read by updating its data in the database.
+ *
+ * @param {Object} req - The request object containing the notification ID in the URL
+ *                       parameters and the updated notification data in the request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the updated notification.
+ *                            Responds with status 200 and the updated notification if successful.
+ *                            If an error occurs, responds with status 500 and an error message.
+ */
 
 const markAsRead = async (req, res = response) => {
   const notificationId = req.params.id;
@@ -79,6 +136,18 @@ const markAsRead = async (req, res = response) => {
     });
   }
 };
+
+/**
+ * Marks all the notifications in the given list as read by updating their data in the database.
+ *
+ * @param {Object} req - The request object containing the list of notifications to mark as read in the request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status.
+ *                            Responds with status 200 and a success message if the notifications are
+ *                            marked as read successfully.
+ *                            If an error occurs, responds with status 500 and an error message.
+ */
 const markAllAsRead = (req, res = response) => {
   const notifications = req.body;
   try {
@@ -100,6 +169,19 @@ const markAllAsRead = (req, res = response) => {
   }
 };
 
+/**
+ * Schedules a notification to be sent to the given user about the given event at
+ * 30 minutes before the event starts.
+ *
+ * @param {Object} req - The request object containing the user ID and event ID in
+ *                       the request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status.
+ *                            Responds with status 201 and a success message if the notification is
+ *                            scheduled successfully.
+ *                            If an error occurs, responds with status 500 and an error message.
+ */
 const scheduleNotification = async (req, res = response) => {
   const { user, event } = req.body;
 

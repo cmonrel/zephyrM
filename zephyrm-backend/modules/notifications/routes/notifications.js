@@ -1,8 +1,11 @@
-/* 
-    CRUD Notifications
-    Notifications Routes
-    host + /api/notifications
-*/
+/**
+ * Notifications Routes
+ *
+ * Sets up the routes for notification management.
+ * host + /api/notifications
+ *
+ * @module modules/notifications/routes/notifications
+ */
 
 const { Router } = require("express");
 const { check } = require("express-validator");

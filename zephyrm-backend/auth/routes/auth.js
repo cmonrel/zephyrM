@@ -1,7 +1,11 @@
-/* 
-    Rutas de Usuarios /auth
-    host + /api/auth
-*/
+/**
+ * Auth Routes
+ *
+ * Sets up the routes for user authentication.
+ * host + /api/auth
+ *
+ * @module auth/routes/auth
+ */
 
 const { Router } = require("express");
 
@@ -11,17 +15,9 @@ const {
   validBlocking,
 } = require("../middlewares/user-validator");
 
-const {
-  loginUser,
-  renewToken,
-  blockUser,
-  validateRoleUser,
-} = require("../controllers/auth");
+const { loginUser, renewToken, blockUser } = require("../controllers/auth");
 
 const router = Router();
-
-// GET validate role
-router.get("/role", validateRoleUser);
 
 // POST login
 router.post("/", validatingUser, loginUser);

@@ -1,3 +1,11 @@
+/**
+ * User model
+ *
+ * Defines the schema for the User model.
+ *
+ * @module auth/models/User
+ */
+
 const { Schema, model } = require("mongoose");
 
 const UserSchema = Schema({

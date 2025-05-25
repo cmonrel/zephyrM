@@ -1,3 +1,11 @@
+/**
+ * Notification model
+ *
+ * Defines the schema for the Notification model.
+ *
+ * @module modules/notifications/models/Notification
+ */
+
 const { Schema, model } = require("mongoose");
 
 const NotificationSchema = Schema({

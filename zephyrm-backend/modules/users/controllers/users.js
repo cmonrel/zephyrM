@@ -1,8 +1,29 @@
+/**
+ * Users Controller
+ *
+ * Contains the controllers for user management.
+ *
+ * @module modules/users/controllers/users
+ */
+
 const { response } = require("express");
 const bcrypt = require("bcryptjs");
 
 const User = require("../../../auth/models/User");
 const { generateJWT } = require("../../../helpers/jwt");
+
+/**
+ * Retrieves the list of users in the database.
+ *
+ * @param {Object} req - The request object containing the user ID in the URL
+ *                        parameters.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the
+ *                            list of users if successful.
+ *                            If an error occurs, sends a JSON response with
+ *                            status 500 and an error message.
+ */
 
 const getUsers = async (req, res = response) => {
   try {
@@ -27,6 +48,17 @@ const getUsers = async (req, res = response) => {
   }
 };
 
+/**
+ * Creates a new user in the database.
+ *
+ * @param {Object} req - The request object containing the user data in the request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the
+ *                            created user if successful.
+ *                            If an error occurs, sends a JSON response with
+ *                            status 500 and an error message.
+ */
 const createUser = async (req, res = response) => {
   const { password } = req.body;
 
@@ -59,10 +91,21 @@ const createUser = async (req, res = response) => {
   }
 };
 
+/**
+ * Updates the password for the user with the given ID.
+ *
+ * @param {Object} req - The request object containing the user ID in the URL
+ *                       parameters and the new password in the request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the
+ *                            updated user if successful.
+ *                            If an error occurs, sends a JSON response with
+ *                            status 500 and an error message.
+ */
 const updatePassword = async (req, res = response) => {
   const { password } = req.body;
   const uid = req.params.id;
-  console.log(password);
 
   try {
     const user = await User.findById({ _id: uid });
@@ -91,6 +134,18 @@ const updatePassword = async (req, res = response) => {
   }
 };
 
+/**
+ * Updates an existing user in the database with new data.
+ *
+ * @param {Object} req - The request object containing the user ID in the URL
+ *                       parameters and the new user data in the request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the
+ *                            updated user if successful.
+ *                            If an error occurs, sends a JSON response with
+ *                            status 500 and an error message.
+ */
 const updateUser = async (req, res = response) => {
   const uid = req.params.id;
   const user = req.body;
@@ -113,6 +168,19 @@ const updateUser = async (req, res = response) => {
   }
 };
 
+/**
+ * Deletes an existing user from the database with the given ID.
+ *
+ * @param {Object} req - The request object containing the user ID in the URL
+ *                       parameters.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status.
+ *                            Responds with status 200 if the user is deleted
+ *                            successfully.
+ *                            If an error occurs, responds with status 500 and
+ *                            an error message.
+ */
 const deleteUser = async (req, res = response) => {
   const uid = req.params.id;
   try {

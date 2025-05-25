@@ -1,3 +1,13 @@
+/**
+ * @fileoverview Main application entry point.
+ * @author [Carlos Monserrat Relaño]
+ * @description Initializes and starts the application.
+ * @module index
+ * @version 1.0.0
+ */
+
+const path = require("path");
+
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
@@ -56,6 +66,9 @@ app.use(
   })
 );
 
+// Directorio Público
+app.use(express.static("public"));
+
 // Parser and read body
 app.use(express.json());
 
@@ -79,6 +92,10 @@ app.use(
 
 // CRUD: Requests
 app.use("/api/requests", require("./modules/requests/routes/requests"));
+
+app.use("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/index.html"));
+});
 
 // Load and inject agenda jobs
 require("./modules/notifications/helpers/sendNotifications")(agenda, io);

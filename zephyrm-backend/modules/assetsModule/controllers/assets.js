@@ -1,9 +1,24 @@
+/**
+ * Assets Controller
+ *
+ * Contains the controllers for asset management.
+ *
+ * @module modules/assetsModule/controllers/assets
+ */
+
 const { response } = require("express");
 
 const Asset = require("../models/Asset");
 const { generateFile } = require("../helpers/generateFile");
 
-// GET assets
+/**
+ * Get all assets
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} - Sends a JSON response with the status and all the assets.
+ *                            Responds with status 200 and the assets if successful.
+ *                            If an error occurs, responds with status 500 and an error message.
+ */
 const getAssets = async (req, res = response) => {
   try {
     const assets = await Asset.find().populate("title", "category");
@@ -20,7 +35,17 @@ const getAssets = async (req, res = response) => {
   }
 };
 
-// POST asset
+/**
+ * Creates a new asset in the database.
+ *
+ * @param {Object} req - The request object containing asset data in the body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the created asset.
+ *                            Responds with status 201 and the saved asset if successful.
+ *                            If an error occurs, responds with status 400 and an error message.
+ */
+
 const createAsset = async (req, res = response) => {
   const asset = new Asset(req.body);
 
@@ -39,7 +64,18 @@ const createAsset = async (req, res = response) => {
   }
 };
 
-// PUT asset
+/**
+ * Updates an existing asset in the database with new data.
+ *
+ * @param {Object} req - The request object containing the asset ID in the URL
+ *                       parameters and the new asset data in the request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the updated asset.
+ *                            Responds with status 200 and the updated asset if successful.
+ *                            If an error occurs, responds with status 400 and an error message.
+ */
+
 const updateAsset = async (req, res = response) => {
   const assetId = req.params.id;
   const newAsset = req.body;
@@ -61,7 +97,17 @@ const updateAsset = async (req, res = response) => {
   }
 };
 
-// DELETE asset
+/**
+ * Deletes an asset from the database with the given ID.
+ *
+ * @param {Object} req - The request object containing the asset ID in the URL
+ *                       parameters.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status.
+ *                            Responds with status 200 if the asset is deleted successfully.
+ *                            If an error occurs, responds with status 400 and an error message.
+ */
 const deleteAsset = async (req, res = response) => {
   const assetId = req.params.id;
 
@@ -80,7 +126,17 @@ const deleteAsset = async (req, res = response) => {
   }
 };
 
-// POST assign user to asset
+/**
+ * Assigns a user to an existing asset in the database.
+ *
+ * @param {Object} req - The request object containing the asset ID in the URL
+ *                       parameters and the user ID in the request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a JSON response with the status and the updated asset.
+ *                            Responds with status 200 and the updated asset if successful.
+ *                            If an error occurs, responds with status 400 and an error message.
+ */
 const assignUserToAsset = async (req, res = response) => {
   const assetId = req.params.id;
   const { uid } = req.body;
@@ -108,6 +164,16 @@ const assignUserToAsset = async (req, res = response) => {
     });
   }
 };
+
+/**
+ * Generates and sends an XLSX file containing asset data.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends a generated Excel file as a response.
+ *                            If an error occurs, responds with status 500 and an error message.
+ */
 
 const downloadAssetFile = async (req, res = response) => {
   try {

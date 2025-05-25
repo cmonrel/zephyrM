@@ -1,6 +1,28 @@
+/**
+ * Requests Middlewares
+ *
+ * Contains middleware functions for request validation.
+ *
+ * @module modules/requests/middlewares/requests-validator
+ */
+
 const { response } = require("express");
+
 const Request = require("../models/Request");
 
+/**
+ * Middleware to check if a given request belongs to the user making the request.
+ *
+ * @param {Object} req - The request object containing the request ID in the URL
+ *                       parameters and the user ID in the request body.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ * @param {Function} next - The next middleware function in the stack.
+ *
+ * @returns {Promise<void>} - Sends a 401 response with an error message if the
+ *                            request does not belong to the user.
+ *                            Calls the next middleware if the request belongs to
+ *                            the user.
+ */
 const userRequest = async (req, res = response, next) => {
   const requestId = req.params.id;
   const uid = req.uid;
@@ -24,6 +46,17 @@ const userRequest = async (req, res = response, next) => {
     });
   }
 };
+
+/**
+ * Middleware to check if a request exists in the database.
+ *
+ * @param {Object} req - The request object containing the request ID in the URL parameters.
+ * @param {Object} res - The response object used to send back the HTTP response.
+ * @param {Function} next - The next middleware function in the stack.
+ *
+ * @returns {Promise<void>} - Sends a 404 response with an error message if the request does not exist.
+ *                            Calls the next middleware if the request exists.
+ */
 
 const requestExist = async (req, res = response, next) => {
   const requestId = req.params.id;

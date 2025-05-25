@@ -1,3 +1,11 @@
+/**
+ * Asset model
+ *
+ * Defines the schema for the Asset model.
+ *
+ * @module modules/assetsModule/models/Asset
+ */
+
 const { Schema, model } = require("mongoose");
 
 const AssetSchema = Schema({

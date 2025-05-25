@@ -1,3 +1,11 @@
+/**
+ * Event model
+ *
+ * Defines the schema for the Event model.
+ *
+ * @module modules/calendar/models/Event
+ */
+
 const { Schema, model } = require("mongoose");
 
 const EventSchema = Schema({

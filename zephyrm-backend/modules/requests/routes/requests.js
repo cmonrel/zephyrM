@@ -1,8 +1,11 @@
-/* 
-    CRUD  Requests
-    Requests Routes
-    host + /api/requests
-*/
+/**
+ * Requests Routes
+ *
+ * Sets up the routes for request management.
+ * host + /api/requests
+ *
+ * @module modules/requests/routes/requests
+ */
 
 const { Router } = require("express");
 const { check } = require("express-validator");

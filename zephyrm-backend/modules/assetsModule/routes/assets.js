@@ -1,8 +1,11 @@
-/* 
-    CRUD  Assets
-    Assets Routes
-    host + /api/assets
-*/
+/**
+ * Assets Routes
+ *
+ * Sets up the routes for asset management.
+ * host + /api/assets
+ *
+ * @module modules/assetsModule/routes/assets
+ */
 
 const { Router } = require("express");
 const { check } = require("express-validator");
@@ -63,7 +66,7 @@ router.put(
 router.delete("/:id", assetExists, deleteAsset);
 
 // PUT assign user to asset
-router.put("/assign/:id", [assetExists, userExists], assignUserToAsset);
+router.put("/assign/:id", [assetExists], assignUserToAsset);
 
 // GET XLSX file
 router.get("/xlsx", downloadAssetFile);

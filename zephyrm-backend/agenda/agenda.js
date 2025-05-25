@@ -1,3 +1,11 @@
+/**
+ * Agenda
+ *
+ * This module sets up an Agenda instance for job scheduling.
+ *
+ * @module agenda
+ */
+
 const Agenda = require("agenda");
 require("dotenv").config();
 

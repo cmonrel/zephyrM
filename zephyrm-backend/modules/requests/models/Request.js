@@ -1,3 +1,11 @@
+/**
+ * Request model
+ *
+ * Defines the schema for the Request model.
+ *
+ * @module modules/requests/models/Request
+ */
+
 const { Schema, model } = require("mongoose");
 
 const RequestSchema = Schema({

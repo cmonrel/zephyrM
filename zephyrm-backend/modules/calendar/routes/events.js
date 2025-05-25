@@ -1,8 +1,11 @@
-/* 
-    CRUD  Calendar
-    Events Routes
-    host + /api/events
-*/
+/**
+ * Events Routes
+ *
+ * Sets up the routes for event management.
+ * host + /api/events
+ *
+ * @module modules/calendar/routes/events
+ */
 
 const { Router } = require("express");
 const { check } = require("express-validator");

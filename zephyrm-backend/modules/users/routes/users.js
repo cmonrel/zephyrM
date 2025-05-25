@@ -1,8 +1,11 @@
-/* 
-    CURD Users
-    Users Routes
-    host + /api/users
-*/
+/**
+ * Users Routes
+ *
+ * Sets up the routes for user management.
+ * host + /api/users
+ *
+ * @module modules/users/routes/users
+ */
 
 const { Router } = require("express");
 const { check } = require("express-validator");

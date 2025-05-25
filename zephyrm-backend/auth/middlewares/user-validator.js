@@ -1,7 +1,25 @@
+/**
+ * User Middlewares
+ *
+ * Contains middleware functions for user validation.
+ *
+ * @module auth/middlewares/user-validator
+ */
+
 const { response } = require("express");
-const { validationResult } = require("express-validator");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+
+/**
+ * Middleware to check if a user with the provided email already exists.
+ *
+ * @param {Object} req - The request object, containing the email in the body.
+ * @param {Object} res - The response object for sending HTTP responses.
+ * @param {Function} next - The next middleware function in the stack.
+ *
+ * @returns {void} - Sends a JSON response with an error message if the user exists,
+ * or calls the next middleware function if the user does not exist.
+ */
 
 const userAlreadyExist = async ({ body }, res = response, next) => {
   const { email } = body;
@@ -18,21 +36,16 @@ const userAlreadyExist = async ({ body }, res = response, next) => {
   next();
 };
 
-const userExists = async (req, res = response, next) => {
-  const { uid } = req.body;
-  const _id = uid;
-  const user = await User.findById(_id);
-
-  if (!user) {
-    return res.status(400).json({
-      ok: true,
-      msg: "User don't exists",
-    });
-  }
-
-  next();
-};
-
+/**
+ * Middleware to validate the user login credentials.
+ *
+ * @param {Object} req - The request object, containing the email and password in the body.
+ * @param {Object} res - The response object for sending HTTP responses.
+ * @param {Function} next - The next middleware function in the stack.
+ *
+ * @returns {void} - Sends a JSON response with an error message if the user or password is incorrect,
+ * or if the user is blocked, or calls the next middleware function if the user is valid.
+ */
 const validatingUser = async (req, res = response, next) => {
   const { email, password } = req.body;
 
@@ -77,6 +90,16 @@ const validatingUser = async (req, res = response, next) => {
   next();
 };
 
+/**
+ * Middleware to check if a user with the provided email can be blocked.
+ *
+ * @param {Object} req - The request object, containing the email in the body.
+ * @param {Object} res - The response object, used to send back the HTTP response.
+ * @param {Function} next - The next middleware function in the stack.
+ *
+ * @returns {void} - Calls the next middleware function if the user can be blocked,
+ * or sends a JSON response with an error message if the user can't be blocked.
+ */
 const validBlocking = async ({ body }, res = response, next) => {
   const { email } = body;
 
@@ -108,6 +131,17 @@ const validBlocking = async ({ body }, res = response, next) => {
   next();
 };
 
+/**
+ * Middleware to validate the user's role.
+ *
+ * @param {Object} req - The request object, containing the role in the body.
+ * @param {Object} res - The response object for sending HTTP responses.
+ * @param {Function} next - The next middleware function in the stack.
+ *
+ * @returns {void} - Calls the next middleware function if the role is valid,
+ * or sends a JSON response with an error message if the role is invalid.
+ */
+
 const validRole = (req, res = response, next) => {
   const { role } = req.body;
 
@@ -122,7 +156,6 @@ const validRole = (req, res = response, next) => {
 
 module.exports = {
   userAlreadyExist,
-  userExists,
   validBlocking,
   validatingUser,
   validRole,

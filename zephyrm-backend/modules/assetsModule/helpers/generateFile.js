@@ -1,10 +1,24 @@
+/**
+ * Excel file generation
+ *
+ * Generates and sends an Excel file containing asset data.
+ *
+ * @module modules/assetsModule/helpers/generateFile
+ */
+
 const ExcelJS = require("exceljs");
-const fs = require("fs");
 const path = require("path");
 const Asset = require("../models/Asset");
-const { utc } = require("moment");
 const User = require("../../../auth/models/User");
 
+/**
+ * Generates an Excel file containing asset data.
+ *
+ * @param {Object} res - The Express response object used to send back the HTTP response.
+ *
+ * @returns {Promise<void>} - Sends an Excel file as a response.
+ *                            If an error occurs, responds with status 500 and an error message.
+ */
 const generateFile = async (res) => {
   try {
     const assets = await Asset.find();
@@ -98,7 +112,6 @@ const generateFile = async (res) => {
 
     // Serve the file for download
     res.download(outputPath, "assets_report.xlsx");
-    console.log("Report generated successfully");
   } catch (error) {
     console.error("Error generating report:", error);
     res.status(500).send("Error generating report");
