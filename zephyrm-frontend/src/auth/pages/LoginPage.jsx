@@ -33,13 +33,13 @@ export const LoginPage = () => {
   return (
     <div className="container login-container">
       <div className="login-form-1">
-        <h3>Ingreso</h3>
+        <h3>Welcome!</h3>
         <form onSubmit={loginSubmit}>
           <div className="form-group mb-2">
             <input
               type="text"
               className="form-control"
-              placeholder="Correo"
+              placeholder="Email"
               name="loginEmail"
               value={loginEmail}
               onChange={onLoginInputChange}
@@ -49,7 +49,7 @@ export const LoginPage = () => {
             <input
               type="password"
               className="form-control"
-              placeholder="Contraseña"
+              placeholder="Password"
               name="loginPassword"
               value={loginPassword}
               onChange={onLoginInputChange}

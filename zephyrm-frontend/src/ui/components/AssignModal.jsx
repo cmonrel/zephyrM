@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import Modal from "react-modal";
+import "./AssignModal.css";
+
 import { useUsersStore } from "../../modules/users/hooks/useUsersStore";
 import { useUIStore } from "../hooks/useUiStore";
 import { useAssetsStore } from "../../modules/assetsModule";

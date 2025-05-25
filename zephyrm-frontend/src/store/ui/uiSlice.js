@@ -70,7 +70,6 @@ export const uiSlice = createSlice({
       state.isRoleSelectionModalOpen = false;
     },
     onOpenStateSelectionModal: (state) => {
-      console.log("onOpen");
       state.isStateSelectionModalOpen = true;
     },
     onCloseStateSelectionModal: (state) => {

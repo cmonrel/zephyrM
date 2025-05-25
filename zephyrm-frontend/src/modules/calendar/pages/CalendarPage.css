@@ -1,0 +1,43 @@
+.calendar-container {
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.calendar {
+  height: calc(100vh - 80px);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .calendar {
+    height: calc(100vh - 100px);
+    font-size: 12px;
+  }
+
+  .rbc-toolbar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rbc-toolbar .rbc-toolbar-label {
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+  }
+
+  .rbc-event {
+    font-size: 11px;
+    padding: 2px;
+  }
+
+  .rbc-agenda-view table {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .calendar {
+    max-width: 100%;
+  }
+}

@@ -86,7 +86,7 @@ export const AssetModal = () => {
           <h2 className="selection-modal-title">{activeAsset.title}</h2>
         )}
         <hr />
-        <form className="container" onSubmit={onSubmit}>
+        <form className="container-modal" onSubmit={onSubmit}>
           <div className="form-group mb-2">
             <label>Title</label>
             <input

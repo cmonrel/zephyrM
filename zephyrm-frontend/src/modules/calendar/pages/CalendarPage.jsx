@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Calendar } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "./CalendarPage.css";
 
 import { useAuthStore } from "../../../auth/hooks/useAuthStore";
 import { CalendarEvent, getMessages, localizer, useCalendarStore } from "..";
@@ -62,24 +63,24 @@ export const CalendarPage = () => {
 
   return (
     <>
-      <Calendar
-        localizer={localizer}
-        events={displayedEvents}
-        defaultView={lastView}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: "calc(100vh - 80px)" }}
-        messages={getMessages()}
-        eventPropGetter={eventStyleGetter}
-        components={{
-          event: CalendarEvent,
-        }}
-        selectable
-        onSelectSlot={onSelectEmpty}
-        onDoubleClickEvent={onDoubleClick}
-        onSelectEvent={onSelect}
-        onView={onViewChange}
-      />
+      <div className="calendar-container">
+        <Calendar
+          localizer={localizer}
+          events={displayedEvents}
+          defaultView={lastView}
+          startAccessor="start"
+          endAccessor="end"
+          className="calendar"
+          messages={getMessages()}
+          eventPropGetter={eventStyleGetter}
+          components={{ event: CalendarEvent }}
+          selectable
+          onSelectSlot={onSelectEmpty}
+          onDoubleClickEvent={onDoubleClick}
+          onSelectEvent={onSelect}
+          onView={onViewChange}
+        />
+      </div>
 
       {hasEventSelected && !isDateModalOpen && user.role === "admin" && (
         <FabDelete />

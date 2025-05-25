@@ -10,8 +10,12 @@ const customStyles = {
     left: "50%",
     right: "auto",
     bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -49%)",
+    width: "90%",
+    maxWidth: "500px",
+    padding: "20px",
+    transform: "translate(-50%, -50%)",
+    borderRadius: "8px",
+    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
   },
 };
 

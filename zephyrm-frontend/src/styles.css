@@ -1,4 +1,3 @@
-/* Modal */
 .ReactModalPortal > div {
   opacity: 0;
 }
@@ -11,6 +10,114 @@
   z-index: 999;
 }
 
+.ReactModalPortal .ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModalPortal .ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.container-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.container-modal .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.container-modal label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+  font-size: 1rem;
+}
+
+.container-modal input.form-control {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.container-modal input.form-control:focus {
+  border-color: #80bdff;
+  outline: none;
+}
+
+.container-modal input.is-invalid {
+  border-color: #dc3545;
+  background-color: #f8d7da;
+}
+
+.selection-field {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: border-color 0.3s ease;
+}
+
+.selection-field:hover {
+  border-color: #80bdff;
+}
+
+.container-modal button.btn {
+  align-self: flex-start;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.container-modal button.btn-outline-primary {
+  border: 2px solid #0d6efd;
+  background-color: transparent;
+  color: #0d6efd;
+}
+
+.container-modal button.btn-outline-primary:hover,
+.container-modal button.btn-outline-primary:focus {
+  background-color: #0d6efd;
+  color: white;
+  outline: none;
+}
+
+@media (max-width: 480px) {
+  .container-modal {
+    max-height: 60vh;
+    gap: 12px;
+    padding-right: 4px;
+  }
+
+  .container-modal label {
+    font-size: 0.9rem;
+  }
+
+  .container-modal input.form-control {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+
+  .container-modal button.btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
 .modal-fondo {
   background-color: rgba(0, 0, 0, 0.4);
   bottom: 0;
@@ -18,14 +125,6 @@
   right: 0;
   top: 0;
   position: fixed;
-}
-
-.ReactModalPortal .ReactModal__Overlay--after-open {
-  opacity: 1;
-}
-
-.ReactModalPortal .ReactModal__Overlay--before-close {
-  opacity: 0;
 }
 
 .modal {
@@ -39,69 +138,167 @@
   padding: 10px;
 }
 
-/* FABS */
-
-.fab {
-  border-radius: 100%;
-  bottom: 25px;
-  font-size: 30px;
-  position: fixed;
-  right: 25px;
-  width: 50px;
-  height: 50px;
-  z-index: 999;
-}
-
-.fab-danger {
-  border-radius: 100%;
-  bottom: 25px;
-  font-size: 22px;
-  position: fixed;
-  left: 25px;
-  width: 50px;
-  height: 50px;
-  z-index: 999;
-}
-
-/* AssetSelectionModal && UserSelectionModal && RoleSelectionModal && StateSelectionModal */
-
-.selection-field {
-  padding: 8px 12px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: white;
-  display: flex;
-  justify-content: space-between;
-}
-
-.selection-field:hover {
-  border-color: #80bdff;
-}
-
 .selection-modal {
   background-color: white;
-  border-radius: 5%;
-  max-width: 50vw;
-  max-height: 60vh;
-}
-
-.selection-list {
-  max-height: 40vh;
-  overflow-y: auto;
+  border-radius: 8px;
+  max-width: 90vw; /* nearly full width on small screens */
+  width: 450px; /* fixed width for larger screens */
+  max-height: 70vh; /* allow scrolling if content is tall */
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .selection-modal-title {
   border-bottom: 1px solid #eee;
-  padding: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.selection-list {
+  flex-grow: 1;
+  max-height: 45vh;
+  overflow-y: auto;
+  padding-right: 8px; /* for scrollbar spacing */
 }
 
 .selection-item {
-  padding: 12px;
+  padding: 12px 15px;
   border-bottom: 1px solid #eee;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  color: #444;
+  transition: background-color 0.2s ease;
 }
 
 .selection-item:hover {
-  background-color: #f8f9fa;
+  background-color: #e2f0ff;
+}
+
+.asset-state {
+  font-size: 0.85rem;
+  color: #777;
+  font-style: italic;
+}
+
+/* Search bar styling override (optional, depending on your SearchBar styles) */
+.selection-modal input[type="search"],
+.selection-modal input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.selection-modal input[type="search"]:focus,
+.selection-modal input[type="text"]:focus {
+  border-color: #80bdff;
+  outline: none;
+}
+
+/* Responsive tweaks */
+
+@media (max-width: 480px) {
+  .selection-modal {
+    width: 95vw;
+    max-height: 75vh;
+    padding: 15px;
+  }
+
+  .selection-modal-title {
+    font-size: 1.1rem;
+  }
+
+  .selection-item {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+
+  .asset-state {
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 600px) {
+  .modal {
+    max-width: 500px;
+    padding: 24px;
+  }
+}
+
+.fab,
+.fab-danger {
+  position: fixed;
+  bottom: 25px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.fab:hover,
+.fab-danger:hover {
+  transform: scale(1.05);
+}
+
+.fab {
+  right: 25px;
+  font-size: 30px;
+}
+
+.fab-danger {
+  left: 25px;
+  font-size: 22px;
+  background-color: #dc3545;
+}
+
+@media (max-width: 480px) {
+  .fab,
+  .fab-danger {
+    width: 45px;
+    height: 45px;
+  }
+
+  .fab {
+    font-size: 24px;
+  }
+
+  .fab-danger {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .fab,
+  .fab-danger {
+    width: 60px;
+    height: 60px;
+  }
+
+  .fab {
+    font-size: 34px;
+  }
+
+  .fab-danger {
+    font-size: 26px;
+  }
 }

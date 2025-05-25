@@ -1,43 +1,109 @@
 .login-container {
-  margin-top: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-width: 100vw;
+  padding: 2rem;
+  background-color: #f8f9fa;
 }
 
 .login-form-1 {
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
-  padding: 5%;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2), 0 9px 26px rgba(0, 0, 0, 0.19);
+  padding: 3rem;
+  width: 100%;
+  max-width: 450px;
 }
 
 .login-form-1 h3 {
-  text-align: center;
   color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
 }
 
 .login-container form {
-  padding: 10%;
+  padding: 0;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .btnDiv {
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
 }
 
 .btnSubmit {
-  width: 50%;
-  border-radius: 1rem;
-  padding: 1.5%;
-  border: none;
-  cursor: pointer;
-}
-
-.login-form-1 .btnSubmit {
-  color: #fff;
   background-color: #0062cc;
+  border-radius: 1rem;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.75rem;
+  width: 100%;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
-.login-form-1 .ForgetPwd {
-  color: #0062cc;
-  font-weight: 600;
-  text-decoration: none;
+.btnSubmit:hover {
+  background-color: #004a9f;
+}
+
+@media (max-width: 768px) {
+  .login-form-1 {
+    padding: 2rem;
+    max-width: 90%;
+  }
+
+  .btnSubmit {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form-1 {
+    padding: 1.5rem;
+  }
+
+  .login-form-1 h3 {
+    font-size: 1.5rem;
+  }
+
+  .btnSubmit {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .login-form-1 {
+    max-width: 45%;
+    padding: 3.5rem;
+  }
+
+  .login-form-1 h3 {
+    font-size: 2rem;
+  }
+
+  .form-control {
+    font-size: 1.05rem;
+    padding: 0.85rem 1.2rem;
+  }
+
+  .btnSubmit {
+    font-size: 1.05rem;
+    padding: 0.9rem;
+  }
 }

@@ -90,7 +90,7 @@ export const UserManagementPage = () => {
                     className="btn new-password-btn"
                     onClick={() => handleRecoverPassword(user)}
                   >
-                    New Password
+                    Password
                   </button>
                   <button
                     className="btn delete-btn"

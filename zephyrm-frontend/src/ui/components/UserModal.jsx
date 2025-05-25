@@ -85,7 +85,7 @@ export const UserModal = () => {
           <h1>{activeUser.name}</h1>
         )}
         <hr />
-        <form className="container" onSubmit={onSubmit}>
+        <form className="container-modal" onSubmit={onSubmit}>
           <div className="form-group mb-2">
             <label>Name</label>
             <input

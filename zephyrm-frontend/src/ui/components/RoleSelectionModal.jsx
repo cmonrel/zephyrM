@@ -26,6 +26,7 @@ export const RoleSelectionModal = ({ onSelect }) => {
       onRequestClose={onCloseModal}
       style={customStyles}
       className="selection-modal"
+      overlayClassName={"modal-fondo"}
     >
       <h2>Select User</h2>
       <div className="selection-list">

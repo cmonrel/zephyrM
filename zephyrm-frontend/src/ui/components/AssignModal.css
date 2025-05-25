@@ -1,0 +1,140 @@
+.modal-fondo {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 8px;
+  max-width: 95vw;
+  width: 100%;
+  max-height: 90vh;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header h2 {
+  margin: 0 0 15px;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.user-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.user-card:hover,
+.user-card:focus {
+  background-color: #e2e6ea;
+  outline: none;
+}
+
+.user-info h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.1rem;
+  color: #212529;
+}
+
+.user-meta {
+  font-size: 0.875rem;
+  color: #6c757d;
+  display: flex;
+  gap: 10px;
+}
+
+.user-select-indicator {
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+.modal-footer-assign {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-footer-assign .btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modal-footer-assign .btn:hover,
+.modal-footer-assign .btn:focus {
+  background-color: #dc3545;
+  color: white;
+  outline: none;
+}
+
+@media (min-width: 600px) {
+  .modal {
+    max-width: 480px;
+    padding: 24px;
+  }
+
+  .user-card {
+    padding: 16px 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .modal-footer-assign .btn {
+    font-size: 1.1rem;
+    padding: 12px 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .user-meta {
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.8rem;
+  }
+
+  .user-select-indicator {
+    font-size: 1rem;
+  }
+}

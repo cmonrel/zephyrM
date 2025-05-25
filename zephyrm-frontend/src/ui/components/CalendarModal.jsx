@@ -130,7 +130,7 @@ export const CalendarModal = ({ role }) => {
             <h2>{activeEvent.title}</h2>
           )}
           <hr />
-          <form className="container" onSubmit={onSubmit}>
+          <form className="container-modal" onSubmit={onSubmit}>
             <div className="form-group mb-2">
               <label>Start date and hour &nbsp;</label>
               <DatePicker
