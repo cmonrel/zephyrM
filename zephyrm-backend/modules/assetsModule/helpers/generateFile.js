@@ -81,6 +81,8 @@ const generateFile = async (res) => {
           }
         } else if (field === "acquisition date") {
           cell.value = asset.acquisitionDate;
+        } else if (field === "nfc id") {
+          cell.value = asset.NFCTag;
         } else {
           cell.value = asset[field];
         }
@@ -98,7 +100,7 @@ const generateFile = async (res) => {
         const cellLength = cell.value ? cell.value.toString().length : 0;
         if (cellLength > maxLength) {
           maxLength = cellLength + 5;
-          if (cell._column._number === 5) {
+          if (cell._column._number === 6) {
             maxLength = 20;
           }
         }

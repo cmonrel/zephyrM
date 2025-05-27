@@ -36,6 +36,9 @@ const AssetSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  NFCTag: {
+    type: String,
+  },
 });
 
 AssetSchema.method("toJSON", function () {
