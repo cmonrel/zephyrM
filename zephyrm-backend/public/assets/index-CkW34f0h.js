@@ -22420,7 +22420,7 @@ const ai = Wr(pz),
                 className: "navbar-brand cursor-pointer",
                 children: [
                   A.jsx("img", {
-                    src: "./src/assets/zephyrLogo-BRO1eJVc.png",
+                    src: "./assets/zephyrLogo-BRO1eJVc.png",
                     alt: "Logo",
                     style: {
                       width: "30px",
