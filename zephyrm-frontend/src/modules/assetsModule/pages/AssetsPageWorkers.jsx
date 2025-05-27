@@ -1,7 +1,7 @@
 /**
  * Assets Page Component
  *
- * This component represents the main page for managing assets for admins.
+ * This component represents the main page for managing assets for workers.
  *
  * @module modules/assetsModule/pages/AssetsPage
  */
@@ -9,36 +9,21 @@
 import { useEffect, useState } from "react";
 import "./AssetsPage.css";
 
-import { AssetModal } from "../../../ui/components/AssetModal";
 import { useAssetsStore } from "../";
 import { AssetDetailsModal, AssignModal, useUIStore } from "../../../ui";
-import { FabAddNewAsset } from "../../../components/FabButtons/FabAddNewAsset";
 import { useUsersStore } from "../../users/hooks/useUsersStore";
 import { SearchBar } from "../../../components";
 import { useAuthStore } from "../../../auth/hooks/useAuthStore";
 
 /**
- * It displays a table with all the assets, and allows the user to search, create, edit, assign, or delete them.
+ * It displays a table with all the assets, and allows the user to search and send requests for using them.
  *
  * @returns {JSX.Element} The assets page component.
  */
-export const AssetsPage = () => {
-  const {
-    activeAsset,
-    assets,
-    startLoadingAssets,
-    setActiveAsset,
-    startDeletingAsset,
-    startDownloadingAssetsFile,
-  } = useAssetsStore();
-  const {
-    isAssetModalOpen,
-    isAssignModalOpen,
-    isAssetDetailsModalOpen,
-    openAssetModal,
-    openAssignModal,
-    openAssetsDetailsModal,
-  } = useUIStore();
+export const AssetsPageWorkers = () => {
+  const { activeAsset, assets, startLoadingAssets, setActiveAsset } =
+    useAssetsStore();
+  const { isAssetDetailsModalOpen, openAssetsDetailsModal } = useUIStore();
   const { users, startLoadingUsers } = useUsersStore();
   const { user } = useAuthStore();
 
@@ -110,79 +95,16 @@ export const AssetsPage = () => {
   };
 
   /**
-   * Handles the edit event for an asset.
+   * Handles double click on an asset.
    *
-   * This function takes an asset object as an argument and sets the
-   * active asset to the given asset. It then opens the asset modal
-   * for editing the asset.
+   * When an asset is double clicked, this function sets the active asset
+   * to the given asset and opens the asset details modal.
    *
-   * @param {Object} asset The asset object to edit.
+   * @param {Object} asset The asset to be set as active.
    */
-  const handleEdit = (asset) => {
+  const handleDoubleClick = (asset) => {
     setActiveAsset(asset);
-    openAssetModal();
-  };
-
-  /**
-   * Deletes an asset.
-   *
-   * This function takes an asset ID as an argument and initiates the
-   * process for deleting that asset by calling the appropriate function
-   * to handle server communication and state updates.
-   *
-   * @param {string} aid The ID of the asset to delete.
-   */
-  const handleDelete = (aid) => {
-    startDeletingAsset(aid);
-  };
-
-  /**
-   * Assigns a user to an asset.
-   *
-   * This function takes an asset object as an argument and sets the
-   * active asset to the given asset. It then opens the assign modal
-   * to select a user to assign to the asset.
-   *
-   * @param {Object} asset The asset object to assign to a user.
-   */
-  const handleAssign = (asset) => {
-    setActiveAsset(asset);
-    openAssignModal();
-  };
-
-  /**
-   * Sets the provided asset as active.
-   *
-   * This function takes an asset object as an argument and updates
-   * the application's state to set this asset as the active asset.
-   *
-   * @param {Object} asset The asset object to be set as active.
-   */
-
-  const handleClick = (asset) => {
-    setActiveAsset(asset);
-  };
-
-  /**
-   * Handles the double-click event for an asset.
-   *
-   * This function opens the asset details modal,
-   * allowing the user to view more information about the selected asset.
-   */
-
-  const handleDoubleClick = () => {
     openAssetsDetailsModal();
-  };
-
-  /**
-   * Initiates the download of all assets as an Excel file.
-   *
-   * This function triggers the process to download an Excel file
-   * containing all available assets. It calls the function responsible
-   * for server communication and file handling to execute the download.
-   */
-  const handleDownloadXLSX = () => {
-    startDownloadingAssetsFile();
   };
 
   /**
@@ -194,7 +116,7 @@ export const AssetsPage = () => {
   }, []);
 
   /**
-   * Updates the filtered assets list whenever the assets state changes.
+   * Updates the filtered assets whenever the assets change.
    */
   useEffect(() => {
     setFilteredAssets(assets);
@@ -205,10 +127,6 @@ export const AssetsPage = () => {
       <h2 className="page-title">Assets Management</h2>
 
       <SearchBar onSearch={handleAssetSearch} placeholder="Search assets..." />
-
-      <button className="btn download-btn" onClick={handleDownloadXLSX}>
-        Download Excel File
-      </button>
 
       <div className="table-container">
         <table className="assets-table">
@@ -222,15 +140,13 @@ export const AssetsPage = () => {
               <th>Location</th>
               <th>State</th>
               <th>User</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredAssets.map((asset, index) => (
               <tr
                 key={asset.aid}
-                onClick={() => handleClick(asset)}
-                onDoubleClick={() => handleDoubleClick()}
+                onDoubleClick={() => handleDoubleClick(asset)}
                 style={
                   asset.user === user.uid ? { backgroundColor: "#e0f7fa" } : {}
                 }
@@ -268,26 +184,6 @@ export const AssetsPage = () => {
                   {users.find((user) => user.uid === asset.user)?.name ||
                     "Unassigned"}
                 </td>
-                <td className="actions">
-                  <button
-                    className="btn edit-btn"
-                    onClick={() => handleEdit(asset)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn assign-btn"
-                    onClick={() => handleAssign(asset)}
-                  >
-                    Assign
-                  </button>
-                  <button
-                    className="btn delete-btn"
-                    onClick={() => handleDelete(asset.aid)}
-                  >
-                    Delete
-                  </button>
-                </td>
               </tr>
             ))}
           </tbody>
@@ -296,14 +192,6 @@ export const AssetsPage = () => {
 
       {/* Detaisl Asset Modal */}
       {isAssetDetailsModalOpen && <AssetDetailsModal asset={activeAsset} />}
-
-      {/* Edit Asset Modal */}
-      {isAssetModalOpen && <AssetModal />}
-
-      {/* New Password Modal */}
-      {isAssignModalOpen && <AssignModal />}
-
-      <FabAddNewAsset />
     </div>
   );
 };

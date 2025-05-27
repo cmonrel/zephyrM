@@ -1,6 +1,14 @@
+/**
+ * Assets Page Styles
+ *
+ * This stylesheet defines the visual styles for the assets page component.
+ *
+ * @module modules/assetsModule/pages/AssetsPage
+ */
+
 .assets-management-container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 90vw;
   margin: 0 auto;
   padding: 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;

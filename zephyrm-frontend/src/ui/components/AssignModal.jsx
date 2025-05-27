@@ -1,3 +1,11 @@
+/**
+ * Assign User to Asset Modal Component
+ *
+ * This component displays a modal for assigning a user to an asset.
+ *
+ * @module ui/components/AssignModal
+ */
+
 import { useEffect } from "react";
 import Modal from "react-modal";
 import "./AssignModal.css";
@@ -17,26 +25,54 @@ const customStyles = {
   },
 };
 
+/**
+ * Assign Modal Component
+ *
+ * This component renders a modal for assigning users to assets. It displays a list of users
+ * fetched from the server, allowing the selection of a user to be assigned to an active asset.
+ * The modal also provides an option to clear the current assignment.
+ *
+ * @returns {ReactElement} A modal component that displays a list of users for assignment.
+ */
 export const AssignModal = () => {
   const { users, startLoadingUsers } = useUsersStore();
   const { isAssignModalOpen, closeAssignModal } = useUIStore();
   const { setActiveAsset, startAssigningUserToAsset } = useAssetsStore();
 
+  /**
+   * Handles a user click event in the modal.
+   *
+   * This function assigns the clicked user to the active asset and closes the modal.
+   *
+   * @param {{ uid: string }} user - The user object from the users list.
+   */
   const handleUserClick = ({ uid }) => {
     startAssigningUserToAsset(uid);
     closeAssignModal();
   };
 
+  /**
+   * Handles the button click event to clear the current assignment.
+   *
+   * This function calls the function to clear the current assignment and
+   * closes the assign modal.
+   */
   const handleButtonClick = () => {
     startAssigningUserToAsset(null);
     closeAssignModal();
   };
 
+  /**
+   * Closes the assign modal and resets the active asset.
+   */
   const onCloseModal = () => {
     closeAssignModal();
     setActiveAsset(null);
   };
 
+  /**
+   * Loads users when the component mounts.
+   */
   useEffect(() => {
     startLoadingUsers();
   }, []);

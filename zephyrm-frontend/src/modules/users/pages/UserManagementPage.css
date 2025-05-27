@@ -1,3 +1,11 @@
+/**
+ * User Management Page Styles
+ *
+ * This stylesheet defines the visual styles for the user management page component.
+ *
+ * @module modules/users/pages/UserManagementPage
+ */
+
 .user-management-container {
   max-width: 75vw;
   margin: 0 auto;

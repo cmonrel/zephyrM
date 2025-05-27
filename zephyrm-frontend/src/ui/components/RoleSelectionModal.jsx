@@ -1,3 +1,11 @@
+/**
+ * Role Selection Modal Component
+ *
+ * This component displays a modal for selecting a role.
+ *
+ * @module ui/components/RoleSelectionModal
+ */
+
 import Modal from "react-modal";
 
 import { useUIStore } from "../hooks/useUiStore";
@@ -13,9 +21,25 @@ const customStyles = {
   },
 };
 
+/**
+ * Displays a modal for selecting a user role.
+ *
+ * This component renders a modal with a list of roles that can be selected:
+ * - "Admin"
+ * - "Worker"
+ *
+ * When a role is selected, the `onSelect` function is called with the
+ * selected role as its argument.
+ *
+ * @param {function} onSelect - The function to call when a role is selected.
+ * @returns {ReactElement} The rendered modal component.
+ */
 export const RoleSelectionModal = ({ onSelect }) => {
   const { isRoleSelectionModalOpen, closeRoleSelectionModal } = useUIStore();
 
+  /**
+   * Closes the role selection modal.
+   */
   const onCloseModal = () => {
     closeRoleSelectionModal();
   };

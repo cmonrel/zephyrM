@@ -1,3 +1,11 @@
+/**
+ * Search Bar Styles
+ *
+ * This stylesheet defines the visual styles for the search bar component.
+ *
+ * @module components/SearchBar/SearchBar
+ */
+
 .search-bar {
   width: 100%;
   max-width: 400px;

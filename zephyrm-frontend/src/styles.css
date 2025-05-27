@@ -1,3 +1,11 @@
+/**
+* Styles for the application 
+*
+* Custom styles for React Modal and Floating Action Button (FAB)
+* 
+* @module styles
+*/
+
 .ReactModalPortal > div {
   opacity: 0;
 }
@@ -94,6 +102,15 @@
   background-color: #0d6efd;
   color: white;
   outline: none;
+}
+
+.container-request {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 @media (max-width: 480px) {

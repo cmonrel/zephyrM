@@ -1,3 +1,11 @@
+/**
+ * NavBar Component Styles
+ *
+ * This stylesheet defines the visual styles for the navegation bar component.
+ *
+ * @module components/NavBar/NavBar
+ */
+
 .notification-container {
   position: relative;
 }

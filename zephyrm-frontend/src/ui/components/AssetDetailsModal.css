@@ -1,3 +1,11 @@
+/**
+ * Asset Details Modal Component Styles
+ *
+ * This stylesheet defines the visual styles for the asset details modal component.
+ *
+ * @module ui/components/AssetDetailsModal
+ */
+
 .modal h2 {
   margin-top: 0;
   font-size: 1.5rem;

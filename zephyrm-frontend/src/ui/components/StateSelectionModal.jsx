@@ -1,3 +1,11 @@
+/**
+ * State Selection Modal Component
+ *
+ * This component displays a modal for selecting a state.
+ *
+ * @module ui/components/StateSelectionModal
+ */
+
 import Modal from "react-modal";
 
 import { useUIStore } from "../hooks/useUiStore";
@@ -13,9 +21,27 @@ const customStyles = {
   },
 };
 
+/**
+ * Displays a modal for selecting a state.
+ *
+ * This component renders a modal with a list of states that can be selected:
+ * - "Free"
+ * - "On loan"
+ * - "Under maintenance"
+ * - "Broken"
+ *
+ * When a state is selected, the `onSelect` function is called with the
+ * selected state as its argument.
+ *
+ * @param {function} onSelect - The function to call when a state is selected.
+ * @returns {ReactElement} The rendered modal component.
+ */
 export const StateSelectionModal = ({ onSelect }) => {
   const { isStateSelectionModalOpen, closeStateSelectionModal } = useUIStore();
 
+  /**
+   * Closes the state selection modal.
+   */
   const onCloseModal = () => {
     closeStateSelectionModal();
   };

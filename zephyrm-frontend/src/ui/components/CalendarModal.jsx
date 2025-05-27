@@ -1,3 +1,11 @@
+/**
+ * Calendar Modal Component
+ *
+ * This component displays a modal for adding, editing, and seeing events to the calendar.
+ *
+ * @module ui/components/CalendarModal
+ */
+
 import { useEffect, useMemo, useState } from "react";
 import Modal from "react-modal";
 
@@ -28,6 +36,14 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
+/**
+ * Displays a modal for adding, editing, and seeing events to the calendar.
+ *
+ * Depending on the role of the user, it will display a different modal.
+ *
+ * @param {string} role The role of the user.
+ * @returns {ReactElement}
+ */
 export const CalendarModal = ({ role }) => {
   const {
     isDateModalOpen,
@@ -58,12 +74,27 @@ export const CalendarModal = ({ role }) => {
     return formValues.title.length > 0 ? "" : "is-invalid";
   }, [formValues.title, formSubmitted]);
 
+  /**
+   * Updates the form values when the active event changes. Also loads users and assets.
+   */
   useEffect(() => {
     startLoadingUsers();
     startLoadingAssets();
     if (activeEvent !== null) setFormValues({ ...activeEvent });
   }, [activeEvent]);
 
+  /**
+   * Updates the form values when an input element changes.
+   *
+   * Gets the target element from the event object and updates the form values
+   * with the value of the input element that changed, using the name of the
+   * element as the key.
+   *
+   * @param {Object} event - The event object associated with the input element change.
+   * @param {Object} event.target - The input element that changed.
+   * @param {string} event.target.name - The name of the input element that changed.
+   * @param {string} event.target.value - The new value of the input element that changed.
+   */
   const onChangeInput = ({ target }) => {
     setFormValues({
       ...formValues,
@@ -71,11 +102,23 @@ export const CalendarModal = ({ role }) => {
     });
   };
 
+  /**
+   * Closes the date modal and resets the active event.
+   */
   const onCloseModal = () => {
     setActiveEvent(null);
     closeDateModal();
   };
 
+  /**
+   * Updates the form values when a date picker changes.
+   *
+   * Updates the form values with the value of the date picker that changed, using the name of the
+   * element as the key.
+   *
+   * @param {Object} event - The event object associated with the date picker change.
+   * @param {string} changing - The name of the date picker that changed.
+   */
   const onDateChange = (event, changing) => {
     setFormValues({
       ...formValues,
@@ -83,16 +126,39 @@ export const CalendarModal = ({ role }) => {
     });
   };
 
+  /**
+   * Updates the form values when an asset is selected and closes the asset selection modal.
+   *
+   * @param {Object} asset - The selected asset.
+   */
   const handleAssetSelect = (asset) => {
     setFormValues({ ...formValues, asset });
     closeAssetSelectionModal();
   };
 
+  /**
+   * Updates the form values when a user is selected and closes the user selection modal.
+   *
+   * @param {Object} user - The selected user.
+   */
   const handleUserSelect = (user) => {
     setFormValues({ ...formValues, user });
     closeUserSelectionModal();
   };
 
+  /**
+   * Submits the event form and closes the date modal.
+   *
+   * First, it prevents the default event behavior, then sets the form
+   * submitted state to true. It checks if the end date is greater than the
+   * start date and that the title, asset, and user fields are not empty. If any
+   * of these conditions are not met, it displays an error message and returns.
+   * If all conditions are met, it calls the `startSavingEvent` action to save
+   * the event to the server, and then calls the `onCloseModal` function to
+   * close the date modal, and sets the form submitted state to false.
+   *
+   * @param {Event} event The form submission event.
+   */
   const onSubmit = async (event) => {
     event.preventDefault();
     setFormSubmitted(true);

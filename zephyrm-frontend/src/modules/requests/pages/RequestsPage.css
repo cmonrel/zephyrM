@@ -1,0 +1,110 @@
+/**
+ * Requests Admin Page Styles
+ *
+ * This stylesheet defines the visual styles for the requests admin page component.
+ *
+ * @module modules/requests/pages/RequestsPage
+ */
+
+.requests-container {
+  padding: 1.5rem;
+  background-color: #fff;
+  max-height: 100vh;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.25rem;
+  color: #0d6efd;
+}
+
+.no-requests {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+  margin-top: 2rem;
+}
+
+.request-card {
+  background-color: #f8f9fa;
+  padding: 1.25rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.request-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.3rem;
+}
+
+.request-status {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.request-date {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.request-reason {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+.request-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.accept-btn,
+.deny-btn {
+  background-color: #4caf50;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deny-btn {
+  background-color: #f44336;
+}
+
+.accept-btn svg,
+.deny-btn svg {
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .request-card {
+    padding: 1rem;
+  }
+
+  .request-title {
+    font-size: 1rem;
+  }
+
+  .request-date,
+  .request-reason,
+  .request-status {
+    font-size: 0.85rem;
+  }
+
+  .accept-btn,
+  .deny-btn {
+    padding: 0.4rem;
+  }
+}

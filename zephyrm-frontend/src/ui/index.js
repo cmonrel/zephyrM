@@ -10,7 +10,5 @@ export * from "./components/AssetDetailsModal";
 export * from "./components/RoleSelectionModal";
 export * from "./components/StateSelectionModal";
 
-// HELPERS
-
 // HOOKS
 export * from "./hooks/useUiStore";

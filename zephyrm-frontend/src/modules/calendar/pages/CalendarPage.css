@@ -1,3 +1,11 @@
+/**
+ * Calendar Page Styles
+ *
+ * This stylesheet defines the visual styles for the calendar page component.
+ *
+ * @module modules/calendar/pages/CalendarPage
+ */
+
 .calendar-container {
   width: 100%;
   padding: 0 10px;
@@ -5,14 +13,14 @@
 }
 
 .calendar {
-  height: calc(100vh - 80px);
+  height: calc(95vh - 80px);
   max-width: 1200px;
   margin: 0 auto;
 }
 
 @media (max-width: 768px) {
   .calendar {
-    height: calc(100vh - 100px);
+    height: calc(95vh - 100px);
     font-size: 12px;
   }
 

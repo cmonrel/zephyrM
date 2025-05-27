@@ -1,3 +1,11 @@
+/**
+ * Password Change Modal Component
+ *
+ * This component displays a modal for changing a user's password.
+ *
+ * @module ui/components/PasswordModal
+ */
+
 import { useEffect } from "react";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
@@ -22,17 +30,42 @@ const initialForm = {
   password2: "",
 };
 
+/**
+ * Displays a modal for changing a user's password.
+ *
+ * The component displays a form with two input fields for the user to enter the new password and confirm it.
+ * When the form is submitted, it calls the `startSavingPassword` function from the `useUsersStore` hook
+ * with the active user and the new password as arguments. If the two passwords do not match, it displays an error
+ * message.
+ *
+ * @returns {ReactElement} The JSX element for the modal.
+ */
 export const PasswordModal = () => {
   const { isPasswordModalOpen, closePasswordModal } = useUIStore();
   const { activeUser, setActiveUser, startSavingPassword } = useUsersStore();
 
   const { formState, onInputChange, setFormState } = useForm(initialForm);
 
+  /**
+   * Closes the password modal and resets the active user.
+   */
+
   const onCloseModal = () => {
     closePasswordModal();
     setActiveUser(null);
   };
 
+  /**
+   * Submits the password change form and closes the password modal.
+   *
+   * First, it prevents the default event behavior, then checks if the two
+   * input fields have the same value. If they don't, it displays an error
+   * message. If they do, it calls the `startSavingPassword` action to
+   * save the new password to the server, and then calls the
+   * `onCloseModal` function to close the password modal.
+   *
+   * @param {Event} event The form submission event.
+   */
   const onSubmit = async (event) => {
     event.preventDefault();
     if (formState.password !== formState.password2) {
@@ -42,6 +75,9 @@ export const PasswordModal = () => {
     onCloseModal();
   };
 
+  /**
+   * Updates the form state when the initial form changes.
+   */
   useEffect(() => {
     setFormState(initialForm);
   }, [initialForm]);

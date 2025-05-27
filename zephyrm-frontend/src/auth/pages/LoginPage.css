@@ -1,3 +1,11 @@
+/**
+ * Login Page Styles
+ *
+ * This stylesheet defines the visual styles for the login page component.
+ *
+ * @module auth/pages/LoginPage
+ */
+
 .login-container {
   display: flex;
   justify-content: center;

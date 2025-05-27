@@ -1,3 +1,11 @@
+/**
+ * Asset Modal Component
+ *
+ * This component displays a modal for creating or editing assets.
+ *
+ * @module ui/components/AssetModal
+ */
+
 import { useEffect, useMemo, useState } from "react";
 import Modal from "react-modal";
 
@@ -17,6 +25,16 @@ const customStyles = {
   },
 };
 
+/**
+ * Asset Modal Component
+ *
+ * This component renders a modal for creating or editing assets. It provides
+ * a form to input asset details such as title, NFC ID, category, location,
+ * description, acquisition date, and state. The modal can be closed or submitted,
+ * and it integrates a state selection modal for updating the asset's state.
+ *
+ * @returns {ReactElement} The rendered modal component.
+ */
 export const AssetModal = () => {
   const {
     isAssetModalOpen,
@@ -44,15 +62,26 @@ export const AssetModal = () => {
     return formState.title.length > 0 ? "" : "is-invalid";
   }, [formState.title, formSubmitted]);
 
+  /**
+   * Updates the form state when the component mounts.
+   */
   useEffect(() => {
     if (activeAsset !== null) setFormState({ ...activeAsset });
   }, []);
 
+  /**
+   * Closes the asset modal and resets the active asset.
+   */
   const onCloseModal = () => {
     closeAssetModal();
     setActiveAsset(null);
   };
 
+  /**
+   * Updates the form state with the selected state and closes the state selection modal.
+   *
+   * @param {string} state The selected state.
+   */
   const onSelect = (state) => {
     setFormState({
       ...formState,
@@ -61,6 +90,16 @@ export const AssetModal = () => {
     closeStateSelectionModal();
   };
 
+  /**
+   * Submits the asset form and closes the asset modal.
+   *
+   * Prevents the default event behavior, then sets the form submitted state to true.
+   * It calls the `startSavingAsset` action to save the asset to the server, and then
+   * calls the `onCloseModal` function to close the asset modal, and sets the form
+   * submitted state to false.
+   *
+   * @param {Event} event The form submission event.
+   */
   const onSubmit = async (event) => {
     event.preventDefault();
     setFormSubmitted(true);
@@ -96,6 +135,19 @@ export const AssetModal = () => {
               name="title"
               autoComplete="off"
               value={formState.title}
+              onChange={onInputChange}
+            />
+          </div>
+
+          <div className="form-group mb-2">
+            <label>NFC ID</label>
+            <input
+              type="text"
+              className={`form-control ${nameClass}`}
+              placeholder="NFC ID"
+              name="NFCTag"
+              autoComplete="off"
+              value={formState.NFCTag}
               onChange={onInputChange}
             />
           </div>

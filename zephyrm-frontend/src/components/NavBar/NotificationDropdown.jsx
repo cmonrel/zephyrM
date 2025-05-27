@@ -1,9 +1,39 @@
+/**
+ * NotificationDropdown Component
+ *
+ * This component represents a dropdown for displaying notifications.
+ *
+ * @module components/NavBar/NotificationDropdown
+ */
+
 import { useAuthStore } from "../../auth/hooks/useAuthStore";
 import { useNotificationStore } from "../../hooks";
 
+/**
+ * NotificationDropdown
+ *
+ * This component represents a dropdown for displaying notifications. It
+ * shows a list of all notifications, and allows the user to mark them as
+ * read or delete them.
+ *
+ * @param {function} markAsRead - A function for marking a notification as
+ *   read.
+ * @param {function} markAllAsRead - A function for marking all notifications
+ *   as read.
+ * @returns {ReactElement} - A React element representing the
+ *   NotificationDropdown component.
+ */
 export const NotificationDropdown = ({ markAsRead, markAllAsRead }) => {
   const { notifications } = useAuthStore();
   const { startDeletingNotification } = useNotificationStore();
+
+  /**
+   * Handles the button click event to delete a notification.
+   *
+   * This function triggers the deletion of a notification by its ID.
+   *
+   * @param {string} nid - The ID of the notification to be deleted.
+   */
 
   const handleButtonClick = (nid) => {
     startDeletingNotification(nid);

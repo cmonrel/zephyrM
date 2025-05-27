@@ -1,3 +1,11 @@
+/**
+ * Assign Modal Component Styles
+ *
+ * This stylesheet defines the visual styles for the assign modal component.
+ *
+ * @module ui/components/AssignModal
+ */
+
 .modal-fondo {
   background-color: rgba(0, 0, 0, 0.4);
   position: fixed;

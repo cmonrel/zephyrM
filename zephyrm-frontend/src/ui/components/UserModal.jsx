@@ -1,3 +1,11 @@
+/**
+ * User Modal Component
+ *
+ * This component displays a modal for creating or editing users.
+ *
+ * @module ui/components/UserModal
+ */
+
 import { useEffect, useMemo, useState } from "react";
 import Modal from "react-modal";
 
@@ -17,6 +25,11 @@ const customStyles = {
   },
 };
 
+/**
+ * This component displays a modal for creating or editing users.
+ *
+ * @returns {ReactElement}
+ */
 export const UserModal = () => {
   const {
     isUserModalOpen,
@@ -36,10 +49,19 @@ export const UserModal = () => {
     return formState.name.length > 0 ? "" : "is-invalid";
   }, [formState.name, formSubmitted]);
 
+  /**
+   * Closes the user modal and resets the active user.
+   */
   const onCloseModal = () => {
     closeUserModal();
     setActiveUser(null);
   };
+
+  /**
+   * Updates the form state with the selected role and closes the role selection modal.
+   *
+   * @param {string} role The role selected by the user.
+   */
 
   const onSelect = (role) => {
     setFormState({
@@ -49,6 +71,18 @@ export const UserModal = () => {
     closeRoleSelectionModal();
   };
 
+  /**
+   * Submits the user form and closes the user modal.
+   *
+   * First, it prevents the default event behavior, then sets the form
+   * submitted state to true. It checks for empty fields and returns if
+   * any are empty. If all fields are filled, it calls the
+   * `startSavingUser` action to save the user to the server. After
+   * saving the user, it calls the `onCloseModal` function to close the
+   * user modal, and sets the form submitted state to false.
+   *
+   * @param {Event} event The form submission event.
+   */
   const onSubmit = async (event) => {
     event.preventDefault();
     setFormSubmitted(true);
@@ -65,6 +99,9 @@ export const UserModal = () => {
     setFormSubmitted(false);
   };
 
+  /**
+   * Updates the form state when the active user changes.
+   */
   useEffect(() => {
     if (activeUser !== null) setFormState({ ...activeUser });
   }, [activeUser]);
