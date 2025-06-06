@@ -22,7 +22,7 @@ const {
   assignUserToAsset,
   downloadAssetFile,
 } = require("../controllers/assets");
-const { assetExists } = require("../middlewares/asset-validator");
+const { assetExists, NFCUnique } = require("../middlewares/asset-validator");
 const { userExists } = require("../../../auth/middlewares/user-validator");
 
 const router = Router();
@@ -30,7 +30,7 @@ const router = Router();
 // All routes need JWT verification
 router.use(validateJWT);
 
-// // GET assets
+// GET assets
 router.get("/", getAssets);
 
 // POST asset
@@ -43,6 +43,7 @@ router.post(
     check("state", "State is required").not().isEmpty(),
     check("acquisitionDate", "Acquisition date is required").custom(isDate),
     fieldsValidator,
+    NFCUnique,
   ],
   createAsset
 );
@@ -58,12 +59,16 @@ router.put(
     check("acquisitionDate", "Acquisition date is required").custom(isDate),
     fieldsValidator,
     assetExists,
+    NFCUnique,
   ],
   updateAsset
 );
 
 // DELETE asset
 router.delete("/:id", assetExists, deleteAsset);
+
+// PUT remove nfc
+router.put("/remove-nfc/:id", [assetExists], updateAsset);
 
 // PUT assign user to asset
 router.put("/assign/:id", [assetExists], assignUserToAsset);

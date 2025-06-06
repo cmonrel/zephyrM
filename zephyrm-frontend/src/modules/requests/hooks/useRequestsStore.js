@@ -100,12 +100,33 @@ export const useRequestsStore = () => {
    * @param {string} status - The new status of the request.
    * @param {string} aid - The ID of the asset to update, if the status is "Approved".
    * @param {string} uid - The ID of the user to assign the asset to, if the status is "Approved".
+   * @param {string} denialMotive - The motive for denying the request, if the status is "Denied".
    */
-  const startMarkStatusRequest = async (rid, status, aid, uid) => {
+  const startMarkStatusRequest = async (
+    rid,
+    status,
+    aid,
+    uid,
+    denialMotive
+  ) => {
     if (status === "Pending") return;
     try {
       if (status === "Approved") {
         const asset = assets.find((asset) => asset.aid === aid);
+
+        if (asset.state === "On loan") {
+          const deny = "Asset is already being used";
+          const state = "Denied";
+
+          await zephyrmApi.put(`requests/${rid}`, {
+            status: state,
+            denialMotive: deny,
+          });
+          dispatch(onMarkRequestStatus({ rid, status }));
+          startLoadingRequests();
+          return;
+        }
+
         const updateAsset = {
           ...asset,
           state: "On loan",
@@ -113,7 +134,8 @@ export const useRequestsStore = () => {
         };
         if (updateAsset) startSavingAsset(updateAsset);
       }
-      await zephyrmApi.put(`requests/${rid}`, { status });
+
+      await zephyrmApi.put(`requests/${rid}`, { status, denialMotive });
       dispatch(onMarkRequestStatus({ rid, status }));
       startLoadingRequests();
     } catch (error) {

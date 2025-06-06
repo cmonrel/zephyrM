@@ -16,6 +16,7 @@ import { FabAddNewAsset } from "../../../components/FabButtons/FabAddNewAsset";
 import { useUsersStore } from "../../users/hooks/useUsersStore";
 import { SearchBar } from "../../../components";
 import { useAuthStore } from "../../../auth/hooks/useAuthStore";
+import { useCategoriesStore } from "../hooks/useCategoriesStore";
 
 /**
  * It displays a table with all the assets, and allows the user to search, create, edit, assign, or delete them.
@@ -41,6 +42,7 @@ export const AssetsPage = () => {
   } = useUIStore();
   const { users, startLoadingUsers } = useUsersStore();
   const { user } = useAuthStore();
+  const { startLoadingCategories } = useCategoriesStore();
 
   const [filteredAssets, setFilteredAssets] = useState(assets);
 
@@ -186,11 +188,12 @@ export const AssetsPage = () => {
   };
 
   /**
-   * Loads users and assets when the component mounts.
+   * Loads users, assets and categories when the component mounts.
    */
   useEffect(() => {
     startLoadingUsers();
     startLoadingAssets();
+    startLoadingCategories();
   }, []);
 
   /**
@@ -211,87 +214,93 @@ export const AssetsPage = () => {
       </button>
 
       <div className="table-container">
-        <table className="assets-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Description</th>
-              <th>Acquisition Date</th>
-              <th>Location</th>
-              <th>State</th>
-              <th>User</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredAssets.map((asset, index) => (
-              <tr
-                key={asset.aid}
-                onClick={() => handleClick(asset)}
-                onDoubleClick={() => handleDoubleClick()}
-                style={
-                  asset.user === user.uid ? { backgroundColor: "#e0f7fa" } : {}
-                }
-              >
-                <td>{index + 1}</td>
-                <td>{asset.title}</td>
-                <td>{asset.category}</td>
-                <td
-                  style={{
-                    maxWidth: "150px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {asset.description}
-                </td>
-                <td>
-                  {asset.acquisitionDate
-                    ? new Date(asset.acquisitionDate).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )
-                    : "Not specified"}
-                </td>
-                <td>{asset.location}</td>
-                <td style={{ color: getStateColor(asset.state) }}>
-                  {asset.state}
-                </td>
-                <td>
-                  {users.find((user) => user.uid === asset.user)?.name ||
-                    "Unassigned"}
-                </td>
-                <td className="actions">
-                  <button
-                    className="btn edit-btn"
-                    onClick={() => handleEdit(asset)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn assign-btn"
-                    onClick={() => handleAssign(asset)}
-                  >
-                    Assign
-                  </button>
-                  <button
-                    className="btn delete-btn"
-                    onClick={() => handleDelete(asset.aid)}
-                  >
-                    Delete
-                  </button>
-                </td>
+        {filteredAssets.length === 0 ? (
+          <h2>No results found</h2>
+        ) : (
+          <table className="assets-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Acquisition Date</th>
+                <th>Location</th>
+                <th>State</th>
+                <th>User</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredAssets.map((asset, index) => (
+                <tr
+                  key={asset.aid}
+                  onClick={() => handleClick(asset)}
+                  onDoubleClick={() => handleDoubleClick()}
+                  style={
+                    asset.user === user.uid
+                      ? { backgroundColor: "#e0f7fa" }
+                      : {}
+                  }
+                >
+                  <td>{index + 1}</td>
+                  <td>{asset.title}</td>
+                  <td>{asset.category}</td>
+                  <td
+                    style={{
+                      maxWidth: "150px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {asset.description}
+                  </td>
+                  <td>
+                    {asset.acquisitionDate
+                      ? new Date(asset.acquisitionDate).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
+                      : "Not specified"}
+                  </td>
+                  <td>{asset.location}</td>
+                  <td style={{ color: getStateColor(asset.state) }}>
+                    {asset.state}
+                  </td>
+                  <td>
+                    {users.find((user) => user.uid === asset.user)?.name ||
+                      "Unassigned"}
+                  </td>
+                  <td className="actions">
+                    <button
+                      className="btn edit-btn"
+                      onClick={() => handleEdit(asset)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn assign-btn"
+                      onClick={() => handleAssign(asset)}
+                    >
+                      Assign
+                    </button>
+                    <button
+                      className="btn delete-btn"
+                      onClick={() => handleDelete(asset.aid)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* Detaisl Asset Modal */}
@@ -300,7 +309,7 @@ export const AssetsPage = () => {
       {/* Edit Asset Modal */}
       {isAssetModalOpen && <AssetModal />}
 
-      {/* New Password Modal */}
+      {/* Assign User to Asset Modal */}
       {isAssignModalOpen && <AssignModal />}
 
       <FabAddNewAsset />

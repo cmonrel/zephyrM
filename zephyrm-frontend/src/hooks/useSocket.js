@@ -45,7 +45,7 @@ export const useSocket = (uid, url) => {
         socketRef.current.disconnect();
       }
     };
-  }, [uid, url]);
+  }, [uid]);
 
   return socketRef.current;
 };

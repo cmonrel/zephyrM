@@ -52,7 +52,7 @@ export const RoleSelectionModal = ({ onSelect }) => {
       className="selection-modal"
       overlayClassName={"modal-fondo"}
     >
-      <h2>Select User</h2>
+      <h2>Select Role</h2>
       <div className="selection-list">
         <div
           key="admin"

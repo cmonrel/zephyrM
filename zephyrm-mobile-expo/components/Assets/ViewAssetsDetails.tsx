@@ -1,30 +1,54 @@
+/**
+ * ViewAssetsDetails component
+ *
+ * @module components/Assets/ViewAssetsDetails
+ */
+
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
+  Keyboard,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 
-import { useAssetsStore } from "../hooks/assetsHooks/useAssetsStore";
-import { useAuthStore } from "../hooks/auth/useAuthStore";
-import { useNotificationStore } from "../hooks/notifications/useNotificationStore";
-import { useRequestsStore } from "../hooks/requests/useRequestsStore";
-import { useForm } from "../hooks/useForm";
-import { useUsersStore } from "../hooks/users/useUsersStore";
-import { Asset } from "../interfaces";
-import { User } from "../interfaces/login/userInterface";
+import { useAssetsStore } from "../../hooks/assetsHooks/useAssetsStore";
+import { useCategoriesStore } from "../../hooks/assetsHooks/useCategoriesStore";
+import { useAuthStore } from "../../hooks/auth/useAuthStore";
+import { useNotificationStore } from "../../hooks/notifications/useNotificationStore";
+import { useRequestsStore } from "../../hooks/requests/useRequestsStore";
+import { useForm } from "../../hooks/useForm";
+import { useUsersStore } from "../../hooks/users/useUsersStore";
+import { Asset, Category } from "../../interfaces";
+import { User } from "../../interfaces/login/userInterface";
 
-export default function ViewAssetsDetails() {
+/**
+ * @description Component to view and edit asset details
+ * @param {Function} onDelete Optional function to delete an asset
+ * @param {Function} onClear Optional function to clear the active asset
+ * @returns {JSX.Element} The ViewAssetsDetails component
+ */
+export default function ViewAssetsDetails({
+  onDelete,
+  onClear,
+}: {
+  onDelete?: (asset: Asset) => void;
+  onClear?: () => void;
+}) {
   const { user } = useAuthStore();
   const { users } = useUsersStore();
   const { activeAsset, setActiveAsset, startSavingAsset } = useAssetsStore();
   const { startSendingNotificationRequest } = useNotificationStore();
   const { startSavingRequest } = useRequestsStore();
+  const { categories, startLoadingCategories, startDeletingCategory } =
+    useCategoriesStore();
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSent, setIsSent] = useState(false);
@@ -59,6 +83,12 @@ export default function ViewAssetsDetails() {
 
   const { formState, onInputChange } = useForm(activeAsset, formValidations);
 
+  /**
+   * Returns the color code associated with the given asset state.
+   *
+   * @param {Asset["state"]} state - The state of the asset.
+   * @returns {string} The hexadecimal color code representing the asset state.
+   */
   const getStateColor = (state: Asset["state"]) => {
     switch (state) {
       case "Free":
@@ -74,12 +104,63 @@ export default function ViewAssetsDetails() {
     }
   };
 
+  /**
+   * Handles the event when the user presses the clear button.
+   *
+   * @remarks
+   * This function triggers the onClear callback to clear the form or reset the asset state.
+   */
+  const handleClear = () => {
+    onClear!();
+  };
+
+  /**
+   * Handles the event when the user presses the save button.
+   *
+   * @remarks
+   * This function saves the asset by calling the startSavingAsset function and
+   * updates the active asset state by calling setActiveAsset with the new values.
+   */
   const handleSave = () => {
     setIsEditing(false);
     setActiveAsset(formState);
     startSavingAsset(formState);
   };
 
+  /**
+   * Handles the event when the user presses the delete button.
+   *
+   * @remarks
+   * This function calls the onDelete callback with the active asset as an argument.
+   * The onDelete callback is responsible for deleting the asset and updating the application state.
+   * The onDelete callback is required and must be a function that takes a single asset as an argument.
+   */
+  const handleDelete = () => {
+    onDelete!(activeAsset);
+  };
+
+  /**
+   * Handles the event when the user presses the delete category button.
+   *
+   * @remarks
+   * This function finds the category that matches the category title in the form state
+   * and calls startDeletingCategory with the category's cid.
+   */
+  const handleDeleteCategory = () => {
+    const category = categories.find(
+      (category: Category) => category.title === formState.category
+    );
+    startDeletingCategory(category!.cid);
+  };
+
+  /**
+   * Handles the event when the user presses the send request button.
+   *
+   * @remarks
+   * This function sends a request for the active asset to the server and
+   * saves the request in the application state. It also shows a success
+   * message. If an error occurs, it displays an error message.
+   */
   const handleSendRequest = async () => {
     if (activeAsset.state !== "Free") return;
     setIsSent(true);
@@ -98,12 +179,31 @@ export default function ViewAssetsDetails() {
     }
   };
 
+  /**
+   * Effect hook to load categories when the component mounts.
+   */
+  useEffect(() => {
+    startLoadingCategories();
+  }, []);
+
   return (
     <>
       <View style={styles.container}>
         <Text style={styles.header}>
           <Ionicons name="information-circle-outline" size={20} /> Asset Details
         </Text>
+
+        <View style={styles.footer}>
+          <View style={styles.row}>
+            <Text style={styles.label}>NFC Tag:</Text>
+            <Text style={styles.value}>{activeAsset.nfcTag}</Text>
+          </View>
+          {activeAsset.nfcTag && user.role === "admin" && (
+            <Pressable style={styles.deleteBtn} onPress={() => handleClear()}>
+              <Ionicons name="remove-circle" size={25} color="#f44336" />
+            </Pressable>
+          )}
+        </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Title:</Text>
@@ -124,13 +224,26 @@ export default function ViewAssetsDetails() {
         <View style={styles.row}>
           <Text style={styles.label}>Category:</Text>
           {isEditing ? (
-            <TextInput
-              style={styles.input}
-              value={formState.category}
-              onChangeText={(value) =>
-                onInputChange({ target: { name: "category", value } })
-              }
-            />
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={formState.category}
+                onValueChange={(value) =>
+                  onInputChange({ target: { name: "category", value } })
+                }
+                style={styles.pickerCategory}
+              >
+                {categories.map((category: Category) => (
+                  <Picker.Item
+                    key={category.title}
+                    label={category.title}
+                    value={category.title}
+                  />
+                ))}
+              </Picker>
+              <TouchableOpacity onPress={() => handleDeleteCategory()}>
+                <Ionicons name="trash-outline" size={20} color="#d00" />
+              </TouchableOpacity>
+            </View>
           ) : (
             <Text style={styles.value}>{formState.category}</Text>
           )}
@@ -190,10 +303,15 @@ export default function ViewAssetsDetails() {
               onValueChange={(value) =>
                 onInputChange({ target: { name: "state", value } })
               }
-              style={styles.picker}
+              style={[styles.picker, { color: getStateColor(formState.state) }]}
             >
               {stateOptions.map((state) => (
-                <Picker.Item key={state} label={state} value={state} />
+                <Picker.Item
+                  style={{ color: getStateColor(state) }}
+                  key={state}
+                  label={state}
+                  value={state}
+                />
               ))}
             </Picker>
           ) : (
@@ -248,10 +366,18 @@ export default function ViewAssetsDetails() {
                 />
                 {isEditing && <Text style={styles.cancelText}>Cancel</Text>}
               </Pressable>
-              {isEditing && (
+              {isEditing ? (
                 <Pressable onPress={handleSave} style={styles.saveBtn}>
                   <Ionicons name="save-outline" size={30} />
                   <Text style={styles.saveText}>Save</Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => handleDelete()}
+                  style={styles.deleteBtn}
+                >
+                  <Ionicons name="trash-outline" size={30} />
+                  <Text style={styles.deleteText}>Delete</Text>
                 </Pressable>
               )}
             </View>
@@ -269,13 +395,15 @@ export default function ViewAssetsDetails() {
                   </Pressable>
                 ) : (
                   <View style={{ flex: 1 }}>
-                    <TextInput
-                      style={[styles.input, { marginBottom: 8 }]}
-                      placeholder="Write your motivation..."
-                      value={motivation}
-                      onChangeText={setMotivation}
-                      multiline
-                    />
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                      <TextInput
+                        style={[styles.input, { marginBottom: 8 }]}
+                        placeholder="Write your motivation..."
+                        value={motivation}
+                        onChangeText={setMotivation}
+                        multiline
+                      />
+                    </TouchableWithoutFeedback>
 
                     <View
                       style={{
@@ -360,8 +488,33 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     marginTop: 2,
   },
+  pickerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#e9e9e9",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginTop: 10,
+    paddingHorizontal: 10,
+  },
+  pickerCategory: {
+    flex: 1,
+    color: "#222",
+    fontSize: 16,
+  },
+  icon: {
+    marginLeft: 8,
+    color: "#888",
+  },
   picker: {
-    marginTop: 2,
+    color: "#222",
+    backgroundColor: "#e9e9e9",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginTop: 10,
+    fontSize: 16,
   },
   editBtn: {
     flexDirection: "row",
@@ -384,6 +537,16 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   cancelText: {
+    marginLeft: 6,
+    color: "#f44336",
+    fontWeight: "500",
+  },
+  deleteBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  deleteText: {
     marginLeft: 6,
     color: "#f44336",
     fontWeight: "500",

@@ -62,7 +62,6 @@ export const UserModal = () => {
    *
    * @param {string} role The role selected by the user.
    */
-
   const onSelect = (role) => {
     setFormState({
       ...formState,

@@ -21,7 +21,6 @@ const { validationResult } = require("express-validator");
  * or calls the next middleware function if there are no errors.
  */
 const fieldsValidator = (req, res = response, next) => {
-  // Manejo de errores
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({

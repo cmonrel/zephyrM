@@ -1,95 +1,132 @@
+/**
+ * UI slice
+ *
+ * @module store/ui/uiSlice
+ */
+
 import { createSlice } from "@reduxjs/toolkit";
 
 interface UiState {
-  isDateModalOpen: boolean;
-  isUserModalOpen: boolean;
-  isPasswordModalOpen: boolean;
-  isAssetModalOpen: boolean;
-  isAssignModalOpen: boolean;
-  isAssetSelectionModalOpen: boolean;
-  isUserSelectionModalOPen: boolean;
   isAssetDetailsModalOpen: boolean;
-  isRoleSelectionModalOpen: boolean;
-  isStateSelectionModalOpen: boolean;
+  isAssetModalOpen: boolean;
+  isAssetSelectionModalOpen: boolean;
+  isUserSelectionModalOpen: boolean;
+  isCreatingModalOpen: boolean;
 }
 
 const initialState: UiState = {
-  isDateModalOpen: false,
-  isUserModalOpen: false,
-  isPasswordModalOpen: false,
-  isAssetModalOpen: false,
-  isAssignModalOpen: false,
-  isAssetSelectionModalOpen: false,
-  isUserSelectionModalOPen: false,
   isAssetDetailsModalOpen: false,
-  isRoleSelectionModalOpen: false,
-  isStateSelectionModalOpen: false,
+  isAssetModalOpen: false,
+  isAssetSelectionModalOpen: false,
+  isUserSelectionModalOpen: false,
+  isCreatingModalOpen: false,
 };
 
+/**
+ * This slice defines the state and actions for the UI module in the Redux store.
+ */
 export const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    onOpenDateModal: (state) => {
-      state.isDateModalOpen = true;
-    },
-    onCloseDateModal: (state) => {
-      state.isDateModalOpen = false;
-    },
-    onOpenUserModal: (state) => {
-      state.isUserModalOpen = true;
-    },
-    onCloseUserModal: (state) => {
-      state.isUserModalOpen = false;
-    },
-    onOpenPasswordModal: (state) => {
-      state.isPasswordModalOpen = true;
-    },
-    onClosePasswordModal: (state) => {
-      state.isPasswordModalOpen = false;
-    },
+    /**
+     * Opens the asset creation modal.
+     *
+     * @remarks
+     * Sets isAssetModalOpen to true in the state.
+     */
     onOpenAssetModal: (state) => {
       state.isAssetModalOpen = true;
     },
+
+    /**
+     * Closes the asset creation modal.
+     *
+     * @remarks
+     * Sets isAssetModalOpen to false in the state.
+     */
     onCloseAssetModal: (state) => {
       state.isAssetModalOpen = false;
     },
-    onOpenAssignModal: (state) => {
-      state.isAssignModalOpen = true;
-    },
-    onCloseAssignModal: (state) => {
-      state.isAssignModalOpen = false;
-    },
+
+    /**
+     * Opens the asset selection modal.
+     *
+     * @remarks
+     * Sets isAssetSelectionModalOpen to true in the state.
+     */
     onOpenAssetSelectionModal: (state) => {
       state.isAssetSelectionModalOpen = true;
     },
+
+    /**
+     * Closes the asset selection modal.
+     *
+     * @remarks
+     * Sets isAssetSelectionModalOpen to false in the state.
+     */
     onCloseAssetSelectionModal: (state) => {
       state.isAssetSelectionModalOpen = false;
     },
+
+    /**
+     * Opens the user selection modal.
+     *
+     * @remarks
+     * Sets isUserSelectionModalOpen to true in the state.
+     */
     onOpenUserSelectionModal: (state) => {
-      state.isUserSelectionModalOPen = true;
+      state.isUserSelectionModalOpen = true;
     },
+
+    /**
+     * Closes the user selection modal.
+     *
+     * @remarks
+     * Sets isUserSelectionModalOpen to false in the state.
+     */
     onCloseUserSelectionModal: (state) => {
-      state.isUserSelectionModalOPen = false;
+      state.isUserSelectionModalOpen = false;
     },
+
+    /**
+     * Opens the asset details modal.
+     *
+     * @remarks
+     * Sets isAssetDetailsModalOpen to true in the state.
+     */
     onOpenAssetsDetailsModal: (state) => {
       state.isAssetDetailsModalOpen = true;
     },
+
+    /**
+     * Closes the asset details modal.
+     *
+     * @remarks
+     * Sets isAssetDetailsModalOpen to false in the state.
+     */
     onCloseAssetsDetailsModal: (state) => {
       state.isAssetDetailsModalOpen = false;
     },
-    onOpenRoleSelectionModal: (state) => {
-      state.isRoleSelectionModalOpen = true;
+
+    /**
+     * Opens the creation asset modal.
+     *
+     * @remarks
+     * Sets isCreatingModalOpen to true in the state.
+     */
+    onOpenCreatingModal: (state) => {
+      state.isCreatingModalOpen = true;
     },
-    onCloseRoleSelectionModal: (state) => {
-      state.isRoleSelectionModalOpen = false;
-    },
-    onOpenStateSelectionModal: (state) => {
-      console.log("onOpen");
-      state.isStateSelectionModalOpen = true;
-    },
-    onCloseStateSelectionModal: (state) => {
-      state.isStateSelectionModalOpen = false;
+
+    /**
+     * Closes the creation asset modal.
+     *
+     * @remarks
+     * Sets isCreatingModalOpen to false in the state.
+     */
+    onCloseCreatingModal: (state) => {
+      state.isCreatingModalOpen = false;
     },
   },
 });
@@ -99,21 +136,11 @@ export const {
   onCloseAssetModal,
   onCloseAssetsDetailsModal,
   onCloseAssetSelectionModal,
-  onCloseAssignModal,
-  onCloseDateModal,
-  onClosePasswordModal,
-  onCloseRoleSelectionModal,
-  onCloseStateSelectionModal,
-  onCloseUserModal,
+  onCloseCreatingModal,
   onCloseUserSelectionModal,
   onOpenAssetModal,
   onOpenAssetsDetailsModal,
   onOpenAssetSelectionModal,
-  onOpenAssignModal,
-  onOpenDateModal,
-  onOpenPasswordModal,
-  onOpenRoleSelectionModal,
-  onOpenStateSelectionModal,
-  onOpenUserModal,
+  onOpenCreatingModal,
   onOpenUserSelectionModal,
 } = uiSlice.actions;

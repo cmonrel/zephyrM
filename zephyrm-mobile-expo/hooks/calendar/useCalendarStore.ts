@@ -1,3 +1,9 @@
+/**
+ * Calendar store hook
+ *
+ * @module hooks/calendar/useCalendarStore
+ */
+
 import { isEqual } from "lodash";
 import { useSelector } from "react-redux";
 
@@ -16,15 +22,46 @@ import {
 import { useAppDispatch } from "../../store/store";
 import { useNotificationStore } from "../notifications/useNotificationStore";
 
+/**
+ * Returns an object with the following properties and methods:
+ *
+ * - events: The list of events.
+ * - activeEvent: The active event.
+ * - hasEventSelected: A boolean indicating whether there is an active event.
+ * - setActiveEvent: Sets the active event.
+ * - startSavingEvent: Saves an event.
+ * - startDeletingEvent: Deletes an event.
+ * - startDeletingUserEvents: Deletes all events of a user.
+ * - startLoadingEvents: Loads all events.
+ *
+ * @returns {Object} An object with the properties and methods above.
+ */
 export const useCalendarStore = () => {
   const dispatch = useAppDispatch();
   const { events, activeEvent } = useSelector((state: any) => state.calendar);
   const { startCreatingNotification } = useNotificationStore();
 
-  const setActiveEvent = (calendarEvent: EventInter) => {
+  /**
+   * Sets the active event.
+   *
+   * @param {EventInter | null} calendarEvent - The event to set as active, or null to unset.
+   */
+  const setActiveEvent = (calendarEvent: EventInter | null) => {
     dispatch(onSetActiveEvent(calendarEvent));
   };
 
+  /**
+   * Saves an event.
+   *
+   * @param {EventInter} calendarEvent - The event to save.
+   *
+   * @remarks
+   * If the event is an existing one (i.e. has an eid), it will be updated.
+   * Otherwise, a new event will be created.
+   * If the event is created or updated successfully, a notification will be created
+   * if the event is not already the active event.
+   * If there is an error, an alert will be shown with the error message.
+   */
   const startSavingEvent = async (calendarEvent: EventInter) => {
     if (!calendarEvent) return;
     try {
@@ -47,6 +84,15 @@ export const useCalendarStore = () => {
     }
   };
 
+  /**
+   * Deletes an event.
+   *
+   * @param {EventInter} event - The event to delete. If not provided, the active event will be deleted.
+   *
+   * @remarks
+   * If the event is deleted successfully, the active event will be unset.
+   * If there is an error, an alert will be shown with the error message.
+   */
   const startDeletingEvent = async (event: EventInter) => {
     if (!activeEvent && !event) return;
     const idEventToDelete = activeEvent?.eid || event.eid;
@@ -59,6 +105,14 @@ export const useCalendarStore = () => {
     }
   };
 
+  /**
+   * Loads all events from the API.
+   *
+   * Makes a GET request to the API to fetch all available events.
+   * If the request is successful, it dispatches the onLoadEvents action
+   * with the received events to update the application's state. If an error
+   * occurs during the request, it logs an error message to the console.
+   */
   const startLoadingEvents = async () => {
     try {
       const { data } = await zephyrmApi.get("events");
@@ -71,9 +125,18 @@ export const useCalendarStore = () => {
     }
   };
 
+  /**
+   * Deletes all events of a user.
+   *
+   * @param {string} uid - The uid of the user whose events should be deleted.
+   *
+   * @remarks
+   * This function loops over the events and calls startDeletingEvent if the
+   * event belongs to the user with the given uid.
+   */
   const startDeletingUserEvents = (uid: string) => {
     events.map((event: EventInter) => {
-      if (event.user.uid === uid) {
+      if (event.user?.uid === uid) {
         startDeletingEvent(event);
       }
     });

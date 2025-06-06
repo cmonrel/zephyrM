@@ -106,16 +106,16 @@ const deleteRequest = async (req, res = response) => {
  *                            updated successfully.
  *                            If an error occurs, an error message is logged.
  */
-
 const markRequestStatus = async (req, res = response) => {
   const requestId = req.params.id;
-  const { status } = req.body;
+  const { status, denialMotive } = req.body;
 
   try {
     const { _doc: request } = await Request.findById(requestId);
     const updateRequest = {
       ...request,
       status: status,
+      denialMotive,
     };
 
     await Request.findByIdAndUpdate(requestId, updateRequest, {
