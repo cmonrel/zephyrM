@@ -75,37 +75,9 @@ npx expo start
 
 ## 📝 Documentación
 
-Toda la documentación de este proyecto está disponible en la memoria del Trabajo de Fin de Grado. El código ha sido documentado en inglés para facilitar su comprensión y mantenimiento internacional. Puedes consultar los detalles técnicos y manuales de usuario en los archivos del repositorio o accediendo a la [wiki del proyecto](https://github.com/cmonrel/zephyrM/wiki) (si aplica).
+Toda la documentación de este proyecto está disponible en la memoria del Trabajo de Fin de Grado. El código ha sido documentado en inglés para facilitar su comprensión y mantenimiento. Si quieres acceder al manual de usuario está en el siguiente enlace [memoria](https://drive.google.com/file/d/1hBjdH5eIfEK6kpck1GHHLJhtBRg71iua/view?usp=sharing) (si aplica).
 
 ---
-
-## 📄 Licencia
-
-Este proyecto ha sido desarrollado como parte de un Trabajo de Fin de Grado. Todos los derechos reservados.
-
----
-
-## ⚙️ Configuración de variables de entorno
-
-Para que el sistema funcione correctamente, es necesario configurar las variables de entorno en el archivo `.env` del backend.
-
-Ejemplo de archivo `.env`:
-
-```
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/zephyrm
-JWT_SECRET=your_jwt_secret_key
-FRONTEND_URL=http://localhost:3000
-```
-
-Asegúrate de que los valores se ajustan a tu entorno de desarrollo local o de producción.
-
-- `PORT`: Puerto en el que se ejecuta el servidor backend.
-- `MONGO_URI`: URI de conexión a la base de datos MongoDB.
-- `JWT_SECRET`: Clave secreta para generar y validar los tokens JWT.
-- `FRONTEND_URL`: URL del frontend permitida para CORS.
-
-
 
 ---
 
