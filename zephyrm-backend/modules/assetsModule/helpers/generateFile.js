@@ -28,7 +28,14 @@ const generateFile = async (res) => {
     if (users.length === 0) throw new Error("No users found");
 
     // Load the Excel template
-    const filePath = "../../files/Template_Assets_Report.xlsx";
+    const directoryPath = path.join(__dirname, "../../../files");
+
+    const fs = require("fs");
+    if (!fs.existsSync(directoryPath)) {
+      fs.mkdirSync(directoryPath, { recursive: true });
+    }
+
+    const filePath = path.join(directoryPath, "Template_Assets_Report.xlsx");
 
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.readFile(filePath);
