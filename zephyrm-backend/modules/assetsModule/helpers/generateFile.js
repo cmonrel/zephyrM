@@ -80,7 +80,7 @@ const generateFile = async (res) => {
         } else if (field === "acquisition date") {
           cell.value = asset.acquisitionDate;
         } else if (field === "nfc id") {
-          cell.value = asset.NFCTag;
+          cell.value = asset.nfcTag;
         } else {
           cell.value = asset[field];
         }
