@@ -28,16 +28,7 @@ const generateFile = async (res) => {
     if (users.length === 0) throw new Error("No users found");
 
     // Load the Excel template
-    const directoryPath = path.join(
-      "D:",
-      "Usuarios",
-      "Carlos",
-      "Proyecto_TFG",
-      "zephyrm",
-      "zephyrm-backend",
-      "files"
-    );
-    const filePath = path.join(directoryPath, "Template_Assets_Report.xlsx");
+    const filePath = "../../files/Template_Assets_Report.xlsx";
 
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.readFile(filePath);
