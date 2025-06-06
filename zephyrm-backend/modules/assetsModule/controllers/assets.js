@@ -78,7 +78,7 @@ const createAsset = async (req, res = response) => {
 
 const updateAsset = async (req, res = response) => {
   const assetId = req.params.id;
-  const newAsset = req.body;
+  const { _id, ...newAsset } = req.body;
 
   try {
     const updatedAsset = await Asset.findByIdAndUpdate(assetId, newAsset, {
@@ -90,9 +90,10 @@ const updateAsset = async (req, res = response) => {
       updatedAsset,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       ok: false,
-      msg: "Error deleting asset",
+      msg: "Error updating asset",
     });
   }
 };

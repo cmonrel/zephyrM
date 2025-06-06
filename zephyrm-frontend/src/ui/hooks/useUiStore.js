@@ -13,6 +13,7 @@ import {
   onCloseAssetsDetailsModal,
   onCloseAssetSelectionModal,
   onCloseAssignModal,
+  onCloseCategorySelectionModal,
   onCloseDateModal,
   onClosePasswordModal,
   onCloseRoleSelectionModal,
@@ -23,6 +24,7 @@ import {
   onOpenAssetsDetailsModal,
   onOpenAssetSelectionModal,
   onOpenAssignModal,
+  onOpenCategorySelectionModal,
   onOpenDateModal,
   onOpenPasswordModal,
   onOpenRoleSelectionModal,
@@ -54,6 +56,8 @@ import {
  *   modal is open
  * - `isStateSelectionModalOpen`: boolean indicating whether the state selection
  *   modal is open
+ * - `isCategorySelectionModalOpen`: boolean indicating whether the category
+ *   selection modal is open
  *
  * Methods:
  *
@@ -61,6 +65,7 @@ import {
  * - `closeAssetsDetailsModal`: function to close the asset details modal
  * - `closeAssetSelectionModal`: function to close the asset selection modal
  * - `closeAssignModal`: function to close the assign modal
+ * - `closeCategorySelectionModal`: function to close the category selection modal
  * - `closeDateModal`: function to close the date modal
  * - `closePasswordModal`: function to close the password modal
  * - `closeRoleSelectionModal`: function to close the role selection modal
@@ -71,6 +76,7 @@ import {
  * - `openAssetsDetailsModal`: function to open the asset details modal
  * - `openAssetSelectionModal`: function to open the asset selection modal
  * - `openAssignModal`: function to open the assign modal
+ * - `openCategorySelectionModal`: function to open the category selection modal
  * - `openDateModal`: function to open the date modal
  * - `openPasswordModal`: function to open the password modal
  * - `openRoleSelectionModal`: function to open the role selection modal
@@ -87,6 +93,7 @@ export const useUIStore = () => {
     isAssetModalOpen,
     isAssetSelectionModalOpen,
     isAssignModalOpen,
+    isCategorySelectionModalOpen,
     isDateModalOpen,
     isPasswordModalOpen,
     isRoleSelectionModalOpen,
@@ -275,12 +282,31 @@ export const useUIStore = () => {
     dispatch(onCloseStateSelectionModal());
   };
 
+  /**
+   * Opens the category selection modal.
+   *
+   * This method dispatches an action to open the category selection modal in the UI.
+   */
+  const openCategorySelectionModal = () => {
+    dispatch(onOpenCategorySelectionModal());
+  };
+
+  /**
+   * Closes the category selection modal.
+   *
+   * This method dispatches an action to close the category selection modal in the UI.
+   */
+  const closeCategorySelectionModal = () => {
+    dispatch(onCloseCategorySelectionModal());
+  };
+
   return {
     // Properties
     isAssetDetailsModalOpen,
     isAssetModalOpen,
     isAssetSelectionModalOpen,
     isAssignModalOpen,
+    isCategorySelectionModalOpen,
     isDateModalOpen,
     isPasswordModalOpen,
     isUserModalOpen,
@@ -293,6 +319,7 @@ export const useUIStore = () => {
     closeAssetsDetailsModal,
     closeAssetSelectionModal,
     closeAssignModal,
+    closeCategorySelectionModal,
     closeDateModal,
     closePasswordModal,
     closeRoleSelectionModal,
@@ -303,6 +330,7 @@ export const useUIStore = () => {
     openAssetsDetailsModal,
     openAssetSelectionModal,
     openAssignModal,
+    openCategorySelectionModal,
     openDateModal,
     openPasswordModal,
     openRoleSelectionModal,

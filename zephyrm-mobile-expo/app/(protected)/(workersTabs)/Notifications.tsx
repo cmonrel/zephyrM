@@ -1,3 +1,9 @@
+/**
+ * Notifications screen
+ *
+ * @module app/(protected)/(workersTabs)/Notifications
+ */
+
 import { Ionicons } from "@expo/vector-icons";
 import {
   ScrollView,
@@ -7,19 +13,52 @@ import {
   View,
 } from "react-native";
 
-import { useEffect } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useRef } from "react";
 import { useAuthStore } from "../../../hooks/auth/useAuthStore";
 import { useNotificationStore } from "../../../hooks/notifications/useNotificationStore";
 import { NotificationInter } from "../../../interfaces";
 
+/**
+ * Renders the Notifications screen component.
+ *
+ * @module app/(protected)/(workersTabs)/Notifications
+ *
+ * This component displays a list of notifications for the user, allowing them to
+ * mark individual notifications as read, delete them, or mark all notifications
+ * as read at once. The notifications are loaded when the screen is focused, and
+ * reloaded if a certain time interval has passed since the last load.
+ *
+ * @returns {JSX.Element} A view containing the notification list and controls.
+ */
 export default function Notifications() {
   const { user, notifications, startLoadingNotifications } = useAuthStore();
   const { markAllAsRead, markNotificationRead, startDeletingNotification } =
     useNotificationStore();
 
-  useEffect(() => {
-    startLoadingNotifications(user.uid);
-  }, []);
+  const lastLoadedRef = useRef<number | null>(null);
+  const reloadTime = process.env.EXPO_PUBLIC_RELOAD_TIME;
+
+  /**
+   * Load notifications when the screen is focused
+   *
+   * @remarks
+   * This function is called when the screen is focused and whenever the reload time has passed since the last load.
+   * It loads the notifications and updates the last loaded time.
+   */
+  useFocusEffect(
+    useCallback(() => {
+      const now = Date.now();
+
+      if (
+        !lastLoadedRef.current ||
+        now - lastLoadedRef.current > Number(reloadTime)
+      ) {
+        startLoadingNotifications(user.uid);
+        lastLoadedRef.current = now;
+      }
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

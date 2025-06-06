@@ -21,6 +21,7 @@ export const uiSlice = createSlice({
     isAssetDetailsModalOpen: false,
     isRoleSelectionModalOpen: false,
     isStateSelectionModalOpen: false,
+    isCategorySelectionModalOpen: false,
   },
   reducers: {
     /**
@@ -243,6 +244,28 @@ export const uiSlice = createSlice({
     onCloseStateSelectionModal: (state) => {
       state.isStateSelectionModalOpen = false;
     },
+    /**
+     * Open the category selection modal.
+     *
+     * This reducer sets isCategorySelectionModalOpen to true, which will open the category
+     * selection modal in the UI.
+     *
+     * @param {Object} state The current state of the reducer.
+     */
+    onOpenCategorySelectionModal: (state) => {
+      state.isCategorySelectionModalOpen = true;
+    },
+    /**
+     * Close the category selection modal.
+     *
+     * This reducer sets isCategorySelectionModalOpen to false, which will close
+     * the category selection modal in the UI.
+     *
+     * @param {Object} state The current state of the reducer.
+     */
+    onCloseCategorySelectionModal: (state) => {
+      state.isCategorySelectionModalOpen = false;
+    },
   },
 });
 
@@ -252,6 +275,7 @@ export const {
   onCloseAssetsDetailsModal,
   onCloseAssetSelectionModal,
   onCloseAssignModal,
+  onCloseCategorySelectionModal,
   onCloseDateModal,
   onClosePasswordModal,
   onCloseRoleSelectionModal,
@@ -262,6 +286,7 @@ export const {
   onOpenAssetsDetailsModal,
   onOpenAssetSelectionModal,
   onOpenAssignModal,
+  onOpenCategorySelectionModal,
   onOpenDateModal,
   onOpenPasswordModal,
   onOpenRoleSelectionModal,

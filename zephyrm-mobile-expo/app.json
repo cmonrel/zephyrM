@@ -13,10 +13,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/zephyrLogo.png",
+        "foregroundImage": "./assets/images/adaptive_zephyrLogo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": ["NFC"],
+      "package": "com.cmonrel.ZephyrM"
     },
     "web": {
       "bundler": "metro",
@@ -39,10 +41,23 @@
         {
           "configureAndroidBackup": true
         }
-      ]
+      ],
+      ["react-native-nfc-manager"]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a62e10c8-059f-470b-b87b-9c99a66ce5ee"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a62e10c8-059f-470b-b87b-9c99a66ce5ee"
     }
   }
 }

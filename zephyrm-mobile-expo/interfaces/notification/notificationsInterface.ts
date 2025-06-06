@@ -1,3 +1,9 @@
+/**
+ * Interface for notification
+ *
+ * @module interfaces/notification/notificationsInterface
+ */
+
 import { Asset } from "../assetsModule/assetInterface";
 import { EventInter } from "../calendar/eventInterface";
 

@@ -90,6 +90,16 @@ export const assetsSlice = createSlice({
         state.activeAsset = null;
       }
     },
+    /**
+     * Resets the assets state upon logout.
+     *
+     * This reducer is used when a user logs out of the application.
+     * It clears the list of assets, sets the active asset to null,
+     * and marks isLoadingAssets as false, indicating that no assets
+     * are being loaded.
+     *
+     * @param {Object} state The current state of the reducer.
+     */
     onLogoutAssets: (state) => {
       state.isLoadingAssets = false;
       state.assets = [];

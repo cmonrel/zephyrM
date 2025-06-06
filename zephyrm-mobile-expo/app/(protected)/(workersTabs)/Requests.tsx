@@ -1,3 +1,9 @@
+/**
+ * Requests screen
+ *
+ * @module app/(protected)/(workersTabs)/Requests
+ */
+
 import {
   ActivityIndicator,
   FlatList,
@@ -8,11 +14,22 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useRef } from "react";
 import { useAuthStore } from "../../../hooks/auth/useAuthStore";
 import { useRequestsStore } from "../../../hooks/requests/useRequestsStore";
 import { RequestInter } from "../../../interfaces/request/requestInterface";
 
+/**
+ * Renders a list of all the requests made by the user.
+ * The list will show a card for each request with the title, status, date of creation
+ * and a denial reason (if any) of each request.
+ * The status of each request will be colored according to its status.
+ * The component will also render a button for each request to delete it.
+ * If the user has no requests, a message will be displayed.
+ *
+ * @returns {JSX.Element} A JSX element representing the component.
+ */
 export default function Requests() {
   const { user } = useAuthStore();
   const {
@@ -22,19 +39,32 @@ export default function Requests() {
     startDeletingRequest,
   } = useRequestsStore();
 
+  const lastLoadedRef = useRef<number | null>(null);
+  const reloadTime = process.env.EXPO_PUBLIC_RELOAD_TIME;
+
   const userRequests: [] = requests.filter(
     (request: RequestInter) => request.user === user.uid
   );
 
+  /**
+   * Deletes a request by its id and reloads the requests list.
+   *
+   * @param {string | undefined} rid The id of the request to be deleted.
+   */
   const handleDelete = (rid: string | undefined) => {
     startDeletingRequest(rid!);
     startLoadingRequests();
   };
 
-  useEffect(() => {
-    startLoadingRequests();
-  }, []);
-
+  /**
+   * Renders a request item as a card component.
+   *
+   * @param {{ item: RequestInter }} param - The parameter object containing the request item.
+   *
+   * @returns {JSX.Element} A JSX element representing the request card, displaying the title, status,
+   * user's name, creation date, and optional motivation and denial reason. It also includes a button to delete the
+   * request with functionality for entering a reason for denial.
+   */
   const renderRequestItem = ({ item }: { item: RequestInter }) => {
     const statusColor = getStatusColor(item.status!);
 
@@ -50,6 +80,11 @@ export default function Requests() {
         {item.motivation && (
           <Text style={styles.reason}>Reason: {item.motivation}</Text>
         )}
+
+        {item.denialMotive && (
+          <Text style={styles.reason}>Reason: {item.denialMotive}</Text>
+        )}
+
         <Pressable
           onPress={() => handleDelete(item.rid)}
           style={styles.deleteBtn}
@@ -59,6 +94,23 @@ export default function Requests() {
       </View>
     );
   };
+
+  /**
+   * Loads the requests when the screen is focused and whenever the reload time has passed since the last load.
+   */
+  useFocusEffect(
+    useCallback(() => {
+      const now = Date.now();
+
+      if (
+        !lastLoadedRef.current ||
+        now - lastLoadedRef.current > Number(reloadTime)
+      ) {
+        startLoadingRequests();
+        lastLoadedRef.current = now;
+      }
+    }, [])
+  );
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -1,3 +1,9 @@
+/**
+ * Interface for user data
+ *
+ * @module interfaces/login/userInterface
+ */
+
 export interface AuthUser {
   uid: string;
   name: string;

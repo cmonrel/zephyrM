@@ -1,34 +1,54 @@
+/**
+ * Layout for admin tabs
+ *
+ * @module app/(protected)/(adminTabs)/_layout
+ */
+
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
-import { useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-import { useAssetsStore } from "../../../hooks/assetsHooks/useAssetsStore";
 import { useAuthStore } from "../../../hooks/auth/useAuthStore";
-import { useRequestsStore } from "../../../hooks/requests/useRequestsStore";
 import { NotificationInter } from "../../../interfaces";
 
+/**
+ * The admin tabs layout component
+ *
+ * This component is the base layout for all the admin tabs. It renders
+ * the tabs navigation with the following screens:
+ *
+ * - SearchAssetsAdmin
+ * - WorkersRequests
+ * - NFCTags
+ * - Calendar
+ * - Notifications
+ *
+ * The header title is set to the current user's name and the title
+ * of the screen. The header right button is a logout button.
+ *
+ * The tabs navigation is set to display the "Assets" screen as the
+ * first screen when the user logs in.
+ *
+ * @returns {JSX.Element} The admin tabs layout component
+ */
 export default function TabLayout() {
-  const { user, notifications, startLoadingNotifications, startLogout } =
-    useAuthStore();
-  const { startLoadingAssets } = useAssetsStore();
-  const { startLoadingRequests } = useRequestsStore();
+  const { user, notifications, startLogout } = useAuthStore();
   const router = useRouter();
 
   const unreadCount = notifications.filter(
     (n: NotificationInter) => !n.read
   ).length;
 
+  /**
+   * Handles the user logout process.
+   *
+   * Initiates the logout procedure and redirects the user
+   * to the home page after logout is complete.
+   */
   const handleLogout = async () => {
     startLogout();
     router.replace("/");
   };
-
-  useEffect(() => {
-    startLoadingNotifications(user.uid);
-    startLoadingAssets();
-    startLoadingRequests();
-  }, []);
 
   return (
     <Tabs
@@ -95,6 +115,22 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="CalendarAdmin"
+        options={{
+          title: "Calendar",
+          headerTitle: `Calendar - ${user.name}`,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "calendar-sharp" : "calendar-outline"}
+              color={color}
+              size={24}
+            />
+          ),
+        }}
+      />
+
       {unreadCount > 0 ? (
         <Tabs.Screen
           name="Notifications"

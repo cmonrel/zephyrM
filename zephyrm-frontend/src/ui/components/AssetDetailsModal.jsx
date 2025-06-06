@@ -16,6 +16,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { useNotificationStore } from "../../hooks";
 import { useRequestsStore } from "../../modules/requests/hooks/useRequestsStore";
+import { useAssetsStore } from "../../modules/assetsModule";
 
 const customStyles = {
   content: {
@@ -44,9 +45,11 @@ export const AssetDetailsModal = ({ asset }) => {
   const { user } = useAuthStore();
   const { startSendingNotificationRequest } = useNotificationStore();
   const { startSavingRequest } = useRequestsStore();
+  const { startRemovingNFCFromAsset } = useAssetsStore();
 
   const [motivation, setMotivation] = useState("");
   const [isSent, setIsSent] = useState(false);
+  const [renderAsset, setRenderAsset] = useState(asset);
 
   /**
    * Returns the color based on the asset state.
@@ -113,6 +116,21 @@ export const AssetDetailsModal = ({ asset }) => {
     }
   };
 
+  /**
+   * Clears the NFC tag of the asset.
+   *
+   * This function is called when the user wants to clear the NFC tag of the
+   * asset. It creates an updated asset with the NFC tag set to null, then
+   * calls the `startSavingAsset` action to save the updated asset to the
+   * server and sets the `renderAsset` state to the updated asset.
+   */
+  const clearNFC = async () => {
+    const updatedAsset = { ...asset, nfcTag: "" };
+
+    startRemovingNFCFromAsset(updatedAsset);
+    setRenderAsset(updatedAsset);
+  };
+
   return (
     <Modal
       isOpen={isAssetDetailsModalOpen}
@@ -122,41 +140,49 @@ export const AssetDetailsModal = ({ asset }) => {
       overlayClassName="modal-fondo"
       closeTimeoutMS={500}
     >
-      <h2>{asset.title}</h2>
+      <h2>{renderAsset.title}</h2>
       <hr />
-      <div className="asset-detail">
+      <div className="renderAsset-detail">
+        <div className="nfc-tag">
+          <p>
+            <strong>NFC ID </strong> {renderAsset.nfcTag}
+          </p>
+          {renderAsset.nfcTag && user.role === "admin" && (
+            <button className="btn btn-danger" onClick={() => clearNFC()}>
+              <i className="fas fa-remove"></i>
+            </button>
+          )}
+        </div>
         <p>
-          <strong>NFC ID </strong> {asset.NFCTag}
+          <strong>Category:</strong> {renderAsset.category}
         </p>
         <p>
-          <strong>Category:</strong> {asset.category}
-        </p>
-        <p>
-          <strong>Description:</strong> {asset.description}
+          <strong>Description:</strong> {renderAsset.description}
         </p>
         <p>
           <strong>Acquisition Date:</strong>{" "}
-          {format(new Date(asset.acquisitionDate), "PPP")}
+          {format(new Date(renderAsset.acquisitionDate), "PPP")}
         </p>
         <p>
-          <strong>Location:</strong> {asset.location || "N/A"}
+          <strong>Location:</strong> {renderAsset.location || "N/A"}
         </p>
         <p>
           <strong>State: </strong>
-          <span style={{ color: getStateColor(asset.state) }}>
-            {asset.state}
+          <span style={{ color: getStateColor(renderAsset.state) }}>
+            {renderAsset.state}
           </span>
         </p>
         <p>
-          <strong>User Assigned:</strong> {asset.user?.name || "Unassigned"}
+          <strong>User Assigned:</strong>{" "}
+          {renderAsset.user?.name || "Unassigned"}
         </p>
       </div>
-      {user.role === "worker" && !isSent && asset.state === "Free" && (
+      {user.role === "worker" && !isSent && renderAsset.state === "Free" && (
         <div className="container-request mt-4">
           <input
             type="text"
             className="form-control"
-            placeholder="Why do you need this asset?"
+            placeholder="Why do you need this renderAsset?"
             value={motivation}
             onChange={(e) => setMotivation(e.target.value)}
           />

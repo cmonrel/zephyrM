@@ -59,28 +59,28 @@ export const StateSelectionModal = ({ onSelect }) => {
         <div
           key="free"
           className="selection-item"
-          onClick={() => onSelect("Free")}
+          onClick={() => onSelect({ state: "Free" })}
         >
           <p>Free</p>
         </div>
         <div
           key="on loan"
           className="selection-item"
-          onClick={() => onSelect("On loan")}
+          onClick={() => onSelect({ state: "On loan" })}
         >
           <p>On loan</p>
         </div>
         <div
           key="under maintenance"
           className="selection-item"
-          onClick={() => onSelect("Under maintenance")}
+          onClick={() => onSelect({ state: "Under maintenance" })}
         >
           <p>Under maintenance</p>
         </div>
         <div
           key="broken"
           className="selection-item"
-          onClick={() => onSelect("Broken")}
+          onClick={() => onSelect({ state: "Broken" })}
         >
           <p>Broken</p>
         </div>

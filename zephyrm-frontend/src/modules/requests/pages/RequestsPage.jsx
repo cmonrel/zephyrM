@@ -6,12 +6,16 @@
  * @module modules/requests/pages/RequestsPage
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./RequestsPage.css";
 
-import { useNotificationStore } from "../../../hooks";
+import { useForm, useNotificationStore } from "../../../hooks";
 import { useRequestsStore } from "../hooks/useRequestsStore";
 import { useUsersStore } from "../../users/hooks/useUsersStore";
+
+const initialForm = {
+  denialMotive: "",
+};
 
 /**
  * Component to display all the requests made by users to the admins.
@@ -33,6 +37,9 @@ export const RequestsAdminPage = () => {
   } = useRequestsStore();
   const { users } = useUsersStore();
   const { startSendingRequestResponseNotification } = useNotificationStore();
+
+  const [isDenied, setIsDenied] = useState(false);
+  const { formState, onInputChange } = useForm(initialForm);
 
   const adminRequests = requests.filter(
     (request) => request.status === "Pending"
@@ -78,7 +85,8 @@ export const RequestsAdminPage = () => {
       request.rid,
       "Approved",
       request.asset,
-      request.user
+      request.user,
+      ""
     );
     startSendingRequestResponseNotification("Approved", request);
   };
@@ -86,13 +94,32 @@ export const RequestsAdminPage = () => {
   /**
    * Handles the deny button click event.
    *
+   * Sets the isDenied state to true, which triggers the modal for
+   * entering a motive for denying the request.
+   */
+  const handleDeny = () => {
+    setIsDenied(true);
+  };
+
+  /**
+   * Handles the deny button click event after the user has entered a motive.
+   *
    * Updates the request status to `Denied` and sends a notification
    * to the user who made the request to let them know that it was denied.
    *
    * @param {Object} request - The request object to be updated.
    */
-  const handleDeny = (request) => {
-    startMarkStatusRequest(request.rid, "Denied", request.asset);
+  const actionsDenied = (request) => {
+    setIsDenied(false);
+    const { denialMotive } = formState;
+
+    startMarkStatusRequest(
+      request.rid,
+      "Denied",
+      request.asset,
+      request.user,
+      denialMotive
+    );
     startSendingRequestResponseNotification("Denied", request);
   };
 
@@ -129,19 +156,40 @@ export const RequestsAdminPage = () => {
                 <div className="request-reason">Reason: {item.motivation}</div>
               )}
 
-              <div className="request-actions">
-                <button
-                  className="accept-btn"
-                  onClick={() => handleAccept(item)}
-                >
-                  <i className="fas fa-check"></i>
-                  <span>&nbsp; Accept</span>
-                </button>
-                <button className="deny-btn" onClick={() => handleDeny(item)}>
-                  <i className="fas fa-times"></i>
-                  <span>&nbsp; Deny</span>
-                </button>
-              </div>
+              {!isDenied ? (
+                <div className="request-actions">
+                  <button
+                    className="accept-btn"
+                    onClick={() => handleAccept(item)}
+                  >
+                    <i className="fas fa-check"></i>
+                    <span>&nbsp; Accept</span>
+                  </button>
+                  <button className="deny-btn" onClick={handleDeny}>
+                    <i className="fas fa-times"></i>
+                    <span>&nbsp; Deny</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="container-request mt-4">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Reason for Denial"
+                    name="denialMotive"
+                    value={formState.denialMotive}
+                    onChange={onInputChange}
+                  />
+
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => actionsDenied(item)}
+                  >
+                    <i className="fas fa-envelope"></i>
+                    &nbsp; Send
+                  </button>
+                </div>
+              )}
             </div>
           );
         })
