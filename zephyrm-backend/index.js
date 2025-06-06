@@ -29,6 +29,7 @@ const io = new Server(server, {
       "http://localhost:8081",
       "exp://192.168.0.16:8081",
       "https://zephyrm.onrender.com",
+      "0.0.0.0/0",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -61,6 +62,7 @@ app.use(
       "http://localhost:8081",
       "exp://192.168.0.16:8081",
       "https://zephyrm.onrender.com",
+      "0.0.0.0/0",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "x-token"],
@@ -94,6 +96,9 @@ app.use(
 
 // CRUD: Requests
 app.use("/api/requests", require("./modules/requests/routes/requests"));
+
+// CRUD: Categories
+app.use("/api/categories", require("./modules/assetsModule/routes/categories"));
 
 app.use("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));

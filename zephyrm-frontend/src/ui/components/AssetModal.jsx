@@ -13,6 +13,7 @@ import { useUIStore } from "../hooks/useUiStore";
 import { useForm } from "../../hooks/useForm";
 import { useAssetsStore } from "../../modules/assetsModule/hooks/useAssetsStore";
 import { StateSelectionModal } from "../";
+import { CategorySelectionModal } from "./CategorySelectionModal";
 
 const customStyles = {
   content: {
@@ -39,8 +40,11 @@ export const AssetModal = () => {
   const {
     isAssetModalOpen,
     isStateSelectionModalOpen,
+    isCategorySelectionModalOpen,
     closeAssetModal,
+    closeCategorySelectionModal,
     closeStateSelectionModal,
+    openCategorySelectionModal,
     openStateSelectionModal,
   } = useUIStore();
   const { activeAsset, setActiveAsset, startSavingAsset } = useAssetsStore();
@@ -78,16 +82,26 @@ export const AssetModal = () => {
   };
 
   /**
-   * Updates the form state with the selected state and closes the state selection modal.
+   * Updates the form state with the selected state or category and closes the state selection modal.
    *
-   * @param {string} state The selected state.
+   * @param {string} value The selected state or category.
    */
-  const onSelect = (state) => {
-    setFormState({
-      ...formState,
-      state,
-    });
+  const onSelect = (value) => {
+    if (value.category) {
+      const category = value.category;
+      setFormState({
+        ...formState,
+        category,
+      });
+    } else {
+      const state = value.state;
+      setFormState({
+        ...formState,
+        state,
+      });
+    }
     closeStateSelectionModal();
+    closeCategorySelectionModal();
   };
 
   /**
@@ -145,24 +159,22 @@ export const AssetModal = () => {
               type="text"
               className={`form-control ${nameClass}`}
               placeholder="NFC ID"
-              name="NFCTag"
+              name="nfcTag"
               autoComplete="off"
-              value={formState.NFCTag}
+              value={formState.nfcTag}
               onChange={onInputChange}
             />
           </div>
 
           <div className="form-group mb-2">
             <label>Category</label>
-            <input
-              type="text"
-              className={`form-control ${nameClass}`}
-              placeholder="Category"
-              name="category"
-              autoComplete="off"
-              value={formState.category}
-              onChange={onInputChange}
-            />
+            <div
+              className="selection-field"
+              onClick={() => openCategorySelectionModal()}
+            >
+              {formState.category || "Select category"}
+              <i className="fas fa-chevron-down"></i>
+            </div>
           </div>
 
           <div className="form-group mb-2">
@@ -218,6 +230,11 @@ export const AssetModal = () => {
 
       {/* State Selection Modal */}
       {isStateSelectionModalOpen && <StateSelectionModal onSelect={onSelect} />}
+
+      {/* Category Selection Modal */}
+      {isCategorySelectionModalOpen && (
+        <CategorySelectionModal onSelect={onSelect} />
+      )}
     </>
   );
 };

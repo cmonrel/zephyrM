@@ -35,6 +35,9 @@ const RequestSchema = Schema({
     type: Date,
     default: Date.now,
   },
+  denialMotive: {
+    type: String,
+  },
 });
 
 RequestSchema.method("toJSON", function () {

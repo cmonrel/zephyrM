@@ -34,7 +34,11 @@
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Responsive tweaks */
+.nfc-tag {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (max-width: 600px) {
   .modal {
     font-size: 0.95rem;

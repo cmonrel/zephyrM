@@ -199,6 +199,29 @@ export const useAssetsStore = () => {
     }
   };
 
+  /**
+   * Removes the NFC tag from an asset.
+   *
+   * Makes a PUT request to the server to update an asset with the
+   * specified ID. If the request is successful, it dispatches the
+   * onUpdateAsset action to update the application's state, shows a
+   * success message, and reloads the assets list. If an error occurs,
+   * it displays an error message.
+   *
+   * @param {Object} asset The asset to be updated.
+   */
+  const startRemovingNFCFromAsset = async (asset) => {
+    if (!asset) return;
+    try {
+      await zephyrmApi.put(`assets/remove-nfc/${asset.aid}`, asset);
+
+      dispatch(onUpdateAsset(asset));
+      startLoadingAssets();
+    } catch (error) {
+      Swal.fire("Error updating", error.response.data.msg, "error");
+    }
+  };
+
   return {
     // Properties
     assets,
@@ -208,8 +231,9 @@ export const useAssetsStore = () => {
     setActiveAsset,
     startAssigningUserToAsset,
     startDeletingAsset,
-    startLoadingAssets,
-    startSavingAsset,
     startDownloadingAssetsFile,
+    startLoadingAssets,
+    startRemovingNFCFromAsset,
+    startSavingAsset,
   };
 };

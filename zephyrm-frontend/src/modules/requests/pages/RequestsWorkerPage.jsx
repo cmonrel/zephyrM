@@ -101,6 +101,11 @@ export const RequestsWorkerPage = () => {
             {item.motivation && (
               <div className="request-reason">Reason: {item.motivation}</div>
             )}
+            {item.denialMotive && (
+              <div className="request-reason">
+                Reason of denial: {item.denialMotive}
+              </div>
+            )}
             <button
               className="request-delete-btn"
               onClick={() => handleDelete(item.rid)}

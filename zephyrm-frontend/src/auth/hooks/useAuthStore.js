@@ -24,6 +24,7 @@ import {
 } from "../../store";
 import { onLogoutUsers } from "../../store";
 import { onLogoutRequests } from "../../store/request/requestSlice";
+import { onLogoutCategories } from "../../store/assetsModule/categoriesSlice";
 
 /**
  * Custom hook for managing authentication state and actions.
@@ -145,6 +146,7 @@ export const useAuthStore = () => {
     dispatch(onLogoutUsers());
     dispatch(onLogoutNotifications());
     dispatch(onLogoutRequests());
+    dispatch(onLogoutCategories());
     dispatch(onLogout());
   };
 

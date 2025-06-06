@@ -1,20 +1,44 @@
+/**
+ * Requests screen
+ *
+ * @module app/(protected)/(adminTabs)/WorkersRequests
+ */
+
 import {
   ActivityIndicator,
   FlatList,
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useRef, useState } from "react";
 import { useNotificationStore } from "../../../hooks/notifications/useNotificationStore";
 import { useRequestsStore } from "../../../hooks/requests/useRequestsStore";
+import { useForm } from "../../../hooks/useForm";
 import { useUsersStore } from "../../../hooks/users/useUsersStore";
 import { User } from "../../../interfaces/login/userInterface";
 import { RequestInter } from "../../../interfaces/request/requestInterface";
 
+const initialForm = {
+  denialMotive: "",
+};
+
+/**
+ * This component renders a list of all the requests made to the system for the administrator to manage.
+ * The list will show the title, status, and date of creation of each request.
+ * The status of each request will be colored according to its status.
+ * The component will also render two buttons for each request: one for accepting and one for denying.
+ * If the deny button is pressed, a text input will appear for the administrator to enter the reason for denial.
+ * Once the reason is entered, a notification will be sent to the user with the reason.
+ * The component will also show a message if the administrator has no requests.
+ *
+ * @returns {JSX.Element} A JSX element representing the component.
+ */
 export default function Requests() {
   const {
     requests,
@@ -25,29 +49,74 @@ export default function Requests() {
   const { startSendingRequestResponseNotification } = useNotificationStore();
   const { users } = useUsersStore();
 
+  const [isDenied, setIsDenied] = useState(false);
+  const { formState, onInputChange } = useForm(initialForm);
+
+  const lastLoadedRef = useRef<number | null>(null);
+  const reloadTime = process.env.EXPO_PUBLIC_RELOAD_TIME;
+
   const adminRequests: [] = requests.filter(
     (request: RequestInter) => request.status === "Pending"
   );
 
+  /**
+   * Handles the acceptance of a request. It calls the startMarkStatusRequest hook with the status "Approved" and the user's id.
+   * It also calls the startSendingRequestResponseNotification hook with the status "Approved" to send a notification
+   * to the user with the reason of the approval.
+   * @param {RequestInter} request The request to be accepted.
+   */
   const handleAccept = (request: RequestInter) => {
     startMarkStatusRequest(
       request.rid!,
       "Approved",
       request.asset,
+      "",
       request.user
     );
     startSendingRequestResponseNotification("Approved", request);
   };
 
-  const handleDeny = (request: RequestInter) => {
-    startMarkStatusRequest(request.rid!, "Denied", request.asset);
+  /**
+   * Sets the state to indicate that the denial process is active.
+   *
+   * @remarks
+   * This function is called when the deny button is pressed, triggering the appearance
+   * of a text input for entering the reason for denial.
+   */
+  const handleDeny = () => {
+    setIsDenied(true);
+  };
+
+  /**
+   * Handles the denial of a request. It calls the startMarkStatusRequest hook with the status "Denied" and the user's id.
+   * It also calls the startSendingRequestResponseNotification hook with the status "Denied" to send a notification
+   * to the user with the reason of the denial.
+   * @param {RequestInter} request The request to be denied.
+   */
+  const actionsDenied = (request: RequestInter) => {
+    setIsDenied(false);
+    const { denialMotive } = formState;
+
+    startMarkStatusRequest(
+      request.rid!,
+      "Denied",
+      request.asset,
+      denialMotive,
+      request.user
+    );
     startSendingRequestResponseNotification("Denied", request);
   };
 
-  useEffect(() => {
-    startLoadingRequests();
-  }, []);
-
+  /**
+   * Renders a request item as a card component.
+   *
+   * @param {Object} param - The parameter object containing the request item.
+   * @param {RequestInter} param.item - The request item to be rendered.
+   *
+   * @returns {JSX.Element} A JSX element representing the request card, displaying the title, status,
+   * user's name, creation date, and optional motivation. It also includes buttons to accept or deny
+   * the request with functionality for entering a reason for denial.
+   */
   const renderRequestItem = ({ item }: { item: RequestInter }) => {
     const statusColor = getStatusColor(item.status!);
 
@@ -67,21 +136,51 @@ export default function Requests() {
           <Text style={styles.reason}>Reason: {item.motivation}</Text>
         )}
 
-        <View style={styles.btns}>
-          <Pressable
-            onPress={() => handleAccept(item)}
-            style={styles.acceptBtn}
-          >
-            <Ionicons name="checkmark-outline" size={40} color="#fff" />
-          </Pressable>
-          <Pressable onPress={() => handleDeny(item)} style={styles.denyBtn}>
-            <Ionicons name="close-outline" size={40} color="#fff" />
-          </Pressable>
-        </View>
+        {!isDenied ? (
+          <View style={styles.btns}>
+            <Pressable
+              onPress={() => handleAccept(item)}
+              style={styles.acceptBtn}
+            >
+              <Ionicons name="checkmark-outline" size={40} color="#fff" />
+            </Pressable>
+            <Pressable onPress={handleDeny} style={styles.denyBtn}>
+              <Ionicons name="close-outline" size={40} color="#fff" />
+            </Pressable>
+          </View>
+        ) : (
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Reason for Denial"
+              value={formState.denialMotive}
+              onChangeText={(value) =>
+                onInputChange({
+                  target: {
+                    name: "denialMotive",
+                    value: value,
+                  },
+                })
+              }
+            ></TextInput>
+            <Pressable
+              onPress={() => actionsDenied(item)}
+              style={styles.sendBtn}
+            >
+              <Ionicons name="paper-plane-outline" size={40} color="#fff" />
+            </Pressable>
+          </View>
+        )}
       </View>
     );
   };
 
+  /**
+   * Returns the color code associated with the given request status.
+   *
+   * @param {string} status - The status of the request.
+   * @returns {string} The hexadecimal color code representing the request status.
+   */
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Approved":
@@ -94,6 +193,24 @@ export default function Requests() {
         return "#9e9e9e";
     }
   };
+
+  /**
+   * Use the useFocusEffect hook to load the requests when the screen is focused.
+   * It checks if the last loaded time is null or the time has expired, and if so, it loads the requests.
+   */
+  useFocusEffect(
+    useCallback(() => {
+      const now = Date.now();
+
+      if (
+        !lastLoadedRef.current ||
+        now - lastLoadedRef.current > Number(reloadTime)
+      ) {
+        startLoadingRequests();
+        lastLoadedRef.current = now;
+      }
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -167,5 +284,29 @@ const styles = StyleSheet.create({
   denyBtn: {
     backgroundColor: "#f44336",
     borderRadius: "10%",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    marginTop: 10,
+  },
+  input: {
+    flex: 1,
+    height: 45,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    backgroundColor: "#fff",
+    marginRight: 10,
+  },
+  sendBtn: {
+    backgroundColor: "#007BFF",
+    borderRadius: 50,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

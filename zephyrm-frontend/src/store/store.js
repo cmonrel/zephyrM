@@ -16,6 +16,7 @@ import {
 } from "./";
 import { assetsSlice } from "./assetsModule/assetsSlice";
 import { requestSlice } from "./request/requestSlice";
+import { categoriesSlice } from "./assetsModule/categoriesSlice";
 
 /**
  * Configures the Redux store for the application.
@@ -31,6 +32,7 @@ export const store = configureStore({
     assets: assetsSlice.reducer,
     notifications: notificationsSlice.reducer,
     request: requestSlice.reducer,
+    categories: categoriesSlice.reducer,
   },
   /**
    * Middleware configuration for the store.

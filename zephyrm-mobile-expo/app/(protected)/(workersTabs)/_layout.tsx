@@ -1,3 +1,9 @@
+/**
+ * Workers tabs layout
+ *
+ * @module app/(protected)/(workersTabs)/_layout
+ */
+
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
 import { useEffect } from "react";
@@ -8,6 +14,23 @@ import { useAuthStore } from "../../../hooks/auth/useAuthStore";
 import { useRequestsStore } from "../../../hooks/requests/useRequestsStore";
 import { NotificationInter } from "../../../interfaces";
 
+/**
+ * Workers tabs layout
+ *
+ * @function WorkersTabLayout
+ * @returns {React.ReactElement} The tabs layout element
+ *
+ * This component renders a tab layout with the following screens:
+ * - SearchAssetsWorker (search assets)
+ * - Requests (requests management)
+ * - NFCTags (nfc tags scanner)
+ * - Calendar (calendar)
+ * - Notifications (notifications)
+ *
+ * The component also includes a logout button in the header right
+ * that calls the startLogout function and redirects the user to the
+ * home page when the logout is complete.
+ */
 export default function WorkersTabLayout() {
   const { user, notifications, startLoadingNotifications, startLogout } =
     useAuthStore();
@@ -19,11 +42,20 @@ export default function WorkersTabLayout() {
     (n: NotificationInter) => !n.read
   ).length;
 
+  /**
+   * Handles the user logout process.
+   *
+   * Calls the startLogout function to initiate the logout procedure
+   * and redirects the user to the home page upon completion.
+   */
   const handleLogout = async () => {
     startLogout();
     router.replace("/");
   };
 
+  /**
+   * UseEffect hook to load notifications, assets, and requests when the component mounts.
+   */
   useEffect(() => {
     startLoadingNotifications(user.uid);
     startLoadingAssets();
@@ -95,6 +127,22 @@ export default function WorkersTabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="Calendar"
+        options={{
+          title: "Calendar",
+          headerTitle: `Calendar - ${user.name}`,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "calendar-sharp" : "calendar-outline"}
+              color={color}
+              size={24}
+            />
+          ),
+        }}
+      />
+
       {unreadCount > 0 ? (
         <Tabs.Screen
           name="Notifications"

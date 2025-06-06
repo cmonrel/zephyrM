@@ -49,7 +49,6 @@ export const PasswordModal = () => {
   /**
    * Closes the password modal and resets the active user.
    */
-
   const onCloseModal = () => {
     closePasswordModal();
     setActiveUser(null);

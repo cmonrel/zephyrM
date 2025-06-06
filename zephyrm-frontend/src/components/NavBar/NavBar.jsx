@@ -61,7 +61,7 @@ export const NavBar = () => {
         <div className="d-flex align-items-center">
           <span className="navbar-brand cursor-pointer">
             <img
-              src="./src/assets/zephyrLogo.png"
+              src="./assets/zephyrLogo.png"
               alt="Logo"
               style={{ width: "30px", height: "30px", objectFit: "contain" }}
             />
@@ -147,7 +147,7 @@ export const NavBar = () => {
           <button onClick={startLogout} className="btn btn-outline-danger">
             <i className="fas fa-sign-out-alt"></i>
             &nbsp;
-            <span>Sign out</span>
+            <span>Log out</span>
           </button>
         </div>
       </div>
