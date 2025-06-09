@@ -6,6 +6,7 @@
 
 import { useRouter } from "expo-router";
 import {
+  ActivityIndicator,
   Alert,
   Keyboard,
   StyleSheet,
@@ -16,7 +17,7 @@ import {
   View,
 } from "react-native";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "../hooks/auth/useAuthStore";
 import { useForm } from "../hooks/useForm";
 import { LoginFormFields } from "../interfaces";
@@ -43,6 +44,8 @@ export default function LoginScreen() {
   const { email, password, onInputChange } = useForm(loginFormField);
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   /**
    * Function to handle the login form submission
    *
@@ -55,11 +58,14 @@ export default function LoginScreen() {
    * message.
    */
   const loginSubmit = async () => {
+    setIsLoading(true);
     if (!email || !password) {
       Alert.alert("Error", "All fields are required");
+      setIsLoading(false);
       return;
     }
     const token = await startLogin(email, password);
+    setIsLoading(false);
     if (!token) return;
     router.replace("/SearchAssetsWorker");
   };
@@ -108,9 +114,15 @@ export default function LoginScreen() {
               onInputChange({ target: { name: "password", value } })
             }
           />
-          <TouchableOpacity style={styles.button} onPress={loginSubmit}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
+          {isLoading ? (
+            <View style={styles.button}>
+              <ActivityIndicator color="#fff" />
+            </View>
+          ) : (
+            <TouchableOpacity style={styles.button} onPress={loginSubmit}>
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </TouchableWithoutFeedback>
