@@ -39,7 +39,7 @@ zephyrM/
 
 ## 🚀 Despliegue
 
-Este proyecto está desplegado en [[Render](https://zephyrm.onrender.com)], tanto para el backend como para el frontend web. La app móvil se ejecuta desde Expo.
+Este proyecto está desplegado en [[Render](https://zephyrm.onrender.com)], tanto para el backend como para el frontend web. La app móvil se puede descargar [aqui](https://drive.google.com/file/d/1Nov7t1roqeodNGQaFs8F6rDCLm4TAWdY/view?usp=sharing).
 
 ---
 
