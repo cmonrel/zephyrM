@@ -39,6 +39,10 @@ const assetExists = async (req, res = response, next) => {
 const NFCUnique = async (req, res = response, next) => {
   if (req.body.nfcTag === "") return next();
 
+  const reqAsset = await Asset.findOne({ nfcTag: req.body.nfcTag });
+
+  if (reqAsset?._id.toString() === req.params.id) return next();
+
   const asset = await Asset.findOne({ nfcTag: req.body.nfcTag });
 
   if (asset) {

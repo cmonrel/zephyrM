@@ -280,7 +280,12 @@ const styles = StyleSheet.create({
   },
   picker: {
     color: "#222",
-    marginTop: 2,
+    backgroundColor: "#e9e9e9",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginTop: 10,
+    fontSize: 16,
   },
   editBtn: {
     flexDirection: "row",

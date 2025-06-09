@@ -178,6 +178,7 @@ export const useAssetsStore = () => {
    * it displays an error message using Swal.fire.
    */
   const startDownloadingAssetsFile = async () => {
+    const generationDate = new Date().toISOString().split("T")[0];
     try {
       const response = await zephyrmApi.get("assets/xlsx", {
         responseType: "blob",
@@ -187,7 +188,7 @@ export const useAssetsStore = () => {
 
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "assets_report.xlsx";
+      link.download = `assets_report_${generationDate}.xlsx`;
 
       document.body.appendChild(link);
       link.click();

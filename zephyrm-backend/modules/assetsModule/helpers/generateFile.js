@@ -20,6 +20,7 @@ const User = require("../../../auth/models/User");
  *                            If an error occurs, responds with status 500 and an error message.
  */
 const generateFile = async (res) => {
+  const generationDate = new Date().toISOString().split("T")[0];
   try {
     const assets = await Asset.find();
     if (assets.length === 0) throw new Error("No assets found");
@@ -107,11 +108,14 @@ const generateFile = async (res) => {
     });
 
     // Save the updated Excel file
-    const outputPath = path.join(directoryPath, "assets_report.xlsx");
+    const outputPath = path.join(
+      directoryPath,
+      `assets_report_${generationDate}.xlsx`
+    );
     await workbook.xlsx.writeFile(outputPath);
 
     // Serve the file for download
-    res.download(outputPath, "assets_report.xlsx");
+    res.download(outputPath, `assets_report_${generationDate}.xlsx`);
   } catch (error) {
     console.error("Error generating report:", error);
     res.status(500).send("Error generating report");

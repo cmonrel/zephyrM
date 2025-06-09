@@ -336,7 +336,7 @@ export default function ViewAssetsDetails({
               }
               style={styles.picker}
             >
-              <Picker.Item label="Unassigned" value="" />
+              <Picker.Item label="Unassigned" value={null} />
               {users.map((user: User) => (
                 <Picker.Item
                   key={user.uid}
