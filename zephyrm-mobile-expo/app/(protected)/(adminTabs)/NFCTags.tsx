@@ -233,7 +233,7 @@ export default function NFCTagScreen() {
    */
   const handleMarkAsFree = () => {
     if (activeAsset) {
-      const updatedAsset = { ...activeAsset, state: "Free", user: undefined };
+      const updatedAsset = { ...activeAsset, state: "Free", user: null };
       startSavingAsset(updatedAsset);
       setActiveAsset(updatedAsset);
     }
